@@ -12,7 +12,7 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-[#0f0f0f] flex" dir="rtl">
       <AdminSidebar />
-      <main className="flex-1 mr-64 p-8">{children}</main>
+      <main className="flex-1 pt-[56px] lg:pt-0 lg:mr-64 p-4 sm:p-6 lg:p-8">{children}</main>
     </div>
   );
 }

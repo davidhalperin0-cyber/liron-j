@@ -1,165 +1,89 @@
 "use client";
 
 import { Suspense, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import {
   Environment,
   ContactShadows,
-  Float,
   OrbitControls,
+  Float,
 } from "@react-three/drei";
 import * as THREE from "three";
 
-function JewelryModel({ type = "ring" }: { type?: string }) {
+function ProductImage({ imageUrl }: { imageUrl: string }) {
+  const texture = useLoader(THREE.TextureLoader, imageUrl);
   const meshRef = useRef<THREE.Mesh>(null);
+
+  const aspect = texture.image ? texture.image.width / texture.image.height : 1;
+  const width = 2.8;
+  const height = width / aspect;
 
   useFrame((state) => {
     if (!meshRef.current) return;
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
+    meshRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.15) * 0.08;
   });
 
   return (
-    <Float speed={1} rotationIntensity={0.2} floatIntensity={0.5}>
-      <group>
-        {type === "ring" && (
-          <mesh ref={meshRef} castShadow>
-            <torusGeometry args={[1, 0.12, 64, 128]} />
-            <meshPhysicalMaterial
-              color="#C9A96E"
-              metalness={1}
-              roughness={0.12}
-              clearcoat={1}
-              clearcoatRoughness={0.08}
-              reflectivity={1}
-              envMapIntensity={2.5}
-            />
-          </mesh>
-        )}
-
-        {type === "necklace" && (
-          <>
-            <mesh ref={meshRef} castShadow>
-              <torusGeometry args={[1.5, 0.03, 32, 128]} />
-              <meshPhysicalMaterial
-                color="#C9A96E"
-                metalness={1}
-                roughness={0.15}
-                clearcoat={1}
-                envMapIntensity={2}
-              />
-            </mesh>
-            <mesh position={[0, -1.5, 0]} castShadow>
-              <octahedronGeometry args={[0.15, 2]} />
-              <meshPhysicalMaterial
-                color="#ffffff"
-                metalness={0.1}
-                roughness={0}
-                transmission={0.9}
-                thickness={0.5}
-                ior={2.4}
-                clearcoat={1}
-              />
-            </mesh>
-          </>
-        )}
-
-        {type === "earring" && (
-          <>
-            <mesh ref={meshRef} position={[-0.5, 0, 0]} castShadow>
-              <capsuleGeometry args={[0.08, 0.8, 16, 32]} />
-              <meshPhysicalMaterial
-                color="#C9A96E"
-                metalness={1}
-                roughness={0.12}
-                clearcoat={1}
-                envMapIntensity={2}
-              />
-            </mesh>
-            <mesh position={[0.5, 0, 0]} castShadow>
-              <capsuleGeometry args={[0.08, 0.8, 16, 32]} />
-              <meshPhysicalMaterial
-                color="#C9A96E"
-                metalness={1}
-                roughness={0.12}
-                clearcoat={1}
-                envMapIntensity={2}
-              />
-            </mesh>
-          </>
-        )}
-
-        {/* Diamond accent */}
-        {type === "ring" && (
-          <mesh position={[0, 1, 0]} castShadow>
-            <octahedronGeometry args={[0.1, 2]} />
-            <meshPhysicalMaterial
-              color="#f0f0ff"
-              metalness={0}
-              roughness={0}
-              transmission={0.95}
-              thickness={0.3}
-              ior={2.42}
-              clearcoat={1}
-              clearcoatRoughness={0}
-            />
-          </mesh>
-        )}
-      </group>
+    <Float speed={0.8} rotationIntensity={0.05} floatIntensity={0.3}>
+      <mesh ref={meshRef} castShadow>
+        <planeGeometry args={[width, height]} />
+        <meshStandardMaterial
+          map={texture}
+          transparent
+          side={THREE.DoubleSide}
+          toneMapped={false}
+        />
+      </mesh>
     </Float>
   );
 }
 
 interface Props {
-  type?: string;
+  imageUrl?: string;
 }
 
-export function ProductViewer({ type = "ring" }: Props) {
+export function ProductViewer({ imageUrl }: Props) {
+  if (!imageUrl) return null;
+
   return (
-    <div className="w-full aspect-square bg-charcoal rounded-sm overflow-hidden relative">
+    <div className="w-full h-full bg-[#0a0a0a] overflow-hidden relative">
       <Canvas
-        camera={{ position: [0, 0, 4], fov: 40 }}
+        camera={{ position: [0, 0, 3.5], fov: 40 }}
         dpr={[1, 2]}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       >
         <Suspense fallback={null}>
-          <ambientLight intensity={0.4} />
+          <ambientLight intensity={1.2} />
+
           <spotLight
-            position={[5, 8, 5]}
-            angle={0.3}
-            penumbra={1}
-            intensity={1.5}
-            color="#C9A96E"
-            castShadow
-          />
-          <spotLight
-            position={[-3, 5, -3]}
+            position={[3, 5, 5]}
             angle={0.4}
             penumbra={1}
             intensity={0.8}
             color="#ffffff"
           />
 
-          <JewelryModel type={type} />
+          <ProductImage imageUrl={imageUrl} />
 
           <ContactShadows
-            position={[0, -1.2, 0]}
-            opacity={0.5}
-            scale={5}
-            blur={2}
-            far={3}
-            color="#C9A96E"
+            position={[0, -1.5, 0]}
+            opacity={0.3}
+            scale={6}
+            blur={3}
+            far={4}
+            color="#B89B5E"
           />
 
-          <Environment preset="studio" environmentIntensity={0.6} />
+          <Environment preset="studio" environmentIntensity={0.3} />
           <OrbitControls
             enableZoom={true}
             enablePan={false}
             minDistance={2}
-            maxDistance={8}
-            minPolarAngle={Math.PI / 6}
+            maxDistance={6}
+            minPolarAngle={Math.PI / 4}
             maxPolarAngle={Math.PI / 1.5}
             autoRotate
-            autoRotateSpeed={1}
+            autoRotateSpeed={0.5}
           />
         </Suspense>
       </Canvas>

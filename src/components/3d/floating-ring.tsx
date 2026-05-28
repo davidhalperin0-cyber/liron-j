@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { MeshDistortMaterial, Float } from "@react-three/drei";
+import { Float } from "@react-three/drei";
 import * as THREE from "three";
 
 export function FloatingRing() {
@@ -20,7 +20,7 @@ export function FloatingRing() {
       <mesh ref={ringRef} castShadow>
         <torusGeometry args={[1.2, 0.15, 64, 128]} />
         <meshPhysicalMaterial
-          color="#C9A96E"
+          color="#B89B5E"
           metalness={1}
           roughness={0.15}
           clearcoat={1}

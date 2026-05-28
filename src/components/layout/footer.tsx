@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Globe, Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 const FOOTER_LINKS = {
   shop: {
@@ -42,14 +42,18 @@ export function Footer() {
             </p>
             <div className="flex gap-4">
               <a
-                href="#"
+                href="https://www.instagram.com/"
+                target="_blank"
+                rel="noreferrer"
                 className="p-2 text-white/40 hover:text-gold transition-colors"
                 aria-label="Instagram"
               >
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
               </a>
               <a
-                href="#"
+                href="https://www.facebook.com/"
+                target="_blank"
+                rel="noreferrer"
                 className="p-2 text-white/40 hover:text-gold transition-colors"
                 aria-label="Facebook"
               >
@@ -104,7 +108,7 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-center gap-3 text-sm text-white/40">
                 <Phone size={16} className="text-gold/60 shrink-0" />
-                <span dir="ltr">+972-XX-XXX-XXXX</span>
+                <span dir="ltr">+972-3-123-4567</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-white/40">
                 <Mail size={16} className="text-gold/60 shrink-0" />

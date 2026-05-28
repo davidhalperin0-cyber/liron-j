@@ -12,89 +12,32 @@ import {
   Minus,
   Plus,
   Share2,
-  Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product/product-card";
+import { SizeGuideModal } from "@/components/product/size-guide-modal";
+import dynamic from "next/dynamic";
+
+const ProductPresentation = dynamic(
+  () =>
+    import("@/components/product/product-presentation").then(
+      (mod) => mod.ProductPresentation
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="aspect-square bg-charcoal animate-pulse flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
+      </div>
+    ),
+  }
+);
 import { cn, formatPrice } from "@/lib/utils";
 import { useCartStore } from "@/stores/cart-store";
 import { useWishlistStore } from "@/stores/wishlist-store";
+import { notifyAction } from "@/lib/ui-actions";
 import type { ProductCard as ProductCardType } from "@/types";
-import dynamic from "next/dynamic";
-
-const ProductViewer = dynamic(
-  () =>
-    import("@/components/3d/product-viewer").then((mod) => ({
-      default: mod.ProductViewer,
-    })),
-  { ssr: false }
-);
-
-const MOCK_PRODUCT = {
-  id: "main-1",
-  slug: "celestial-diamond-ring",
-  name: { en: "Celestial Diamond Ring", he: "טבעת יהלום סלסטיאל" },
-  description:
-    "טבעת יהלום מרהיבה בהשראת כוכבי הלילה. משובצת ביהלום מרכזי 0.5 קראט ומוקפת בשביל של יהלומים קטנים, יוצרת אפקט של שביל חלב על האצבע.",
-  story:
-    "הטבעת הזו נולדה מתוך רגע של השראה בלילה חשוך על גג הסטודיו שלנו. כשהסתכלנו למעלה, ראינו את שביל החלב חוצה את השמיים — והבנו שזוהי היצירה הבאה שלנו. כל יהלום הושבץ בקפידה כדי ליצור את הזרימה הטבעית של אור הכוכבים.",
-  price: 6800,
-  compareAtPrice: 7800,
-  material: "18K Gold",
-  gemstone: "Diamond 0.5ct",
-  weight: "4.2g",
-  images: [
-    "/images/placeholder-product-1.jpg",
-    "/images/placeholder-product-2.jpg",
-    "/images/placeholder-product-3.jpg",
-    "/images/placeholder-product-4.jpg",
-  ],
-  variants: {
-    colors: [
-      { id: "yellow", name: "זהב צהוב", value: "yellow" },
-      { id: "white", name: "זהב לבן", value: "white" },
-      { id: "rose", name: "זהב ורוד", value: "rose" },
-    ],
-    sizes: ["5", "6", "7", "8", "9", "10"],
-  },
-};
-
-const MOCK_SIMILAR: ProductCardType[] = [
-  {
-    id: "sim-1",
-    slug: "eternity-band",
-    name: { en: "Eternity Band", he: "טבעת נצח" },
-    price: 5200,
-    image: "/images/placeholder-ring-2.jpg",
-    material: "18K Gold",
-  },
-  {
-    id: "sim-2",
-    slug: "north-star-ring",
-    name: { en: "North Star Ring", he: "טבעת כוכב הצפון" },
-    price: 2800,
-    image: "/images/placeholder-ring-1.jpg",
-    material: "14K Gold",
-    isNew: true,
-  },
-  {
-    id: "sim-3",
-    slug: "crown-ring",
-    name: { en: "Crown Ring", he: "טבעת כתר" },
-    price: 7200,
-    image: "/images/placeholder-ring-3.jpg",
-    material: "18K Gold",
-  },
-  {
-    id: "sim-4",
-    slug: "solitaire-ring",
-    name: { en: "Solitaire Ring", he: "טבעת סוליטר" },
-    price: 8500,
-    image: "/images/placeholder-ring-2.jpg",
-    material: "18K Gold",
-    isLimited: true,
-  },
-];
+import type { ProductDetail } from "@/lib/db/products";
 
 const TRUST_ITEMS = [
   { icon: Truck, text: "משלוח חינם מעל ₪500" },
@@ -104,108 +47,66 @@ const TRUST_ITEMS = [
 ];
 
 interface Props {
-  slug: string;
+  product: ProductDetail;
+  similarProducts: ProductCardType[];
+  completeTheLook?: ProductCardType[];
+  frequentlyBoughtTogether?: ProductCardType[];
 }
 
-export function ProductPage({ slug }: Props) {
+export function ProductPage({ product, similarProducts, completeTheLook = [], frequentlyBoughtTogether = [] }: Props) {
   const [selectedColor, setSelectedColor] = useState("yellow");
-  const [selectedSize, setSelectedSize] = useState("7");
+  const [selectedSize, setSelectedSize] = useState(product.options.sizes[0]);
   const [quantity, setQuantity] = useState(1);
-  const [activeImage, setActiveImage] = useState(0);
-  const [show3D, setShow3D] = useState(false);
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
 
   const addItem = useCartStore((s) => s.addItem);
   const { toggle, has } = useWishlistStore();
-  const isWishlisted = has(MOCK_PRODUCT.id);
+  const isWishlisted = has(product.id);
 
   const handleAddToCart = () => {
     addItem({
-      id: `${MOCK_PRODUCT.id}-${selectedColor}-${selectedSize}`,
+      id: `${product.id}-${selectedColor}-${selectedSize}`,
       product: {
-        id: MOCK_PRODUCT.id,
-        slug: MOCK_PRODUCT.slug,
-        name: MOCK_PRODUCT.name,
-        price: MOCK_PRODUCT.price,
-        image: MOCK_PRODUCT.images[0],
+        id: product.id,
+        slug: product.slug,
+        name: product.name,
+        price: product.price,
+        image: product.images[0],
       },
       variantId: `${selectedColor}-${selectedSize}`,
-      variantName: `${MOCK_PRODUCT.variants.colors.find((c) => c.id === selectedColor)?.name} / מידה ${selectedSize}`,
+      variantName: `${product.options.colors.find((c) => c.id === selectedColor)?.name} / מידה ${selectedSize}`,
       quantity,
-      price: MOCK_PRODUCT.price,
+      price: product.price,
     });
   };
 
-  const discount = MOCK_PRODUCT.compareAtPrice
+  const discount = product.compareAtPrice
     ? Math.round(
-        ((MOCK_PRODUCT.compareAtPrice - MOCK_PRODUCT.price) /
-          MOCK_PRODUCT.compareAtPrice) *
+        ((product.compareAtPrice - product.price) /
+          product.compareAtPrice) *
           100
       )
     : 0;
 
   return (
-    <div className="min-h-screen bg-black pt-20">
+    <div className="min-h-screen bg-black pt-20 pb-20 lg:pb-0">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Main Product Section */}
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16">
-          {/* Gallery / 3D Viewer */}
+          {/* Premium interactive product presentation */}
           <div className="space-y-4">
-            {/* Main Image / 3D */}
-            <div className="relative aspect-square bg-charcoal overflow-hidden">
-              {show3D ? (
-                <ProductViewer type="ring" />
-              ) : (
-                <motion.div
-                  key={activeImage}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="w-full h-full bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url(${MOCK_PRODUCT.images[activeImage]})`,
-                    backgroundColor: "#1a1a1a",
-                  }}
-                />
-              )}
+            <ProductPresentation
+              media={product.media}
+              fallbackImage={product.images[0]}
+              productName={product.name.he}
+            />
 
-              {/* 3D Toggle */}
-              <button
-                onClick={() => setShow3D(!show3D)}
-                className={cn(
-                  "absolute top-4 left-4 glass px-3 py-2 text-xs transition-colors flex items-center gap-1.5",
-                  show3D ? "text-gold" : "text-white/60 hover:text-white"
-                )}
-              >
-                <Eye size={14} />
-                {show3D ? "תמונות" : "תצוגת 360°"}
-              </button>
-
-              {/* Social proof */}
-              <div className="absolute bottom-4 right-4 glass px-3 py-1.5 rounded-full text-xs text-white/60">
+            <div className="glass flex items-center justify-between px-4 py-3 text-xs text-white/50">
+              <span>
                 <span className="text-gold">32</span> צפו היום
-              </div>
+              </span>
+              <span>חוויה אינטראקטיבית עבור /{product.slug}</span>
             </div>
-
-            {/* Thumbnails */}
-            {!show3D && (
-              <div className="grid grid-cols-4 gap-2">
-                {MOCK_PRODUCT.images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveImage(i)}
-                    className={cn(
-                      "aspect-square bg-charcoal bg-cover bg-center border-2 transition-colors",
-                      activeImage === i
-                        ? "border-gold"
-                        : "border-transparent hover:border-white/20"
-                    )}
-                    style={{
-                      backgroundImage: `url(${img})`,
-                      backgroundColor: "#1a1a1a",
-                    }}
-                  />
-                ))}
-              </div>
-            )}
           </div>
 
           {/* Product Info */}
@@ -218,7 +119,7 @@ export function ProductPage({ slug }: Props) {
                 </span>
               )}
               <span className="px-2.5 py-1 text-[10px] tracking-widest uppercase border border-gold/30 text-gold">
-                {MOCK_PRODUCT.material}
+                {product.material}
               </span>
             </div>
 
@@ -228,24 +129,24 @@ export function ProductPage({ slug }: Props) {
               animate={{ opacity: 1, y: 0 }}
               className="font-display text-3xl sm:text-4xl text-white"
             >
-              {MOCK_PRODUCT.name.he}
+              {product.name.he}
             </motion.h1>
 
             {/* Price */}
             <div className="flex items-baseline gap-3">
               <span className="text-2xl font-display text-gold">
-                {formatPrice(MOCK_PRODUCT.price)}
+                {formatPrice(product.price)}
               </span>
-              {MOCK_PRODUCT.compareAtPrice && (
+              {product.compareAtPrice && (
                 <span className="text-lg text-white/30 line-through">
-                  {formatPrice(MOCK_PRODUCT.compareAtPrice)}
+                  {formatPrice(product.compareAtPrice)}
                 </span>
               )}
             </div>
 
             {/* Description */}
             <p className="text-white/50 leading-relaxed">
-              {MOCK_PRODUCT.description}
+              {product.description}
             </p>
 
             {/* Specs */}
@@ -254,19 +155,19 @@ export function ProductPage({ slug }: Props) {
                 <p className="text-[10px] text-white/30 tracking-wider uppercase mb-1">
                   חומר
                 </p>
-                <p className="text-sm text-white/70">{MOCK_PRODUCT.material}</p>
+                <p className="text-sm text-white/70">{product.material}</p>
               </div>
               <div>
                 <p className="text-[10px] text-white/30 tracking-wider uppercase mb-1">
                   אבן
                 </p>
-                <p className="text-sm text-white/70">{MOCK_PRODUCT.gemstone}</p>
+                <p className="text-sm text-white/70">{product.gemstone}</p>
               </div>
               <div>
                 <p className="text-[10px] text-white/30 tracking-wider uppercase mb-1">
                   משקל
                 </p>
-                <p className="text-sm text-white/70">{MOCK_PRODUCT.weight}</p>
+                <p className="text-sm text-white/70">{product.weight}</p>
               </div>
             </div>
 
@@ -276,7 +177,7 @@ export function ProductPage({ slug }: Props) {
                 צבע מתכת
               </p>
               <div className="flex gap-3">
-                {MOCK_PRODUCT.variants.colors.map((color) => (
+                {product.options.colors.map((color) => (
                   <button
                     key={color.id}
                     onClick={() => setSelectedColor(color.id)}
@@ -307,12 +208,15 @@ export function ProductPage({ slug }: Props) {
                 <p className="text-xs text-white/50 tracking-wider uppercase">
                   מידה
                 </p>
-                <button className="text-xs text-gold/60 hover:text-gold transition-colors">
+                <button
+                  onClick={() => setSizeGuideOpen(true)}
+                  className="text-xs text-gold/60 hover:text-gold transition-colors"
+                >
                   מדריך מידות
                 </button>
               </div>
               <div className="flex flex-wrap gap-2">
-                {MOCK_PRODUCT.variants.sizes.map((size) => (
+                {product.options.sizes.map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
@@ -354,14 +258,14 @@ export function ProductPage({ slug }: Props) {
                 onClick={handleAddToCart}
               >
                 <ShoppingBag size={18} className="ml-2" />
-                הוסף לסל — {formatPrice(MOCK_PRODUCT.price * quantity)}
+                הוסף לסל — {formatPrice(product.price * quantity)}
               </Button>
             </div>
 
             {/* Wishlist + Share */}
             <div className="flex gap-3">
               <button
-                onClick={() => toggle(MOCK_PRODUCT.id)}
+                onClick={() => toggle(product.id)}
                 className={cn(
                   "flex-1 flex items-center justify-center gap-2 py-3 border text-sm transition-colors",
                   isWishlisted
@@ -375,7 +279,18 @@ export function ProductPage({ slug }: Props) {
                 />
                 {isWishlisted ? "ברשימת המשאלות" : "הוסף למשאלות"}
               </button>
-              <button className="p-3 border border-white/10 text-white/50 hover:border-white/30 hover:text-white transition-colors">
+              <button
+                onClick={async () => {
+                  const shareUrl = window.location.href;
+                  if (navigator.share) {
+                    await navigator.share({ title: product.name.he, url: shareUrl });
+                    return;
+                  }
+                  await navigator.clipboard.writeText(shareUrl);
+                  notifyAction("קישור למוצר הועתק ללוח.");
+                }}
+                className="p-3 border border-white/10 text-white/50 hover:border-white/30 hover:text-white transition-colors"
+              >
                 <Share2 size={16} />
               </button>
             </div>
@@ -410,28 +325,85 @@ export function ProductPage({ slug }: Props) {
               השראה מהכוכבים
             </h2>
             <p className="text-white/40 text-lg leading-relaxed">
-              {MOCK_PRODUCT.story}
+              {product.story}
             </p>
           </div>
         </motion.section>
 
+        {/* Complete the Look */}
+        {completeTheLook.length > 0 && (
+          <section className="mt-16 py-16 border-t border-white/5">
+            <div className="text-center mb-12">
+              <p className="text-gold/60 text-xs tracking-[0.5em] uppercase mb-3">
+                השלימי את הלוק
+              </p>
+              <h2 className="font-display text-3xl text-white">Complete the Look</h2>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {completeTheLook.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Frequently Bought Together */}
+        {frequentlyBoughtTogether.length > 0 && (
+          <section className="mt-16 py-16 border-t border-white/5">
+            <div className="text-center mb-12">
+              <p className="text-gold/60 text-xs tracking-[0.5em] uppercase mb-3">
+                קונים ביחד
+              </p>
+              <h2 className="font-display text-3xl text-white">לקוחות גם קנו</h2>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {frequentlyBoughtTogether.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Similar Products */}
-        <section className="mt-16 py-16 border-t border-white/5">
-          <div className="text-center mb-12">
-            <p className="text-gold/60 text-xs tracking-[0.5em] uppercase mb-3">
-              מוצרים דומים
-            </p>
-            <h2 className="font-display text-3xl text-white">
-              אולי תאהבו גם
-            </h2>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {MOCK_SIMILAR.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </section>
+        {similarProducts.length > 0 && (
+          <section className="mt-16 py-16 border-t border-white/5">
+            <div className="text-center mb-12">
+              <p className="text-gold/60 text-xs tracking-[0.5em] uppercase mb-3">
+                מוצרים דומים
+              </p>
+              <h2 className="font-display text-3xl text-white">
+                אולי תאהבו גם
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {similarProducts.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
+
+      {/* Sticky Mobile CTA */}
+      <div className="fixed bottom-0 left-0 right-0 lg:hidden z-30 bg-charcoal/95 backdrop-blur-md border-t border-white/5 px-4 py-3 safe-area-pb">
+        <div className="flex items-center gap-3">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs text-white/50 truncate">{product.name.he}</p>
+            <p className="text-sm font-display text-gold">{formatPrice(product.price * quantity)}</p>
+          </div>
+          <Button
+            variant="gold"
+            size="md"
+            onClick={handleAddToCart}
+            className="shrink-0"
+          >
+            <ShoppingBag size={16} className="ml-1.5" />
+            הוסף לסל
+          </Button>
+        </div>
+      </div>
+
+      <SizeGuideModal open={sizeGuideOpen} onClose={() => setSizeGuideOpen(false)} />
     </div>
   );
 }

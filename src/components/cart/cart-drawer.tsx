@@ -32,9 +32,9 @@ export function CartDrawer() {
 
           {/* Drawer */}
           <motion.div
-            initial={{ x: "-100%" }}
+            initial={{ x: "100%" }}
             animate={{ x: 0 }}
-            exit={{ x: "-100%" }}
+            exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed top-0 right-0 bottom-0 z-50 w-full sm:w-[420px] glass flex flex-col"
             style={{ left: "auto" }}
@@ -131,9 +131,9 @@ export function CartDrawer() {
                               onClick={() =>
                                 updateQuantity(item.id, item.quantity - 1)
                               }
-                              className="p-1 text-white/40 hover:text-white transition-colors"
+                              className="p-2.5 text-white/40 hover:text-white transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                             >
-                              <Minus size={14} />
+                              <Minus size={16} />
                             </button>
                             <span className="text-sm w-6 text-center">
                               {item.quantity}
@@ -142,9 +142,9 @@ export function CartDrawer() {
                               onClick={() =>
                                 updateQuantity(item.id, item.quantity + 1)
                               }
-                              className="p-1 text-white/40 hover:text-white transition-colors"
+                              className="p-2.5 text-white/40 hover:text-white transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                             >
-                              <Plus size={14} />
+                              <Plus size={16} />
                             </button>
                           </div>
 
@@ -158,9 +158,9 @@ export function CartDrawer() {
                       {/* Remove */}
                       <button
                         onClick={() => removeItem(item.id)}
-                        className="p-1 text-white/20 hover:text-red-400 transition-colors self-start"
+                        className="p-2.5 text-white/20 hover:text-red-400 transition-colors self-start min-w-[44px] min-h-[44px] flex items-center justify-center"
                       >
-                        <Trash2 size={14} />
+                        <Trash2 size={16} />
                       </button>
                     </motion.div>
                   ))}

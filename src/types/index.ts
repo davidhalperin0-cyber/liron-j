@@ -26,6 +26,7 @@ export interface ProductCard {
     color?: string;
     name: string;
   }[];
+  media?: ProductMedia;
 }
 
 export interface CartItemType {
@@ -44,4 +45,35 @@ export interface HomepageSectionData {
   data?: Record<string, unknown>;
   position: number;
   isActive: boolean;
+}
+
+export type ProductPresentationMode =
+  | "real-3d"
+  | "image-360"
+  | "enhanced-image";
+
+export type ProductMediaQualityLabel =
+  | "Real 3D model"
+  | "360 sequence"
+  | "Enhanced interactive image viewer";
+
+export interface ProductMedia {
+  model3dUrl?: string;
+  model3dKind?: Product3DModelKind;
+  sequence360?: string[];
+  sprite360?: Product360Sprite;
+  images: string[];
+}
+
+export type Product3DModelKind = "ring" | "earrings" | "necklace" | "bracelet";
+
+export interface Product360Sprite {
+  url: string;
+  columns: number;
+  rows: number;
+  frames: number;
+  startFrame?: number;
+  frameZoom?: number;
+  frameOffsetX?: number;
+  frameOffsetY?: number;
 }

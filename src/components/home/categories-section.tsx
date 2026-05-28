@@ -8,28 +8,28 @@ const CATEGORIES = [
     name: "טבעות",
     nameEn: "Rings",
     href: "/collections/rings",
-    image: "/images/placeholder-cat-rings.jpg",
+    image: "/images/products/diamond-halo-ring.webp",
     count: 45,
   },
   {
     name: "עגילים",
     nameEn: "Earrings",
     href: "/collections/earrings",
-    image: "/images/placeholder-cat-earrings.jpg",
+    image: "/images/products/diamond-chandelier-earrings.webp",
     count: 62,
   },
   {
     name: "שרשראות",
     nameEn: "Necklaces",
     href: "/collections/necklaces",
-    image: "/images/placeholder-cat-necklaces.jpg",
+    image: "/images/products/emerald-pendant-necklace.webp",
     count: 38,
   },
   {
     name: "צמידים",
     nameEn: "Bracelets",
     href: "/collections/bracelets",
-    image: "/images/placeholder-cat-bracelets.jpg",
+    image: "/images/products/gold-diamond-cuff.webp",
     count: 24,
   },
 ];
@@ -49,7 +49,7 @@ export function CategoriesSection() {
           <p className="text-gold/60 text-xs tracking-[0.5em] uppercase mb-4">
             גלו את העולם שלנו
           </p>
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-wide text-white">
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-6xl tracking-wide text-white">
             Shop by Category
           </h2>
         </motion.div>
@@ -67,12 +67,11 @@ export function CategoriesSection() {
               <Link href={category.href} className="group block relative">
                 <div className="relative aspect-[3/4] overflow-hidden bg-charcoal">
                   {/* Image */}
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                    style={{
-                      backgroundImage: `url(${category.image})`,
-                      backgroundColor: "#1a1a1a",
-                    }}
+                  <img
+                    src={category.image}
+                    alt={category.name}
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
 
                   {/* Dark overlay */}

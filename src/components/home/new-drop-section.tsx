@@ -6,51 +6,13 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import type { ProductCard as ProductCardType } from "@/types";
 
-const MOCK_NEW: ProductCardType[] = [
-  {
-    id: "10",
-    slug: "celestial-diamond-ring",
-    name: { en: "Celestial Diamond Ring", he: "טבעת יהלום סלסטיאל" },
-    price: 6800,
-    image: "/images/placeholder-ring-3.jpg",
-    material: "18K Gold",
-    color: "yellow",
-    isNew: true,
-  },
-  {
-    id: "11",
-    slug: "cascade-earrings",
-    name: { en: "Cascade Drop Earrings", he: "עגילי קסקייד" },
-    price: 3400,
-    image: "/images/placeholder-earring-2.jpg",
-    material: "14K Gold",
-    color: "rose",
-    isNew: true,
-  },
-  {
-    id: "12",
-    slug: "luna-pendant",
-    name: { en: "Luna Pendant Necklace", he: "תליון לונה" },
-    price: 4200,
-    image: "/images/placeholder-necklace-2.jpg",
-    material: "14K Gold",
-    color: "white",
-    isNew: true,
-  },
-  {
-    id: "13",
-    slug: "infinity-cuff",
-    name: { en: "Infinity Cuff Bracelet", he: "צמיד אינפיניטי" },
-    price: 5100,
-    image: "/images/placeholder-bracelet-1.jpg",
-    material: "18K Gold",
-    color: "yellow",
-    isNew: true,
-    isLimited: true,
-  },
-];
+interface Props {
+  products: ProductCardType[];
+}
 
-export function NewDropSection() {
+export function NewDropSection({ products }: Props) {
+  if (products.length === 0) return null;
+
   return (
     <section className="py-24 sm:py-32 relative overflow-hidden">
       {/* Background */}
@@ -69,7 +31,7 @@ export function NewDropSection() {
             <p className="text-gold/60 text-xs tracking-[0.5em] uppercase mb-4">
               הגיע עכשיו
             </p>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-wide text-white">
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-6xl tracking-wide text-white">
               New Drop
             </h2>
           </div>
@@ -82,7 +44,7 @@ export function NewDropSection() {
 
         {/* Products */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-          {MOCK_NEW.map((product, index) => (
+          {products.map((product, index) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 30 }}

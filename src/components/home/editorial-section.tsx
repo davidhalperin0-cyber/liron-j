@@ -18,7 +18,7 @@ export function EditorialSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-32 sm:py-48 overflow-hidden bg-black"
+      className="relative py-16 sm:py-32 lg:py-48 overflow-hidden bg-black"
     >
       {/* Parallax Background */}
       <motion.div
@@ -28,7 +28,7 @@ export function EditorialSection() {
         <div
           className="absolute inset-0 bg-cover bg-center image-dramatic"
           style={{
-            backgroundImage: "url(/images/placeholder-editorial.jpg)",
+            backgroundImage: "url(/images/products/collection-hero.webp)",
             backgroundColor: "#1a1a1a",
           }}
         />

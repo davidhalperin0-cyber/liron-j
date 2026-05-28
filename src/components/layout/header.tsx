@@ -53,7 +53,7 @@ export function Header() {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-500 pt-[env(safe-area-inset-top)]",
           isScrolled
             ? "glass py-3"
             : "bg-transparent py-5"
@@ -64,7 +64,7 @@ export function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-white/80 hover:text-gold transition-colors"
+              className="lg:hidden p-2.5 text-white/80 hover:text-gold transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -128,20 +128,22 @@ export function Header() {
             </Link>
 
             {/* Actions */}
-            <div className="flex items-center gap-3 sm:gap-5">
-              <button
-                className="p-2 text-white/80 hover:text-gold transition-colors hidden sm:block"
+            <div className="flex items-center gap-1 sm:gap-5">
+              <Link
+                href="/search"
+                className="p-2 text-white/80 hover:text-gold transition-colors"
                 aria-label="Search"
               >
                 <Search size={20} />
-              </button>
+              </Link>
 
-              <button
+              <Link
+                href="/account"
                 className="p-2 text-white/80 hover:text-gold transition-colors hidden sm:block"
                 aria-label="Account"
               >
                 <User size={20} />
-              </button>
+              </Link>
 
               <Link
                 href="/wishlist"
@@ -150,7 +152,7 @@ export function Header() {
               >
                 <Heart size={20} />
                 {wishlistCount > 0 && (
-                  <span className="absolute -top-0.5 -left-0.5 h-4 w-4 rounded-full bg-gold text-black text-[10px] font-bold flex items-center justify-center">
+                  <span className="absolute -top-0.5 -start-0.5 h-4 w-4 rounded-full bg-gold text-black text-[10px] font-bold flex items-center justify-center">
                     {wishlistCount}
                   </span>
                 )}
@@ -163,7 +165,7 @@ export function Header() {
               >
                 <ShoppingBag size={20} />
                 {cartItemCount > 0 && (
-                  <span className="absolute -top-0.5 -left-0.5 h-4 w-4 rounded-full bg-gold text-black text-[10px] font-bold flex items-center justify-center">
+                  <span className="absolute -top-0.5 -start-0.5 h-4 w-4 rounded-full bg-gold text-black text-[10px] font-bold flex items-center justify-center">
                     {cartItemCount}
                   </span>
                 )}
@@ -177,9 +179,9 @@ export function Header() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, x: 100 }}
+            initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 100 }}
+            exit={{ opacity: 0, x: -100 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="fixed inset-0 z-40 lg:hidden"
           >
@@ -215,12 +217,20 @@ export function Header() {
               ))}
 
               <div className="mt-8 flex gap-6">
-                <button className="text-white/60 hover:text-gold transition-colors">
+                <Link
+                  href="/search"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-white/60 hover:text-gold transition-colors"
+                >
                   <Search size={22} />
-                </button>
-                <button className="text-white/60 hover:text-gold transition-colors">
+                </Link>
+                <Link
+                  href="/account"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-white/60 hover:text-gold transition-colors"
+                >
                   <User size={22} />
-                </button>
+                </Link>
               </div>
             </div>
           </motion.div>

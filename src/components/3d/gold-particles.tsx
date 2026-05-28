@@ -4,7 +4,12 @@ import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-export function GoldParticles({ count = 200 }: { count?: number }) {
+function seededRandom(seed: number) {
+  const x = Math.sin(seed * 12.9898) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+export function GoldParticles({ count = 40 }: { count?: number }) {
   const mesh = useRef<THREE.Points>(null);
 
   const particles = useMemo(() => {
@@ -13,11 +18,11 @@ export function GoldParticles({ count = 200 }: { count?: number }) {
     const speeds = new Float32Array(count);
 
     for (let i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 20;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
-      sizes[i] = Math.random() * 3 + 0.5;
-      speeds[i] = Math.random() * 0.5 + 0.1;
+      positions[i * 3] = (seededRandom(i + 1) - 0.5) * 20;
+      positions[i * 3 + 1] = (seededRandom(i + 101) - 0.5) * 20;
+      positions[i * 3 + 2] = (seededRandom(i + 201) - 0.5) * 10;
+      sizes[i] = seededRandom(i + 301) * 2 + 0.3;
+      speeds[i] = seededRandom(i + 401) * 0.15 + 0.03;
     }
 
     return { positions, sizes, speeds };
@@ -29,8 +34,8 @@ export function GoldParticles({ count = 200 }: { count?: number }) {
     const time = state.clock.elapsedTime;
 
     for (let i = 0; i < count; i++) {
-      positions[i * 3 + 1] += particles.speeds[i] * 0.01;
-      positions[i * 3] += Math.sin(time + i) * 0.002;
+      positions[i * 3 + 1] += particles.speeds[i] * 0.004;
+      positions[i * 3] += Math.sin(time * 0.3 + i) * 0.0008;
 
       if (positions[i * 3 + 1] > 10) {
         positions[i * 3 + 1] = -10;
@@ -38,7 +43,7 @@ export function GoldParticles({ count = 200 }: { count?: number }) {
     }
 
     mesh.current.geometry.attributes.position.needsUpdate = true;
-    mesh.current.rotation.y = time * 0.02;
+    mesh.current.rotation.y = time * 0.005;
   });
 
   return (
@@ -54,10 +59,10 @@ export function GoldParticles({ count = 200 }: { count?: number }) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.03}
-        color="#C9A96E"
+        size={0.02}
+        color="#B89B5E"
         transparent
-        opacity={0.6}
+        opacity={0.35}
         sizeAttenuation
         blending={THREE.AdditiveBlending}
         depthWrite={false}

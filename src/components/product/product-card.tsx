@@ -5,8 +5,11 @@ import { motion } from "framer-motion";
 import { Heart, ShoppingBag, Eye } from "lucide-react";
 import { cn, formatPrice, getDiscountPercentage } from "@/lib/utils";
 import { useWishlistStore } from "@/stores/wishlist-store";
+import { useCartStore } from "@/stores/cart-store";
 import type { ProductCard as ProductCardType } from "@/types";
+import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface Props {
   product: ProductCardType;
@@ -17,6 +20,8 @@ export function ProductCard({ product, size = "md" }: Props) {
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const { toggle, has } = useWishlistStore();
+  const addItem = useCartStore((s) => s.addItem);
+  const router = useRouter();
   const isWishlisted = has(product.id);
 
   const discount = product.compareAtPrice
@@ -54,25 +59,30 @@ export function ProductCard({ product, size = "md" }: Props) {
           <div className="absolute inset-0 spotlight opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
 
           {/* Main Image */}
-          <div
+          <Image
+            src={product.image}
+            alt={typeof product.name === "string" ? product.name : product.name.he || product.name.en}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className={cn(
-              "absolute inset-0 bg-cover bg-center transition-all duration-700",
+              "object-cover transition-all duration-700",
               isHovered && product.hoverImage ? "opacity-0 scale-105" : "opacity-100 scale-100"
             )}
-            style={{
-              backgroundImage: `url(${product.image})`,
-              backgroundColor: "#1a1a1a",
-            }}
+            loading="lazy"
           />
 
           {/* Hover Image */}
           {product.hoverImage && (
-            <div
+            <Image
+              src={product.hoverImage}
+              alt={`${typeof product.name === "string" ? product.name : product.name.he || product.name.en} - hover`}
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className={cn(
-                "absolute inset-0 bg-cover bg-center transition-all duration-700",
+                "object-cover transition-all duration-700",
                 isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
               )}
-              style={{ backgroundImage: `url(${product.hoverImage})` }}
+              loading="lazy"
             />
           )}
 
@@ -106,7 +116,14 @@ export function ProductCard({ product, size = "md" }: Props) {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                // Quick add to cart logic
+                addItem({
+                  id: `${product.id}-${product.variants?.[0]?.id ?? "default"}`,
+                  product,
+                  variantId: product.variants?.[0]?.id,
+                  variantName: product.variants?.[0]?.name,
+                  quantity: 1,
+                  price: product.price,
+                });
               }}
               className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gold text-black text-xs tracking-wider uppercase font-medium hover:bg-gold-light transition-colors"
             >
@@ -117,7 +134,7 @@ export function ProductCard({ product, size = "md" }: Props) {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                // Quick view logic
+                router.push(`/products/${product.slug}`);
               }}
               className="p-2.5 bg-black/60 backdrop-blur-sm text-white hover:bg-black/80 transition-colors"
             >
@@ -167,12 +184,12 @@ export function ProductCard({ product, size = "md" }: Props) {
 
         {/* Color Variants */}
         {product.variants && product.variants.length > 0 && (
-          <div className="flex gap-1.5 pt-1">
+          <div className="flex gap-2 pt-1">
             {product.variants.map((variant) => (
               <button
                 key={variant.id}
                 className={cn(
-                  "w-4 h-4 rounded-full border border-white/20 transition-all hover:scale-110",
+                  "w-7 h-7 rounded-full border border-white/20 transition-all hover:scale-110",
                   variant.color === "yellow" && "bg-yellow-600",
                   variant.color === "white" && "bg-gray-200",
                   variant.color === "rose" && "bg-rose-300"

@@ -1,18 +1,19 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-black: #0A0A0A;
-  --color-gold: #C9A96E;
-  --color-gold-light: #D4BC8B;
-  --color-gold-dark: #A8894E;
-  --color-cream: #F5F0EB;
-  --color-cream-dark: #E8DFD4;
-  --color-white: #FAFAFA;
+  /* Refined luxury palette — champagne/bronze, not yellow-gold */
+  --color-black: #111110;
+  --color-gold: #B89B5E;
+  --color-gold-light: #C6A56B;
+  --color-gold-dark: #A8844F;
+  --color-cream: #F5F1EA;
+  --color-cream-dark: #D6D1C7;
+  --color-white: #FAF9F7;
   --color-deep-red: #8B2635;
-  --color-charcoal: #1A1A1A;
-  --color-smoke: #2A2A2A;
-  --color-mist: #3A3A3A;
-  --color-silver: #9A9A9A;
+  --color-charcoal: #1A1918;
+  --color-smoke: #252422;
+  --color-mist: #3A3836;
+  --color-silver: #8E8B86;
 
   --font-display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
   --font-body: "Inter", "Outfit", system-ui, sans-serif;
@@ -86,10 +87,10 @@ body {
 }
 
 .glass {
-  background: rgba(26, 26, 26, 0.8);
+  background: rgba(26, 25, 24, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(201, 169, 110, 0.1);
+  border: 1px solid rgba(184, 155, 94, 0.08);
 }
 
 .glass-light {
@@ -102,7 +103,7 @@ body {
 .spotlight {
   background: radial-gradient(
     600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(201, 169, 110, 0.06),
+    rgba(184, 155, 94, 0.04),
     transparent 40%
   );
 }
@@ -128,6 +129,15 @@ body {
   }
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
@@ -136,7 +146,7 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(201, 169, 110, 0.1) 50%,
+    rgba(184, 155, 94, 0.06) 50%,
     transparent 100%
   );
   background-size: 200% 100%;
@@ -153,6 +163,18 @@ body {
 
 .luxury-shadow {
   box-shadow:
-    0 0 30px rgba(201, 169, 110, 0.05),
+    0 0 30px rgba(184, 155, 94, 0.03),
     0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Safe area padding for devices with notch/home indicator */
+.safe-area-pb {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+/* Touch-friendly tap targets */
+@media (pointer: coarse) {
+  button, a, input, select, textarea {
+    min-height: 44px;
+  }
 }

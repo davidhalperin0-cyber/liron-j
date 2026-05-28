@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -15,6 +16,8 @@ import {
   Tags,
   Megaphone,
   ArrowLeft,
+  Menu,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -32,11 +35,11 @@ const NAV_ITEMS = [
   { label: "הגדרות", href: "/admin/settings", icon: Settings },
 ];
 
-export function AdminSidebar() {
+function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed right-0 top-0 bottom-0 w-64 bg-charcoal border-l border-white/5 flex flex-col z-40">
+    <>
       {/* Logo */}
       <div className="p-6 border-b border-white/5">
         <h1 className="font-display text-xl tracking-[0.2em] uppercase text-gradient-gold">
@@ -58,8 +61,9 @@ export function AdminSidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onNavigate}
               className={cn(
-                "flex items-center gap-3 px-6 py-3 text-sm transition-colors",
+                "flex items-center gap-3 px-6 py-3 text-sm transition-colors min-h-[44px]",
                 isActive
                   ? "text-gold bg-gold/5 border-l-2 border-gold"
                   : "text-white/50 hover:text-white hover:bg-white/[0.02]"
@@ -76,12 +80,58 @@ export function AdminSidebar() {
       <div className="p-4 border-t border-white/5">
         <Link
           href="/"
-          className="flex items-center gap-2 text-xs text-white/30 hover:text-gold transition-colors"
+          onClick={onNavigate}
+          className="flex items-center gap-2 text-xs text-white/30 hover:text-gold transition-colors min-h-[44px]"
         >
           <ArrowLeft size={14} />
           חזרה לחנות
         </Link>
       </div>
-    </aside>
+    </>
+  );
+}
+
+export function AdminSidebar() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  return (
+    <>
+      {/* Mobile top bar */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-charcoal border-b border-white/5 flex items-center justify-between px-4 py-3 lg:hidden">
+        <h1 className="font-display text-lg tracking-[0.2em] uppercase text-gradient-gold">
+          Liron J
+        </h1>
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="p-2.5 text-white/60 hover:text-white min-w-[44px] min-h-[44px] flex items-center justify-center"
+          aria-label="Toggle menu"
+        >
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile drawer overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      {/* Mobile drawer */}
+      <aside
+        className={cn(
+          "fixed right-0 top-[56px] bottom-0 w-[280px] bg-charcoal border-l border-white/5 flex flex-col z-50 transition-transform duration-300 lg:hidden",
+          mobileOpen ? "translate-x-0" : "translate-x-full"
+        )}
+      >
+        <SidebarContent onNavigate={() => setMobileOpen(false)} />
+      </aside>
+
+      {/* Desktop sidebar — unchanged */}
+      <aside className="fixed right-0 top-0 bottom-0 w-64 bg-charcoal border-l border-white/5 flex-col z-40 hidden lg:flex">
+        <SidebarContent />
+      </aside>
+    </>
   );
 }

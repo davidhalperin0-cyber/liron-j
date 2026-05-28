@@ -13,7 +13,7 @@ export function BrandStorySection() {
   return (
     <section className="py-24 sm:py-32 bg-charcoal relative overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
           {/* Image */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -26,7 +26,7 @@ export function BrandStorySection() {
               <div
                 className="w-full h-full bg-cover bg-center image-dramatic"
                 style={{
-                  backgroundImage: "url(/images/placeholder-workshop.jpg)",
+                  backgroundImage: "url(/images/products/collection-hero.webp)",
                   backgroundColor: "#2a2a2a",
                 }}
               />

@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
+import { SlidersHorizontal, ChevronDown, X } from "lucide-react";
 import { ProductCard } from "@/components/product/product-card";
 import { cn } from "@/lib/utils";
 import type { ProductCard as ProductCardType } from "@/types";
@@ -12,6 +12,8 @@ interface Props {
   name: string;
   nameEn: string;
   description: string;
+  products: ProductCardType[];
+  heroImage?: string;
 }
 
 const MATERIALS = ["14K Gold", "18K Gold", "Silver", "Rose Gold"];
@@ -29,39 +31,16 @@ const SORT_OPTIONS = [
   { value: "trending", label: "טרנדי" },
 ];
 
-const MOCK_PRODUCTS: ProductCardType[] = Array.from({ length: 16 }, (_, i) => ({
-  id: `col-${i}`,
-  slug: `product-${i}`,
-  name: {
-    en: `Jewelry Piece ${i + 1}`,
-    he: [
-      "טבעת אינפיניטי", "עגילי חישוק", "שרשרת כוכב", "צמיד זהב",
-      "טבעת יהלום", "עגילי טיפה", "תליון לב", "צמיד טניס",
-      "טבעת כתר", "עגילי פרח", "שרשרת שכבות", "צמיד צ'ארם",
-      "טבעת סוליטר", "עגילי עיגול", "תליון מפתח", "צמיד בנגל",
-    ][i],
-  },
-  price: [2800, 4500, 3900, 5200, 6800, 3400, 4200, 5100, 7200, 2900, 3800, 4600, 8500, 2400, 3100, 5800][i],
-  compareAtPrice: i % 4 === 0 ? [2800, 4500, 3900, 5200, 6800, 3400, 4200, 5100, 7200, 2900, 3800, 4600, 8500, 2400, 3100, 5800][i] * 1.15 : undefined,
-  image: `/images/placeholder-product-${(i % 4) + 1}.jpg`,
-  material: MATERIALS[i % 4],
-  color: COLORS[i % 4].value,
-  isNew: i < 4,
-  isLimited: i === 7 || i === 12,
-  isFeatured: i === 2 || i === 5,
-  trendingScore: Math.random() * 100,
-}));
-
-export function CollectionPage({ slug, name, nameEn, description }: Props) {
+export function CollectionPage({ slug, name, nameEn, description, products: initialProducts, heroImage }: Props) {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [activeSort, setActiveSort] = useState("popular");
   const [activeMaterials, setActiveMaterials] = useState<string[]>([]);
   const [activeColors, setActiveColors] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 15000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000000]);
 
   const filteredProducts = useMemo(() => {
-    let result = [...MOCK_PRODUCTS];
+    let result = [...initialProducts];
 
     if (activeMaterials.length > 0) {
       result = result.filter((p) => p.material && activeMaterials.includes(p.material));
@@ -109,20 +88,31 @@ export function CollectionPage({ slug, name, nameEn, description }: Props) {
     <div className="min-h-screen bg-black pt-20">
       {/* Collection Hero */}
       <section className="relative py-16 sm:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/50 to-black" />
+        {heroImage ? (
+          <>
+            <img
+              src={heroImage}
+              alt={name}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]" />
+          </>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-b from-charcoal/50 to-black" />
+        )}
         <div className="relative max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-gold/60 text-xs tracking-[0.5em] uppercase mb-4"
           >
-            קולקציה
+            {nameEn} / {slug}
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="font-display text-5xl sm:text-6xl lg:text-7xl text-white mb-4"
+            className="font-display text-3xl sm:text-5xl lg:text-7xl text-white mb-4"
           >
             {name}
           </motion.h1>
@@ -191,7 +181,7 @@ export function CollectionPage({ slug, name, nameEn, description }: Props) {
                     initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 4 }}
-                    className="absolute top-full left-0 mt-2 glass rounded-lg py-2 min-w-[160px] z-50"
+                    className="absolute top-full end-0 mt-2 glass rounded-lg py-2 min-w-[160px] z-50"
                   >
                     {SORT_OPTIONS.map((option) => (
                       <button
@@ -220,98 +210,111 @@ export function CollectionPage({ slug, name, nameEn, description }: Props) {
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-8">
-          {/* Filters Sidebar */}
+          {/* Filters — mobile: bottom sheet, desktop: inline sidebar */}
           <AnimatePresence>
             {filtersOpen && (
-              <motion.aside
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 260, opacity: 1 }}
-                exit={{ width: 0, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="shrink-0 overflow-hidden hidden lg:block"
-              >
-                <div className="w-[260px] space-y-8">
-                  {/* Material Filter */}
-                  <div>
-                    <h3 className="text-sm font-medium text-white/80 mb-4 tracking-wider uppercase">
-                      חומר
-                    </h3>
-                    <div className="space-y-2">
-                      {MATERIALS.map((mat) => (
-                        <button
-                          key={mat}
-                          onClick={() => toggleMaterial(mat)}
-                          className={cn(
-                            "flex items-center gap-3 w-full py-2 text-sm transition-colors",
-                            activeMaterials.includes(mat)
-                              ? "text-gold"
-                              : "text-white/50 hover:text-white"
-                          )}
-                        >
-                          <span
-                            className={cn(
-                              "h-4 w-4 border rounded-sm flex items-center justify-center transition-colors",
-                              activeMaterials.includes(mat)
-                                ? "border-gold bg-gold"
-                                : "border-white/20"
-                            )}
-                          >
-                            {activeMaterials.includes(mat) && (
-                              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                                <path d="M2 5L4 7L8 3" stroke="#0A0A0A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg>
-                            )}
-                          </span>
-                          {mat}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+              <>
+                {/* Mobile overlay backdrop */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+                  onClick={() => setFiltersOpen(false)}
+                />
 
-                  {/* Color Filter */}
-                  <div>
-                    <h3 className="text-sm font-medium text-white/80 mb-4 tracking-wider uppercase">
-                      צבע
-                    </h3>
-                    <div className="flex flex-wrap gap-3">
-                      {COLORS.map((color) => (
-                        <button
-                          key={color.value}
-                          onClick={() => toggleColor(color.value)}
-                          className={cn(
-                            "w-8 h-8 rounded-full transition-all",
-                            color.bg,
-                            activeColors.includes(color.value)
-                              ? "ring-2 ring-gold ring-offset-2 ring-offset-black scale-110"
-                              : "ring-1 ring-white/10 hover:scale-105"
-                          )}
-                          title={color.name}
-                        />
-                      ))}
+                {/* Mobile filter sheet */}
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="fixed bottom-0 left-0 right-0 z-50 bg-charcoal rounded-t-2xl max-h-[80vh] overflow-y-auto safe-area-pb lg:hidden"
+                >
+                  <div className="p-6 space-y-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <h2 className="text-lg font-medium text-white">סינון</h2>
+                      <button onClick={() => setFiltersOpen(false)} className="p-2 text-white/60 min-w-[44px] min-h-[44px] flex items-center justify-center">
+                        <X size={20} />
+                      </button>
                     </div>
+                    {/* Material Filter */}
+                    <div>
+                      <h3 className="text-sm font-medium text-white/80 mb-3 tracking-wider uppercase">חומר</h3>
+                      <div className="space-y-1">
+                        {MATERIALS.map((mat) => (
+                          <button key={mat} onClick={() => toggleMaterial(mat)} className={cn("flex items-center gap-3 w-full py-3 text-sm transition-colors min-h-[44px]", activeMaterials.includes(mat) ? "text-gold" : "text-white/50 hover:text-white")}>
+                            <span className={cn("h-5 w-5 border rounded-sm flex items-center justify-center transition-colors", activeMaterials.includes(mat) ? "border-gold bg-gold" : "border-white/20")}>
+                              {activeMaterials.includes(mat) && (<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4 7L8 3" stroke="#0A0A0A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>)}
+                            </span>
+                            {mat}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Color Filter */}
+                    <div>
+                      <h3 className="text-sm font-medium text-white/80 mb-3 tracking-wider uppercase">צבע</h3>
+                      <div className="flex flex-wrap gap-4">
+                        {COLORS.map((color) => (
+                          <button key={color.value} onClick={() => toggleColor(color.value)} className={cn("w-10 h-10 rounded-full transition-all", color.bg, activeColors.includes(color.value) ? "ring-2 ring-gold ring-offset-2 ring-offset-charcoal scale-110" : "ring-1 ring-white/10 hover:scale-105")} title={color.name} />
+                        ))}
+                      </div>
+                    </div>
+                    {/* Price Range */}
+                    <div>
+                      <h3 className="text-sm font-medium text-white/80 mb-3 tracking-wider uppercase">טווח מחיר</h3>
+                      <input type="range" min={0} max={15000} step={500} value={priceRange[1]} onChange={(e) => setPriceRange([0, parseInt(e.target.value)])} className="w-full accent-gold" />
+                      <div className="flex justify-between mt-2 text-xs text-white/40"><span>₪0</span><span>₪{priceRange[1].toLocaleString()}</span></div>
+                    </div>
+                    {/* Apply button */}
+                    <button onClick={() => setFiltersOpen(false)} className="w-full py-3.5 bg-gold text-black rounded-lg font-medium text-sm mt-4">
+                      הצג {filteredProducts.length} תוצאות
+                    </button>
                   </div>
+                </motion.div>
 
-                  {/* Price Range */}
-                  <div>
-                    <h3 className="text-sm font-medium text-white/80 mb-4 tracking-wider uppercase">
-                      טווח מחיר
-                    </h3>
-                    <input
-                      type="range"
-                      min={0}
-                      max={15000}
-                      step={500}
-                      value={priceRange[1]}
-                      onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
-                      className="w-full accent-gold"
-                    />
-                    <div className="flex justify-between mt-2 text-xs text-white/40">
-                      <span>₪0</span>
-                      <span>₪{priceRange[1].toLocaleString()}</span>
+                {/* Desktop inline sidebar */}
+                <motion.aside
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: 260, opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="shrink-0 overflow-hidden hidden lg:block"
+                >
+                  <div className="w-[260px] space-y-8">
+                    {/* Material Filter */}
+                    <div>
+                      <h3 className="text-sm font-medium text-white/80 mb-4 tracking-wider uppercase">חומר</h3>
+                      <div className="space-y-2">
+                        {MATERIALS.map((mat) => (
+                          <button key={mat} onClick={() => toggleMaterial(mat)} className={cn("flex items-center gap-3 w-full py-2 text-sm transition-colors", activeMaterials.includes(mat) ? "text-gold" : "text-white/50 hover:text-white")}>
+                            <span className={cn("h-4 w-4 border rounded-sm flex items-center justify-center transition-colors", activeMaterials.includes(mat) ? "border-gold bg-gold" : "border-white/20")}>
+                              {activeMaterials.includes(mat) && (<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5L4 7L8 3" stroke="#0A0A0A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>)}
+                            </span>
+                            {mat}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Color Filter */}
+                    <div>
+                      <h3 className="text-sm font-medium text-white/80 mb-4 tracking-wider uppercase">צבע</h3>
+                      <div className="flex flex-wrap gap-3">
+                        {COLORS.map((color) => (
+                          <button key={color.value} onClick={() => toggleColor(color.value)} className={cn("w-8 h-8 rounded-full transition-all", color.bg, activeColors.includes(color.value) ? "ring-2 ring-gold ring-offset-2 ring-offset-black scale-110" : "ring-1 ring-white/10 hover:scale-105")} title={color.name} />
+                        ))}
+                      </div>
+                    </div>
+                    {/* Price Range */}
+                    <div>
+                      <h3 className="text-sm font-medium text-white/80 mb-4 tracking-wider uppercase">טווח מחיר</h3>
+                      <input type="range" min={0} max={15000} step={500} value={priceRange[1]} onChange={(e) => setPriceRange([0, parseInt(e.target.value)])} className="w-full accent-gold" />
+                      <div className="flex justify-between mt-2 text-xs text-white/40"><span>₪0</span><span>₪{priceRange[1].toLocaleString()}</span></div>
                     </div>
                   </div>
-                </div>
-              </motion.aside>
+                </motion.aside>
+              </>
             )}
           </AnimatePresence>
 
