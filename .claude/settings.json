@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx next build *)",
+      "Bash(npx tsc *)",
+      "Bash(mkdir -p *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git clone *)",
+      "Bash(cp *)",
+      "Bash(npm install *)",
+      "Bash(gh auth *)",
+      "Bash(gh repo *)",
+      "Bash(npx vercel *)"
+    ]
+  }
+}

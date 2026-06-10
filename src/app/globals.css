@@ -1,19 +1,21 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Refined luxury palette — champagne/bronze, not yellow-gold */
-  --color-black: #111110;
-  --color-gold: #B89B5E;
-  --color-gold-light: #C6A56B;
-  --color-gold-dark: #A8844F;
-  --color-cream: #F5F1EA;
-  --color-cream-dark: #D6D1C7;
-  --color-white: #FAF9F7;
+  /* Light luxury palette — ivory, pearl & antique gold (Cartier/Celine feel).
+     NOTE: token names kept for compatibility, values inverted to light theme.
+     bg-black → ivory page · bg-charcoal → white card · text-white → ink. */
+  --color-black: #F7F3EC;      /* page background — warm ivory */
+  --color-gold: #9A7B3C;       /* antique gold — deepened for contrast on light */
+  --color-gold-light: #B59455;
+  --color-gold-dark: #7A6030;
+  --color-cream: #EFE8DD;
+  --color-cream-dark: #DDD4C6;
+  --color-white: #1C1915;      /* primary text — deep espresso ink */
   --color-deep-red: #8B2635;
-  --color-charcoal: #1A1918;
-  --color-smoke: #252422;
-  --color-mist: #3A3836;
-  --color-silver: #8E8B86;
+  --color-charcoal: #FFFFFF;   /* raised surfaces / cards */
+  --color-smoke: #EFE8DD;      /* alternate sand sections */
+  --color-mist: #DDD4C6;       /* borders / dividers */
+  --color-silver: #6E6962;     /* muted secondary text */
 
   --font-display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
   --font-body: "Inter", "Outfit", system-ui, sans-serif;
@@ -55,11 +57,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-black);
+  background: var(--color-cream);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-mist);
+  background: var(--color-cream-dark);
   border-radius: 3px;
 }
 
@@ -83,27 +85,27 @@ body {
 }
 
 .bg-gradient-luxury {
-  background: linear-gradient(180deg, var(--color-black) 0%, var(--color-charcoal) 50%, var(--color-black) 100%);
+  background: linear-gradient(180deg, var(--color-black) 0%, #FFFFFF 50%, var(--color-black) 100%);
 }
 
 .glass {
-  background: rgba(26, 25, 24, 0.85);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(184, 155, 94, 0.08);
+  border: 1px solid rgba(154, 123, 60, 0.14);
 }
 
 .glass-light {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(28, 25, 21, 0.03);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(28, 25, 21, 0.06);
 }
 
 .spotlight {
   background: radial-gradient(
     600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(184, 155, 94, 0.04),
+    rgba(154, 123, 60, 0.08),
     transparent 40%
   );
 }
@@ -146,7 +148,7 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(184, 155, 94, 0.06) 50%,
+    rgba(154, 123, 60, 0.10) 50%,
     transparent 100%
   );
   background-size: 200% 100%;
@@ -158,13 +160,13 @@ body {
 }
 
 .image-dramatic {
-  filter: contrast(1.05) brightness(0.95);
+  filter: contrast(1.02);
 }
 
 .luxury-shadow {
   box-shadow:
-    0 0 30px rgba(184, 155, 94, 0.03),
-    0 20px 60px rgba(0, 0, 0, 0.3);
+    0 1px 2px rgba(28, 25, 21, 0.04),
+    0 18px 50px rgba(28, 25, 21, 0.10);
 }
 
 /* Safe area padding for devices with notch/home indicator */

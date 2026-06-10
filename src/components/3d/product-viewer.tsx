@@ -46,7 +46,7 @@ export function ProductViewer({ imageUrl }: Props) {
   if (!imageUrl) return null;
 
   return (
-    <div className="w-full h-full bg-[#0a0a0a] overflow-hidden relative">
+    <div className="w-full h-full bg-[#EFE9DF] overflow-hidden relative">
       <Canvas
         camera={{ position: [0, 0, 3.5], fov: 40 }}
         dpr={[1, 2]}

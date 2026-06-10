@@ -73,7 +73,7 @@ function RealModelViewer({
   kind?: Product3DModelKind;
 }) {
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[#080808]">
+    <div className="relative h-full w-full overflow-hidden bg-[#EFE9DF]">
       <Canvas
         camera={{ position: [0, 0, 4.2], fov: 38 }}
         dpr={[1, 2]}
@@ -248,7 +248,7 @@ function Sprite360Viewer({
 
   return (
     <div
-      className="relative h-full w-full cursor-grab overflow-hidden bg-[#080807] active:cursor-grabbing"
+      className="relative h-full w-full cursor-grab overflow-hidden bg-[#EFE9DF] active:cursor-grabbing"
       onPointerDown={(event) => {
         setIsDragging(true);
         lastX.current = event.clientX;
@@ -352,7 +352,7 @@ function SpriteFrameLayer({
 
 function GeneratedLuxuryPreview({ productName }: { productName: string }) {
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[#090806]">
+    <div className="relative h-full w-full overflow-hidden bg-[#EFE9DF]">
       <motion.div
         className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold/30"
         animate={{ rotate: 360, scale: [1, 1.08, 1] }}

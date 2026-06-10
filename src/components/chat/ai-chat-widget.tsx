@@ -216,7 +216,7 @@ export function AiChatWidget() {
             : "pointer-events-none opacity-0 translate-y-3 sm:bottom-6 sm:end-6 sm:w-[400px] sm:h-[600px]"
         )}
       >
-        <div className="flex flex-col h-full bg-[#0c0c0c] sm:border sm:border-white/[0.06] overflow-hidden">
+        <div className="flex flex-col h-full bg-[#FFFFFF] sm:border sm:border-white/[0.06] overflow-hidden">
 
           {/* Header — minimal, architectural */}
           <div className="flex items-center justify-between px-6 py-5 border-b border-white/[0.04]">
@@ -326,7 +326,7 @@ export function AiChatWidget() {
           "sm:w-auto",
           "flex items-center justify-center gap-3",
           "px-6 py-3.5 sm:py-3",
-          "bg-[#0c0c0c]/95 backdrop-blur-sm",
+          "bg-[#FFFFFF]/95 backdrop-blur-sm",
           "sm:border sm:border-white/[0.06]",
           "border-t border-white/[0.04] sm:border-t-0",
           "transition-all duration-500",

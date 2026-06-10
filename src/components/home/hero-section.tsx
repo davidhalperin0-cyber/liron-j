@@ -16,9 +16,9 @@ export function HeroSection() {
       {/* 3D Scene */}
       <HeroScene />
 
-      {/* Cinematic vignette */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/90 z-10 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.7)_100%)] z-10 pointer-events-none" />
+      {/* Soft light vignette — fades edges into the ivory page */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#F7F3EC]/40 via-transparent to-[#F7F3EC] z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(247,243,236,0.85)_100%)] z-10 pointer-events-none" />
 
       {/* Content — bottom-weighted for luxury editorial feel */}
       <div className="relative z-20 text-center max-w-3xl mx-auto px-6">
