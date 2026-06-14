@@ -22,7 +22,7 @@ export default async function CollectionsPage() {
               הקולקציות שלנו
             </p>
             <h1 className="font-display text-4xl md:text-5xl text-white">
-              גלי את העולם של Liron J
+              גלי את העולם של AURÉA
             </h1>
           </div>
 

@@ -19,19 +19,19 @@ function buildBreadcrumbJsonLd(categoryName: string, slug: string) {
         "@type": "ListItem",
         position: 1,
         name: "דף הבית",
-        item: "https://lironj.com",
+        item: "https://aurea.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "קולקציות",
-        item: "https://lironj.com/collections",
+        item: "https://aurea.com/collections",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: categoryName,
-        item: `https://lironj.com/collections/${slug}`,
+        item: `https://aurea.com/collections/${slug}`,
       },
     ],
   };
@@ -42,7 +42,7 @@ const SPECIAL_COLLECTIONS: Record<string, { name: string; nameEn: string; descri
   new: { name: "חדש באתר", nameEn: "New Arrivals", description: "הפריטים החדשים ביותר שהגיעו לקולקציה." },
   bestsellers: { name: "בסט סלרס", nameEn: "Best Sellers", description: "המוצרים הכי אהובים על הלקוחות שלנו." },
   limited: { name: "מהדורה מוגבלת", nameEn: "Limited Edition", description: "פריטים בלעדיים במהדורה מוגבלת." },
-  all: { name: "כל המוצרים", nameEn: "All Products", description: "כל הקולקציה של Liron J במקום אחד." },
+  all: { name: "כל המוצרים", nameEn: "All Products", description: "כל הקולקציה של AURÉA במקום אחד." },
 };
 
 export async function generateMetadata({
@@ -55,17 +55,17 @@ export async function generateMetadata({
   // Check if it's a special collection first
   const special = SPECIAL_COLLECTIONS[slug];
   if (special) {
-    return { title: `${special.name} | Liron J`, description: special.description };
+    return { title: `${special.name} | AURÉA`, description: special.description };
   }
 
   // Otherwise look up the category from DB
   const category = await getCategoryBySlug(slug);
   if (category) {
-    return { title: `${category.name} | Liron J`, description: category.description };
+    return { title: `${category.name} | AURÉA`, description: category.description };
   }
 
   // Fallback
-  return { title: "קולקציה | Liron J", description: "הקולקציה של Liron J" };
+  return { title: "קולקציה | AURÉA", description: "הקולקציה של AURÉA" };
 }
 
 export default async function Page({

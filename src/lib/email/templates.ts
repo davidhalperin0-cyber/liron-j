@@ -12,14 +12,14 @@ function layout(content: string): string {
 <body style="margin:0;padding:0;background:${BG_COLOR};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <div style="max-width:560px;margin:0 auto;padding:40px 20px;">
     <div style="text-align:center;margin-bottom:32px;">
-      <h1 style="color:${BRAND_COLOR};font-size:24px;font-weight:300;letter-spacing:4px;margin:0;">LIRON J</h1>
+      <h1 style="color:${BRAND_COLOR};font-size:24px;font-weight:300;letter-spacing:4px;margin:0;">AURÉA</h1>
     </div>
     <div style="background:${CARD_BG};border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:32px;">
       ${content}
     </div>
     <div style="text-align:center;margin-top:24px;">
       <p style="color:rgba(255,255,255,0.2);font-size:11px;margin:0;">
-        Liron J · תכשיטי יוקרה · תל אביב, ישראל
+        AURÉA · תכשיטי יוקרה · תל אביב, ישראל
       </p>
     </div>
   </div>
@@ -60,11 +60,11 @@ export function orderConfirmationEmail(data: OrderEmailData): { subject: string;
     .join("");
 
   return {
-    subject: `אישור הזמנה ${data.orderNumber} — Liron J`,
+    subject: `אישור הזמנה ${data.orderNumber} — AURÉA`,
     html: layout(`
       <h2 style="color:white;font-size:20px;font-weight:500;margin:0 0 8px;">ההזמנה שלך אושרה</h2>
       <p style="color:rgba(255,255,255,0.4);font-size:13px;margin:0 0 24px;">
-        שלום ${data.customerName}, תודה שקנית ב-Liron J
+        שלום ${data.customerName}, תודה שקנית ב-AURÉA
       </p>
 
       <div style="background:rgba(201,169,110,0.05);border:1px solid rgba(201,169,110,0.15);border-radius:6px;padding:16px;text-align:center;margin-bottom:24px;">
@@ -136,15 +136,15 @@ export function contactNotificationEmail(data: ContactEmailData): { subject: str
 
 export function welcomeEmail(name: string): { subject: string; html: string } {
   return {
-    subject: `ברוכה הבאה ל-Liron J, ${name}!`,
+    subject: `ברוכה הבאה ל-AURÉA, ${name}!`,
     html: layout(`
-      <h2 style="color:white;font-size:20px;font-weight:500;margin:0 0 8px;">ברוכה הבאה למשפחת Liron J</h2>
+      <h2 style="color:white;font-size:20px;font-weight:500;margin:0 0 8px;">ברוכה הבאה למשפחת AURÉA</h2>
       <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.6;margin:0 0 24px;">
         שלום ${name},<br><br>
-        שמחים שהצטרפת אלינו. ב-Liron J אנחנו מאמינים שתכשיט הוא יותר מאביזר — הוא סיפור, זיכרון, חלק ממך.
+        שמחים שהצטרפת אלינו. ב-AURÉA אנחנו מאמינים שתכשיט הוא יותר מאביזר — הוא סיפור, זיכרון, חלק ממך.
       </p>
       <div style="text-align:center;margin:24px 0;">
-        <a href="https://lironj.com/collections" style="display:inline-block;background:${BRAND_COLOR};color:#000;text-decoration:none;padding:12px 32px;border-radius:6px;font-size:14px;font-weight:500;">
+        <a href="https://aurea.com/collections" style="display:inline-block;background:${BRAND_COLOR};color:#000;text-decoration:none;padding:12px 32px;border-radius:6px;font-size:14px;font-weight:500;">
           גלי את הקולקציות
         </a>
       </div>
@@ -177,7 +177,7 @@ export function orderStatusEmail(
         שלום ${customerName}, עדכון לגבי הזמנה <strong style="color:${BRAND_COLOR};">${orderNumber}</strong>
       </p>
       <div style="text-align:center;margin:24px 0;">
-        <a href="https://lironj.com/account" style="display:inline-block;background:${BRAND_COLOR};color:#000;text-decoration:none;padding:12px 32px;border-radius:6px;font-size:14px;font-weight:500;">
+        <a href="https://aurea.com/account" style="display:inline-block;background:${BRAND_COLOR};color:#000;text-decoration:none;padding:12px 32px;border-radius:6px;font-size:14px;font-weight:500;">
           צפי בהזמנה
         </a>
       </div>

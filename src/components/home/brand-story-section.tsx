@@ -51,7 +51,7 @@ export function BrandStorySection() {
               <span className="text-gradient-gold">יצירת אמנות</span>
             </h2>
             <p className="text-white/50 text-lg leading-relaxed mb-6">
-              Liron J נולדה מתוך אהבה אמיתית לאומנות עתיקה. כל תכשיט עובר תהליך קפדני של עיצוב, יציקה וליטוש — מתכת אחרי מתכת, אבן אחרי אבן.
+              AURÉA נולדה מתוך אהבה אמיתית לאומנות עתיקה. כל תכשיט עובר תהליך קפדני של עיצוב, יציקה וליטוש — מתכת אחרי מתכת, אבן אחרי אבן.
             </p>
             <p className="text-white/50 text-lg leading-relaxed mb-12">
               אנחנו מאמינים שתכשיט צריך לספר סיפור. כל פריט בקולקציה שלנו מעוצב כך שילווה אתכם לכל חיים.

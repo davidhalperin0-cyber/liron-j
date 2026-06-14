@@ -5,9 +5,9 @@ import { CartDrawer } from "@/components/cart/cart-drawer";
 import { FaqAccordion } from "@/components/ui/faq-accordion";
 
 export const metadata: Metadata = {
-  title: "שאלות נפוצות | Liron J",
+  title: "שאלות נפוצות | AURÉA",
   description:
-    "תשובות לשאלות הנפוצות ביותר על תכשיטי Liron J - משלוחים, החזרות, מוצרים ותשלום.",
+    "תשובות לשאלות הנפוצות ביותר על תכשיטי AURÉA - משלוחים, החזרות, מוצרים ותשלום.",
 };
 
 const FAQ_CATEGORIES = [

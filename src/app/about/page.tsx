@@ -43,7 +43,7 @@ export default function AboutPage() {
             transition={{ delay: 0.2 }}
             className="text-white/40 text-lg mt-6 max-w-2xl mx-auto leading-relaxed"
           >
-            Liron J נולד מתוך אהבה עמוקה לאומנות התכשיטים ורצון ליצור חוויית יוקרה שנגישה לכל אישה שמחפשת את המיוחד
+            AURÉA נולד מתוך אהבה עמוקה לאומנות התכשיטים ורצון ליצור חוויית יוקרה שנגישה לכל אישה שמחפשת את המיוחד
           </motion.p>
         </div>
       </section>

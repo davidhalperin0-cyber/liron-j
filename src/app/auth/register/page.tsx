@@ -92,7 +92,7 @@ export default function RegisterPage() {
         >
           <div className="text-center mb-8">
             <h1 className="font-display text-3xl text-white">הרשמה</h1>
-            <p className="text-sm text-white/40 mt-2">הצטרפי למשפחת Liron J</p>
+            <p className="text-sm text-white/40 mt-2">הצטרפי למשפחת AURÉA</p>
           </div>
 
           <div className="bg-charcoal border border-white/5 rounded-lg p-8">

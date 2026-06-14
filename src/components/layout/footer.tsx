@@ -35,7 +35,7 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <h2 className="font-display text-2xl tracking-[0.3em] uppercase text-gradient-gold mb-4">
-              Liron J
+              AURÉA
             </h2>
             <p className="text-sm text-white/50 leading-relaxed mb-6">
               תכשיטים יוקרתיים בעבודת יד. זהב, יהלומים ואבני חן — עוצבו עבור אלו שדורשים את המיוחד.
@@ -112,7 +112,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3 text-sm text-white/40">
                 <Mail size={16} className="text-gold/60 shrink-0" />
-                <span>info@lironj.com</span>
+                <span>info@aurea.com</span>
               </li>
               <li className="flex items-start gap-3 text-sm text-white/40">
                 <MapPin size={16} className="text-gold/60 shrink-0 mt-0.5" />
@@ -125,7 +125,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-white/5 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-white/30">
-            &copy; {new Date().getFullYear()} Liron J. כל הזכויות שמורות.
+            &copy; {new Date().getFullYear()} AURÉA. כל הזכויות שמורות.
           </p>
           <div className="flex items-center gap-6">
             <span className="text-xs text-white/30">🔒 תשלום מאובטח</span>

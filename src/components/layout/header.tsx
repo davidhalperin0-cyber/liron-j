@@ -123,7 +123,7 @@ export function Header() {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                Liron J
+                AURÉA
               </motion.h1>
             </Link>
 

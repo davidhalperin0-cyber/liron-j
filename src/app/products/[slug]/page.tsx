@@ -19,10 +19,10 @@ export async function generateMetadata({
   if (!product) return { title: "מוצר לא נמצא" };
 
   return {
-    title: `${product.name.he} | Liron J`,
+    title: `${product.name.he} | AURÉA`,
     description: product.description,
     openGraph: {
-      title: `${product.name.he} | Liron J`,
+      title: `${product.name.he} | AURÉA`,
       description: product.description,
       images: product.images[0] ? [{ url: product.images[0] }] : [],
     },
@@ -59,14 +59,14 @@ export default async function Page({
     image: product.images[0],
     brand: {
       "@type": "Brand",
-      name: "Liron J",
+      name: "AURÉA",
     },
     offers: {
       "@type": "Offer",
       price: product.price,
       priceCurrency: "ILS",
       availability: "https://schema.org/InStock",
-      url: `https://lironj.com/products/${product.slug}`,
+      url: `https://aurea.com/products/${product.slug}`,
     },
   };
 

@@ -22,20 +22,20 @@ export default async function Home() {
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Liron J",
-    url: "https://lironj.com",
-    logo: "https://lironj.com/logo.png",
-    description: "תכשיטי יוקרה בעיצוב אישי — Liron J",
+    name: "AURÉA",
+    url: "https://aurea.com",
+    logo: "https://aurea.com/logo.png",
+    description: "תכשיטי יוקרה בעיצוב אישי — AURÉA",
   };
 
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Liron J",
-    url: "https://lironj.com",
+    name: "AURÉA",
+    url: "https://aurea.com",
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://lironj.com/search?q={search_term_string}",
+      target: "https://aurea.com/search?q={search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };

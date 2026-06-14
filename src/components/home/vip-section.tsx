@@ -29,7 +29,7 @@ export function VipSection() {
               הצטרפו למועדון
             </p>
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-wide text-white mb-6">
-              Liron J <span className="text-gradient-gold">VIP</span>
+              AURÉA <span className="text-gradient-gold">VIP</span>
             </h2>
             <p className="text-white/50 text-lg leading-relaxed mb-12 max-w-xl mx-auto">
               הצטרפו למועדון הלקוחות הבלעדי שלנו ותיהנו מהטבות מיוחדות, גישה מוקדמת ומתנות.

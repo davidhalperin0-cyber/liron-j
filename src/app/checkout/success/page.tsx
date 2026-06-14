@@ -24,7 +24,7 @@ function SuccessContent() {
       </div>
 
       <h1 className="font-display text-3xl text-white mb-3">ההזמנה בוצעה בהצלחה!</h1>
-      <p className="text-sm text-white/50 mb-2">תודה שקנית ב-Liron J</p>
+      <p className="text-sm text-white/50 mb-2">תודה שקנית ב-AURÉA</p>
 
       {orderNumber && (
         <div className="bg-charcoal border border-white/5 rounded-lg p-5 mt-6 mb-8">

@@ -79,7 +79,7 @@ export function SizeGuideModal({ open, onClose }: SizeGuideModalProps) {
         {/* Header */}
         <div className="text-center mb-8">
           <p className="text-gold/60 text-xs tracking-[0.5em] uppercase mb-2">
-            LIRON J
+            AURÉA
           </p>
           <h2 className="font-display text-2xl sm:text-3xl text-white">
             מדריך מידות

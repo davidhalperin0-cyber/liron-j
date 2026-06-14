@@ -43,7 +43,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       {/* Logo */}
       <div className="p-6 border-b border-white/5">
         <h1 className="font-display text-xl tracking-[0.2em] uppercase text-gradient-gold">
-          Liron J
+          AURÉA
         </h1>
         <p className="text-[10px] text-white/30 tracking-widest uppercase mt-1">
           Admin Panel
@@ -99,7 +99,7 @@ export function AdminSidebar() {
       {/* Mobile top bar */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-charcoal border-b border-white/5 flex items-center justify-between px-4 py-3 lg:hidden">
         <h1 className="font-display text-lg tracking-[0.2em] uppercase text-gradient-gold">
-          Liron J
+          AURÉA
         </h1>
         <button
           onClick={() => setMobileOpen(!mobileOpen)}

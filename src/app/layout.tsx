@@ -34,8 +34,8 @@ export const viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Liron J | תכשיטי יוקרה",
-    template: "%s | Liron J",
+    default: "AURÉA | תכשיטי יוקרה",
+    template: "%s | AURÉA",
   },
   description:
     "תכשיטי זהב ויהלומים בעבודת יד. טבעות, עגילים, שרשראות וצמידים — עיצוב ישראלי יוקרתי לנשים שדורשות את הטוב ביותר.",
@@ -49,14 +49,14 @@ export const metadata: Metadata = {
     "gold jewelry",
     "diamond rings",
     "designer earrings",
-    "Liron J",
+    "AURÉA",
   ],
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://lironj.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurea.com"),
   openGraph: {
     type: "website",
     locale: "he_IL",
-    siteName: "Liron J",
-    title: "Liron J | תכשיטי יוקרה",
+    siteName: "AURÉA",
+    title: "AURÉA | תכשיטי יוקרה",
     description: "תכשיטי זהב ויהלומים בעבודת יד. עיצוב ישראלי יוקרתי.",
   },
   robots: {
