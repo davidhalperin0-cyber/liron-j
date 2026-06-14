@@ -17,7 +17,12 @@ async function getPipeline(): Promise<RemovalPipeline> {
       const tf = await import("@huggingface/transformers");
       // Always fetch weights from the HF CDN (no bundled/local models).
       tf.env.allowLocalModels = false;
-      const pipe = await tf.pipeline("background-removal", MODEL_ID);
+      // BiRefNet_lite ships fp32 (model.onnx) + fp16, but NO quantized file —
+      // pin dtype to fp32 so it never requests the missing quantized weights,
+      // and runs on the WASM backend in any browser.
+      const pipe = await tf.pipeline("background-removal", MODEL_ID, {
+        dtype: "fp32",
+      });
       return pipe as unknown as RemovalPipeline;
     })();
   }

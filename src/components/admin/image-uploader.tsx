@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { Upload, X, Loader2, GripVertical } from "lucide-react";
+import { Upload, X, Loader2, GripVertical, Sparkles } from "lucide-react";
+import { ProductImageStudio } from "@/components/admin/product-image-studio";
 
 interface ImageUploaderProps {
   productSlug: string;
@@ -19,6 +20,7 @@ export function ImageUploader({
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [studioOpen, setStudioOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const uploadFiles = useCallback(
@@ -198,6 +200,26 @@ export function ImageUploader({
             }}
           />
         </div>
+      )}
+
+      {/* AI Studio — free in-browser background removal + ivory backdrop */}
+      {images.length < maxImages && (
+        <button
+          type="button"
+          onClick={() => setStudioOpen(true)}
+          className="inline-flex items-center gap-2 text-xs text-[#B89B5E]/90 hover:text-[#B89B5E] transition-colors"
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          עיבוד סטודיו — רקע לבן + שיפור (חינם)
+        </button>
+      )}
+
+      {studioOpen && (
+        <ProductImageStudio
+          productSlug={productSlug}
+          onResult={(url) => onChange([...images, url])}
+          onClose={() => setStudioOpen(false)}
+        />
       )}
 
       {/* Error message */}
