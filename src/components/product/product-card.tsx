@@ -35,23 +35,34 @@ export function ProductCard({ product, size = "md" }: Props) {
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     cardRef.current.style.setProperty("--mouse-x", `${x}%`);
     cardRef.current.style.setProperty("--mouse-y", `${y}%`);
+    // subtle 3D tilt toward the cursor
+    cardRef.current.style.setProperty("--ry", `${(x - 50) / 9}deg`);
+    cardRef.current.style.setProperty("--rx", `${-(y - 50) / 9}deg`);
+  };
+
+  const resetTilt = () => {
+    setIsHovered(false);
+    if (!cardRef.current) return;
+    cardRef.current.style.setProperty("--ry", "0deg");
+    cardRef.current.style.setProperty("--rx", "0deg");
   };
 
   return (
     <motion.div
       ref={cardRef}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={resetTilt}
       onMouseMove={handleMouseMove}
       className="group relative"
       whileHover={{ y: -4 }}
       transition={{ duration: 0.3 }}
+      style={{ perspective: "900px" }}
     >
       {/* Image Container */}
       <Link href={`/products/${product.slug}`} className="block">
         <div
           className={cn(
-            "relative overflow-hidden bg-charcoal",
+            "relative overflow-hidden bg-charcoal transition-transform duration-300 ease-out [transform:rotateX(var(--rx,0))_rotateY(var(--ry,0))]",
             size === "lg" ? "aspect-[3/4]" : "aspect-square"
           )}
         >

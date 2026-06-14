@@ -131,6 +131,29 @@ body {
   }
 }
 
+/* ─── Oversized kinetic brand band ──────────────────────── */
+.luxe-kinetic-text {
+  font-size: 13vw;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(154, 123, 60, 0.55);
+  text-stroke: 1px rgba(154, 123, 60, 0.55);
+}
+@keyframes luxeKinetic {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.luxe-kinetic {
+  animation: luxeKinetic 30s linear infinite;
+}
+[dir="rtl"] .luxe-kinetic {
+  animation-direction: reverse;
+}
+@media (prefers-reduced-motion: reduce) {
+  .luxe-kinetic { animation: none; }
+}
+
 /* ─── Editorial value marquee ───────────────────────────── */
 @keyframes luxeMarquee {
   from { transform: translateX(0); }
