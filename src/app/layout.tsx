@@ -3,6 +3,8 @@ import { Inter, Cormorant_Garamond, Heebo } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { AiChatWidget } from "@/components/chat/ai-chat-widget";
+import { GrainOverlay } from "@/components/luxe/grain-overlay";
+import { IntroReveal } from "@/components/luxe/intro-reveal";
 import "./globals.css";
 
 const inter = Inter({
@@ -78,6 +80,8 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-black text-white">
         {children}
+        <GrainOverlay />
+        <IntroReveal />
         <Toaster />
         <WhatsAppButton />
         <AiChatWidget />
