@@ -161,10 +161,12 @@ export function ProductCard({ product, size = "md" }: Props) {
 
       {/* Info */}
       <div className="mt-4 space-y-1.5">
-        <Link href={`/products/${product.slug}`}>
+        <Link href={`/products/${product.slug}`} className="inline-block">
           <h3 className="text-sm text-white/90 group-hover:text-gold transition-colors line-clamp-1">
             {product.name.he}
           </h3>
+          {/* gold hairline draws in on hover */}
+          <span className="block h-px bg-gold/70 w-0 group-hover:w-full transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
         </Link>
 
         {product.material && (

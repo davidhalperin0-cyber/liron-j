@@ -7,6 +7,7 @@ import { TrendingSection } from "@/components/home/trending-section";
 import { EditorialSection } from "@/components/home/editorial-section";
 import { CategoriesSection } from "@/components/home/categories-section";
 import { BrandStorySection } from "@/components/home/brand-story-section";
+import { ValueMarquee } from "@/components/luxe/value-marquee";
 
 export const revalidate = 60; // re-fetch home data every 60s, not every request
 import { VipSection } from "@/components/home/vip-section";
@@ -49,6 +50,7 @@ export default async function Home() {
 
       <main>
         <HeroSection />
+        <ValueMarquee />
         <NewDropSection products={newProducts} />
         <TrendingSection products={featuredProducts} />
         <EditorialSection />
