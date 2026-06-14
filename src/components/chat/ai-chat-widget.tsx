@@ -119,6 +119,7 @@ export function AiChatWidget() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [teaser, setTeaser] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -127,6 +128,29 @@ export function AiChatWidget() {
     const timer = setTimeout(() => setVisible(true), 4000);
     return () => clearTimeout(timer);
   }, []);
+
+  // Proactive greeting — like a boutique advisor stepping forward.
+  // Appears once per session so it never nags.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (sessionStorage.getItem("concierge-greeted")) return;
+    const timer = setTimeout(() => setTeaser(true), 6500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const dismissTeaser = useCallback(() => {
+    setTeaser(false);
+    try {
+      sessionStorage.setItem("concierge-greeted", "1");
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  const openConcierge = useCallback(() => {
+    setIsOpen(true);
+    dismissTeaser();
+  }, [dismissTeaser]);
 
   // Scroll to latest
   useEffect(() => {
@@ -318,31 +342,67 @@ export function AiChatWidget() {
         </div>
       </div>
 
+      {/* ── Proactive greeting — boutique advisor stepping forward ── */}
+      <div
+        className={cn(
+          "fixed z-40 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "bottom-[84px] right-4 sm:bottom-[78px] sm:right-6",
+          "max-w-[280px]",
+          teaser && !isOpen
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-2 pointer-events-none"
+        )}
+      >
+        <div className="relative bg-[#FFFFFF] border border-gold/15 shadow-[0_12px_40px_rgba(28,25,21,0.12)] px-5 py-4 pe-9">
+          <button
+            onClick={dismissTeaser}
+            className="absolute top-2.5 end-2.5 text-white/25 hover:text-white/50 transition-colors"
+            aria-label="סגירה"
+          >
+            <X size={13} strokeWidth={1.5} />
+          </button>
+          <button onClick={openConcierge} className="block text-start">
+            <p className="text-[10px] tracking-[0.25em] uppercase text-gold/70 mb-1.5">
+              ייעוץ אישי
+            </p>
+            <p className="text-[13px] text-white/80 leading-[1.6]">
+              שלום. אפשר לעזור לך למצוא את הפריט המושלם?
+            </p>
+            <span className="inline-block mt-2.5 text-[11px] text-gold border-b border-gold/30 pb-0.5">
+              להתחלת שיחה
+            </span>
+          </button>
+        </div>
+      </div>
+
       {/* ── Entry Point — architectural, not chatbot bubble ── */}
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={openConcierge}
         className={cn(
-          "fixed z-40 bottom-0 left-0 right-0 sm:bottom-6 sm:left-auto sm:right-auto sm:end-6",
+          "fixed z-40 bottom-0 left-0 right-0 sm:bottom-6 sm:left-auto sm:right-6",
           "sm:w-auto",
-          "flex items-center justify-center gap-3",
+          "flex items-center justify-center gap-2.5",
           "px-6 py-3.5 sm:py-3",
           "bg-[#FFFFFF]/95 backdrop-blur-sm",
-          "sm:border sm:border-white/[0.06]",
-          "border-t border-white/[0.04] sm:border-t-0",
+          "sm:border sm:border-gold/15",
+          "border-t border-gold/10 sm:border-t",
           "transition-all duration-500",
-          "hover:border-white/[0.1]",
+          "hover:sm:border-gold/30 hover:bg-[#FFFFFF]",
           "group",
           isOpen && "opacity-0 pointer-events-none translate-y-2"
         )}
-        aria-label="Jewelry Concierge"
+        aria-label="ייעוץ אישי — Jewelry Concierge"
       >
+        {/* Availability dot — quiet, no pulse */}
+        <span className="inline-flex h-1.5 w-1.5 rounded-full bg-gold/80" />
+
         {/* Diamond icon — subtle, geometric */}
         <svg
-          width="14"
-          height="14"
+          width="13"
+          height="13"
           viewBox="0 0 14 14"
           fill="none"
-          className="text-gold/50 group-hover:text-gold/70 transition-colors duration-300"
+          className="text-gold/60 group-hover:text-gold transition-colors duration-300"
         >
           <path
             d="M7 0.5L13.5 7L7 13.5L0.5 7L7 0.5Z"
@@ -350,8 +410,12 @@ export function AiChatWidget() {
             strokeWidth="0.8"
           />
         </svg>
-        <span className="text-[11px] tracking-[0.2em] uppercase text-white/35 group-hover:text-white/55 transition-colors duration-300">
-          Jewelry Concierge
+
+        <span className="text-[12px] tracking-[0.12em] text-white/70 group-hover:text-white/90 transition-colors duration-300">
+          ייעוץ אישי
+        </span>
+        <span className="text-[10px] tracking-[0.2em] uppercase text-white/30 group-hover:text-white/45 transition-colors duration-300 hidden sm:inline">
+          · Concierge
         </span>
       </button>
     </>
