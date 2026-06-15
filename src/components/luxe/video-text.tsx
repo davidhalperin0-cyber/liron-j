@@ -1,43 +1,89 @@
 "use client";
 
-// Showcase finale — the cinematic video plays INSIDE the giant word "AURÉA".
-// The video is alpha-masked by an SVG of the word; everything outside the
-// letters is the ivory page. Pure CSS mask, no WebGL.
+import { useRef } from "react";
 
-const TEXT_MASK =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400'%3E%3Ctext x='600' y='205' text-anchor='middle' dominant-baseline='central' font-family='Georgia,%20Cormorant%20Garamond,serif' font-weight='600' font-size='300' letter-spacing='10' fill='white'%3EAUR%C3%89A%3C/text%3E%3C/svg%3E\")";
+// Showcase finale — the giant word AURÉA, where EACH letter is its own window
+// into the brand films. Letters alternate between both videos and each is
+// seeded to a different time offset, so the word is a living mosaic of frames.
+
+const HERO = { src: "/videos/hero.mp4", poster: "/videos/hero-poster.jpg" };
+const EDIT = { src: "/videos/editorial.mp4", poster: "/videos/editorial-poster.jpg" };
+
+const LETTERS: { char: string; v: typeof HERO; offset: number }[] = [
+  { char: "A", v: HERO, offset: 0.6 },
+  { char: "U", v: EDIT, offset: 3.4 },
+  { char: "R", v: HERO, offset: 6.7 },
+  { char: "É", v: EDIT, offset: 9.5 },
+  { char: "A", v: HERO, offset: 10.9 },
+];
+
+function letterMask(ch: string) {
+  const c = encodeURIComponent(ch);
+  return `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 130'%3E%3Ctext x='50' y='70' text-anchor='middle' dominant-baseline='central' font-family='Georgia,%20Cormorant%20Garamond,serif' font-weight='600' font-size='118' fill='white'%3E${c}%3C/text%3E%3C/svg%3E")`;
+}
+
+function Letter({ char, v, offset }: { char: string; v: typeof HERO; offset: number }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const seeded = useRef(false);
+  const mask = letterMask(char);
+
+  const seed = () => {
+    const el = ref.current;
+    if (!el || seeded.current) return;
+    try {
+      el.currentTime = offset;
+      seeded.current = true;
+      el.play().catch(() => {});
+    } catch {
+      /* ignore */
+    }
+  };
+
+  return (
+    <span className="relative block h-full aspect-[100/130]">
+      <video
+        ref={ref}
+        className="absolute inset-0 h-full w-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        poster={v.poster}
+        onLoadedMetadata={seed}
+        onLoadedData={seed}
+        onCanPlay={seed}
+        style={{
+          WebkitMaskImage: mask,
+          maskImage: mask,
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+          WebkitMaskPosition: "center",
+          maskPosition: "center",
+          WebkitMaskSize: "contain",
+          maskSize: "contain",
+        }}
+      >
+        <source src={v.src} type="video/mp4" />
+      </video>
+    </span>
+  );
+}
 
 export function VideoText() {
   return (
     <section className="relative bg-[#F7F3EC] py-20 sm:py-28 overflow-hidden">
       <div className="text-center mb-8">
-        <p className="text-gold/60 text-[11px] tracking-[0.5em] uppercase">
-          The Maison
-        </p>
+        <p className="text-gold/60 text-[11px] tracking-[0.5em] uppercase">The Maison</p>
       </div>
 
-      <div className="relative mx-auto h-[32vw] min-h-[200px] max-h-[540px] w-full max-w-[1300px]">
-        <video
-          className="absolute inset-0 h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="/videos/hero-poster.jpg"
-          style={{
-            WebkitMaskImage: TEXT_MASK,
-            maskImage: TEXT_MASK,
-            WebkitMaskRepeat: "no-repeat",
-            maskRepeat: "no-repeat",
-            WebkitMaskPosition: "center",
-            maskPosition: "center",
-            WebkitMaskSize: "contain",
-            maskSize: "contain",
-          }}
-        >
-          <source src="/videos/editorial.mp4" type="video/mp4" />
-        </video>
+      <div
+        dir="ltr"
+        className="mx-auto flex h-[32vw] min-h-[200px] max-h-[540px] w-full max-w-[1300px] items-center justify-center gap-[1.2vw] px-4"
+      >
+        {LETTERS.map((l, i) => (
+          <Letter key={i} char={l.char} v={l.v} offset={l.offset} />
+        ))}
       </div>
 
       <div className="text-center mt-8">
