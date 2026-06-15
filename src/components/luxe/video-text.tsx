@@ -40,7 +40,7 @@ function Letter({ char, v, offset }: { char: string; v: typeof HERO; offset: num
   };
 
   return (
-    <span className="relative block h-full aspect-[100/130]">
+    <span className="relative block flex-1 min-w-0 aspect-[100/130]">
       <video
         ref={ref}
         className="absolute inset-0 h-full w-full object-cover"
@@ -79,7 +79,7 @@ export function VideoText() {
 
       <div
         dir="ltr"
-        className="mx-auto flex h-[32vw] min-h-[200px] max-h-[540px] w-full max-w-[1300px] items-center justify-center gap-[1.2vw] px-4"
+        className="mx-auto flex w-full max-w-[840px] items-center justify-center gap-[1.2vw] px-6"
       >
         {LETTERS.map((l, i) => (
           <Letter key={i} char={l.char} v={l.v} offset={l.offset} />
