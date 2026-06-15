@@ -9,6 +9,8 @@ import { CategoriesSection } from "@/components/home/categories-section";
 import { BrandStorySection } from "@/components/home/brand-story-section";
 import { ValueMarquee } from "@/components/luxe/value-marquee";
 import { KineticBand } from "@/components/luxe/kinetic-band";
+import { VideoText } from "@/components/luxe/video-text";
+import { DragGallery } from "@/components/luxe/drag-gallery";
 
 export const revalidate = 60; // re-fetch home data every 60s, not every request
 import { VipSection } from "@/components/home/vip-section";
@@ -54,10 +56,12 @@ export default async function Home() {
         <ValueMarquee />
         <NewDropSection products={newProducts} />
         <TrendingSection products={featuredProducts} />
+        <DragGallery products={featuredProducts} eyebrow="הסלקציה" title="Drag to explore" />
         <EditorialSection />
         <CategoriesSection />
         <KineticBand />
         <BrandStorySection />
+        <VideoText />
         <VipSection />
       </main>
 
