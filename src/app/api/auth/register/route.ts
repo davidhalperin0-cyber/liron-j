@@ -7,7 +7,8 @@ export async function POST(request: NextRequest) {
   const limited = rateLimit(request, { maxRequests: 5, windowMs: 60_000 });
   if (limited) return limited;
 
-  const { email, password, firstName, lastName } = await request.json();
+  const { email, password, firstName, lastName, phone, birthday, marketingConsent } =
+    await request.json();
 
   if (!email || !password || !firstName || !lastName) {
     return NextResponse.json({ error: "כל השדות נדרשים" }, { status: 400 });
@@ -23,6 +24,9 @@ export async function POST(request: NextRequest) {
           first_name: firstName,
           last_name: lastName,
           full_name: `${firstName} ${lastName}`,
+          phone: phone ?? "",
+          birthday: birthday ?? "",
+          marketing_consent: marketingConsent ? "true" : "false",
           role: "customer",
         },
       },

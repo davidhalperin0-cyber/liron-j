@@ -40,6 +40,9 @@ export const registerSchema = z.object({
   firstName: z.string().min(2, "שם פרטי חייב להכיל לפחות 2 תווים"),
   lastName: z.string().min(2, "שם משפחה חייב להכיל לפחות 2 תווים"),
   email: z.string().email("כתובת אימייל לא תקינה"),
+  phone: z.string().min(9, "מספר טלפון לא תקין").max(15, "מספר טלפון לא תקין"),
+  birthday: z.string().optional(), // YYYY-MM-DD; optional so signup isn't blocked
+  marketingConsent: z.boolean().optional(),
   password: z.string().min(6, "סיסמה חייבת להכיל לפחות 6 תווים"),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {

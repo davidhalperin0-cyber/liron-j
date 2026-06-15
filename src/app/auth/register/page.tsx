@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Mail, Lock, Eye, EyeOff, User, Phone } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, User, Phone, Cake } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,9 @@ export default function RegisterPage() {
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
+    birthday: "",
+    marketingConsent: true,
     password: "",
     confirmPassword: "",
   });
@@ -50,6 +53,9 @@ export default function RegisterPage() {
           password: result.data.password,
           firstName: result.data.firstName,
           lastName: result.data.lastName,
+          phone: result.data.phone,
+          birthday: result.data.birthday,
+          marketingConsent: result.data.marketingConsent,
         }),
       });
       const data = await res.json();
@@ -138,6 +144,36 @@ export default function RegisterPage() {
                 {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
               </div>
 
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs text-white/40 mb-1.5">טלפון</label>
+                  <div className="relative">
+                    <Phone size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/20" />
+                    <input
+                      type="tel"
+                      value={form.phone}
+                      onChange={(e) => updateField("phone", e.target.value)}
+                      placeholder="050-0000000"
+                      className={fieldClass("phone")}
+                    />
+                  </div>
+                  {errors.phone && <p className="text-xs text-red-400 mt-1">{errors.phone}</p>}
+                </div>
+                <div>
+                  <label className="block text-xs text-white/40 mb-1.5">תאריך לידה</label>
+                  <div className="relative">
+                    <Cake size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/20" />
+                    <input
+                      type="date"
+                      value={form.birthday}
+                      onChange={(e) => updateField("birthday", e.target.value)}
+                      className={`${fieldClass("birthday")} [color-scheme:light]`}
+                    />
+                  </div>
+                  <p className="text-[10px] text-gold/50 mt-1">הפתעה מחכה לך ביום ההולדת 🎁</p>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs text-white/40 mb-1.5">סיסמה</label>
                 <div className="relative">
@@ -174,6 +210,18 @@ export default function RegisterPage() {
                 </div>
                 {errors.confirmPassword && <p className="text-xs text-red-400 mt-1">{errors.confirmPassword}</p>}
               </div>
+
+              <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={form.marketingConsent}
+                  onChange={(e) => setForm((prev) => ({ ...prev, marketingConsent: e.target.checked }))}
+                  className="mt-0.5 h-4 w-4 accent-gold shrink-0"
+                />
+                <span className="text-xs text-white/40 leading-relaxed">
+                  אשמח לקבל עדכונים על קולקציות חדשות, מבצעים בלעדיים והפתעת יום הולדת
+                </span>
+              </label>
 
               <Button variant="gold" size="md" className="w-full" loading={loading}>
                 יצירת חשבון
