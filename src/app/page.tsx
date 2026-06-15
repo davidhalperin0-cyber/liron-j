@@ -54,6 +54,7 @@ export default async function Home() {
       <main>
         <HeroSection />
         <ValueMarquee />
+        <VideoText />
         <NewDropSection products={newProducts} />
         <TrendingSection products={featuredProducts} />
         <DragGallery products={featuredProducts} eyebrow="הסלקציה" title="Drag to explore" />
@@ -61,7 +62,6 @@ export default async function Home() {
         <CategoriesSection />
         <KineticBand />
         <BrandStorySection />
-        <VideoText />
         <VipSection />
       </main>
 

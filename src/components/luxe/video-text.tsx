@@ -16,7 +16,7 @@ export function VideoText() {
         </p>
       </div>
 
-      <div className="relative mx-auto h-[26vw] min-h-[160px] max-h-[420px] w-full max-w-[1200px]">
+      <div className="relative mx-auto h-[32vw] min-h-[200px] max-h-[540px] w-full max-w-[1300px]">
         <video
           className="absolute inset-0 h-full w-full object-cover"
           autoPlay

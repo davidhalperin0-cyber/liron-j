@@ -6,7 +6,6 @@ import { Search, Heart, ShoppingBag, Menu, X, User, ChevronDown } from "lucide-r
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/stores/cart-store";
 import { useWishlistStore } from "@/stores/wishlist-store";
-import { VideoWordmark } from "@/components/luxe/video-wordmark";
 import Link from "next/link";
 
 const NAV_ITEMS = [
@@ -117,19 +116,15 @@ export function Header() {
               ))}
             </nav>
 
-            {/* Logo — each letter is a window into the brand film */}
-            <Link
-              href="/"
-              aria-label="AURÉA"
-              className="absolute left-1/2 -translate-x-1/2"
-            >
-              <motion.div
-                whileHover={{ scale: 1.03 }}
+            {/* Logo */}
+            <Link href="/" className="absolute left-1/2 -translate-x-1/2">
+              <motion.h1
+                className="font-display text-2xl sm:text-3xl tracking-[0.3em] uppercase text-gradient-gold"
+                whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <h1 className="sr-only">AURÉA</h1>
-                <VideoWordmark />
-              </motion.div>
+                AURÉA
+              </motion.h1>
             </Link>
 
             {/* Actions */}
