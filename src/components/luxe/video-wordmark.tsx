@@ -80,7 +80,7 @@ export function VideoWordmark() {
     <span
       dir="ltr"
       aria-label="AURÉA"
-      className="flex items-center gap-[0.12em] h-[22px] sm:h-[28px] select-none [filter:drop-shadow(0_1px_2px_rgba(28,25,21,0.28))]"
+      className="flex items-center gap-[0.1em] h-[36px] sm:h-[50px] select-none [filter:drop-shadow(0_1px_3px_rgba(28,25,21,0.3))]"
     >
       {LETTERS.map((l, i) => (
         <Letter key={i} char={l.char} offset={l.offset} />
