@@ -152,6 +152,38 @@ export function welcomeEmail(name: string): { subject: string; html: string } {
   };
 }
 
+// ─── Birthday Gift ──────────────────────────────────────────────
+
+export function birthdayEmail(
+  name: string,
+  code: string,
+  percentOff: number
+): { subject: string; html: string } {
+  return {
+    subject: `מתנת יום ההולדת שלך מחכה — AURÉA`,
+    html: layout(`
+      <p style="color:${BRAND_COLOR};font-size:11px;letter-spacing:3px;text-transform:uppercase;margin:0 0 12px;text-align:center;">Happy Birthday</p>
+      <h2 style="color:white;font-size:22px;font-weight:500;margin:0 0 8px;text-align:center;">יום הולדת שמח, ${name}</h2>
+      <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.7;margin:0 0 24px;text-align:center;">
+        מכל הצוות של AURÉA — שתהיה לך שנה זוהרת.<br>
+        הכנו לך מתנה קטנה לחגוג בה.
+      </p>
+      <div style="text-align:center;margin:8px 0 24px;">
+        <div style="display:inline-block;border:1px solid ${BRAND_COLOR};border-radius:8px;padding:18px 36px;">
+          <p style="color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:2px;text-transform:uppercase;margin:0 0 6px;">${percentOff}% מתנה</p>
+          <p style="color:${BRAND_COLOR};font-size:24px;letter-spacing:4px;font-weight:600;margin:0;">${code}</p>
+        </div>
+        <p style="color:rgba(255,255,255,0.25);font-size:11px;margin:12px 0 0;">בתוקף ל-30 יום</p>
+      </div>
+      <div style="text-align:center;margin:24px 0 0;">
+        <a href="https://aurea.com/collections" style="display:inline-block;background:${BRAND_COLOR};color:#000;text-decoration:none;padding:12px 32px;border-radius:6px;font-size:14px;font-weight:500;">
+          לחגיגה — גלי את הקולקציה
+        </a>
+      </div>
+    `),
+  };
+}
+
 // ─── Order Status Update ────────────────────────────────────────
 
 const STATUS_LABELS: Record<string, string> = {

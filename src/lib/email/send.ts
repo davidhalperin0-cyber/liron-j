@@ -4,6 +4,7 @@ import {
   contactNotificationEmail,
   welcomeEmail,
   orderStatusEmail,
+  birthdayEmail,
 } from "./templates";
 
 async function sendEmail(to: string, subject: string, html: string): Promise<boolean> {
@@ -67,6 +68,16 @@ export async function sendWelcomeEmail(
   name: string
 ): Promise<boolean> {
   const { subject, html } = welcomeEmail(name);
+  return sendEmail(email, subject, html);
+}
+
+export async function sendBirthdayEmail(
+  email: string,
+  name: string,
+  code: string,
+  percentOff: number
+): Promise<boolean> {
+  const { subject, html } = birthdayEmail(name, code, percentOff);
   return sendEmail(email, subject, html);
 }
 
