@@ -11,6 +11,7 @@ import { ValueMarquee } from "@/components/luxe/value-marquee";
 import { KineticBand } from "@/components/luxe/kinetic-band";
 import { VideoText } from "@/components/luxe/video-text";
 import { DragGallery } from "@/components/luxe/drag-gallery";
+import { InstagramFeed } from "@/components/home/instagram-feed";
 
 export const revalidate = 60; // re-fetch home data every 60s, not every request
 import { VipSection } from "@/components/home/vip-section";
@@ -63,6 +64,7 @@ export default async function Home() {
         <KineticBand />
         <BrandStorySection />
         <VipSection />
+        <InstagramFeed />
       </main>
 
       <Footer />

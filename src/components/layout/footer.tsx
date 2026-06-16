@@ -42,7 +42,7 @@ export function Footer() {
             </p>
             <div className="flex gap-4">
               <a
-                href="https://www.instagram.com/"
+                href="https://www.instagram.com/aurea_jewelry_il"
                 target="_blank"
                 rel="noreferrer"
                 className="p-2 text-white/40 hover:text-gold transition-colors"
