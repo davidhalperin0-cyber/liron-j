@@ -3,8 +3,6 @@
 import { useState, useCallback } from "react";
 import { Loader2, X, Sparkles } from "lucide-react";
 import { validateImageFile } from "@/lib/image-studio/geometry";
-import { removeBackground } from "@/lib/image-studio/remove-bg";
-import { composeOnIvory } from "@/lib/image-studio/compose";
 
 interface Props {
   productSlug: string;
@@ -17,7 +15,6 @@ export function ProductImageStudio({ productSlug, onResult, onClose }: Props) {
   const [status, setStatus] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [beforeUrl, setBeforeUrl] = useState<string | null>(null);
-  const [afterBlob, setAfterBlob] = useState<Blob | null>(null);
   const [afterUrl, setAfterUrl] = useState<string | null>(null);
 
   const process = useCallback(async (file: File) => {
@@ -28,19 +25,19 @@ export function ProductImageStudio({ productSlug, onResult, onClose }: Props) {
     }
     setError(null);
     setBeforeUrl(URL.createObjectURL(file));
+    setAfterUrl(null);
     setBusy(true);
+    setStatus("מעבד את התמונה… (כ-10 שניות)");
     try {
-      setStatus("מסיר רקע… (טעינת מודל ראשונית עשויה לקחת רגע)");
-      const cut = await removeBackground(file);
-      setStatus("מרכיב על רקע סטודיו…");
-      const composed = await composeOnIvory(cut);
-      setAfterBlob(composed);
-      setAfterUrl(URL.createObjectURL(composed));
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/admin/enhance-image", { method: "POST", body: fd });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "failed");
+      setAfterUrl(data.image); // data URL from Gemini
       setStatus("");
-    } catch {
-      setError(
-        "העיבוד נכשל — ככל הנראה זיכרון. מומלץ להשתמש ב-Chrome או Edge במחשב (תומכי WebGPU), ולנסות תמונה קטנה יותר."
-      );
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "העיבוד נכשל. נסו שוב.");
       setStatus("");
     } finally {
       setBusy(false);
@@ -48,12 +45,13 @@ export function ProductImageStudio({ productSlug, onResult, onClose }: Props) {
   }, []);
 
   const accept = useCallback(async () => {
-    if (!afterBlob) return;
+    if (!afterUrl) return;
     setBusy(true);
     setStatus("מעלה…");
     try {
+      const blob = await (await fetch(afterUrl)).blob();
       const fd = new FormData();
-      fd.append("file", new File([afterBlob], "studio.jpg", { type: "image/jpeg" }));
+      fd.append("file", new File([blob], "studio.png", { type: blob.type || "image/png" }));
       fd.append("productSlug", productSlug);
       const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
       if (!res.ok) throw new Error("upload");
@@ -66,7 +64,7 @@ export function ProductImageStudio({ productSlug, onResult, onClose }: Props) {
       setBusy(false);
       setStatus("");
     }
-  }, [afterBlob, productSlug, onResult, onClose]);
+  }, [afterUrl, productSlug, onResult, onClose]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
