@@ -17,11 +17,17 @@ async function getPipeline(): Promise<RemovalPipeline> {
       const tf = await import("@huggingface/transformers");
       // Always fetch weights from the HF CDN (no bundled/local models).
       tf.env.allowLocalModels = false;
-      // BiRefNet_lite ships fp32 (model.onnx) + fp16, but NO quantized file —
-      // pin dtype to fp32 so it never requests the missing quantized weights,
-      // and runs on the WASM backend in any browser.
+
+      // fp32 BiRefNet on WASM exhausts memory (std::bad_alloc). Use fp16 (half
+      // the memory) and prefer the WebGPU backend, which runs in GPU memory and
+      // is far faster. Falls back to WASM fp16 when WebGPU is unavailable.
+      const hasWebGPU =
+        typeof navigator !== "undefined" &&
+        !!(navigator as Navigator & { gpu?: unknown }).gpu;
+
       const pipe = await tf.pipeline("background-removal", MODEL_ID, {
-        dtype: "fp32",
+        dtype: "fp16",
+        ...(hasWebGPU ? { device: "webgpu" } : {}),
       });
       return pipe as unknown as RemovalPipeline;
     })();

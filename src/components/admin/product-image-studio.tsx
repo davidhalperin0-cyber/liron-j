@@ -38,7 +38,9 @@ export function ProductImageStudio({ productSlug, onResult, onClose }: Props) {
       setAfterUrl(URL.createObjectURL(composed));
       setStatus("");
     } catch {
-      setError("העיבוד נכשל. נסה תמונה אחרת או השאר את המקור.");
+      setError(
+        "העיבוד נכשל — ככל הנראה זיכרון. מומלץ להשתמש ב-Chrome או Edge במחשב (תומכי WebGPU), ולנסות תמונה קטנה יותר."
+      );
       setStatus("");
     } finally {
       setBusy(false);
