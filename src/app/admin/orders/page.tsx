@@ -173,7 +173,7 @@ export default function OrdersAdmin() {
       </div>
 
       {/* Table */}
-      <div className="bg-charcoal border border-white/5 rounded-lg overflow-hidden">
+      <div className="bg-charcoal border border-white/5 rounded-lg overflow-x-auto">
         {loading ? (
           <div className="flex justify-center py-16">
             <Loader2 size={24} className="animate-spin text-gold/40" />
@@ -186,7 +186,7 @@ export default function OrdersAdmin() {
             </p>
           </div>
         ) : (
-          <table className="w-full">
+          <table className="w-full min-w-[640px]">
             <thead>
               <tr className="border-b border-white/5">
                 <th className="text-right px-5 py-3 text-[10px] text-white/30 tracking-wider uppercase font-medium">הזמנה</th>

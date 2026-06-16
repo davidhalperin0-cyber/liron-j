@@ -87,7 +87,7 @@ export default function BirthdaysAdmin() {
         <Gift size={14} /> שליחה אוטומטית פעילה — כל לקוח שהסכים לדיוור מקבל 15% מתנה במייל ביום ההולדת. כאן אפשר גם לשלוח ידנית.
       </div>
 
-      <div className="bg-charcoal border border-white/5 rounded-lg overflow-hidden">
+      <div className="bg-charcoal border border-white/5 rounded-lg overflow-x-auto">
         {loading ? (
           <div className="flex justify-center py-16">
             <Loader2 size={24} className="animate-spin text-gold/40" />
@@ -98,7 +98,7 @@ export default function BirthdaysAdmin() {
             <p className="text-sm text-white/30">אין ימי הולדת בחודש {MONTHS[thisMonth]}</p>
           </div>
         ) : (
-          <table className="w-full">
+          <table className="w-full min-w-[560px]">
             <thead>
               <tr className="border-b border-white/5">
                 <th className="text-right px-5 py-3 text-[10px] text-white/30 tracking-wider uppercase font-medium">תאריך</th>

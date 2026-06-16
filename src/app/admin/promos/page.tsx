@@ -131,7 +131,7 @@ export default function PromosAdmin() {
       </div>
 
       {/* List */}
-      <div className="bg-charcoal border border-white/5 rounded-lg overflow-hidden">
+      <div className="bg-charcoal border border-white/5 rounded-lg overflow-x-auto">
         {loading ? (
           <div className="flex justify-center py-16"><Loader2 size={24} className="animate-spin text-gold/40" /></div>
         ) : codes.length === 0 ? (
@@ -140,7 +140,7 @@ export default function PromosAdmin() {
             <p className="text-sm text-white/30">אין קודים עדיין</p>
           </div>
         ) : (
-          <table className="w-full">
+          <table className="w-full min-w-[560px]">
             <thead>
               <tr className="border-b border-white/5">
                 <th className="text-right px-5 py-3 text-[10px] text-white/30 tracking-wider uppercase font-medium">קוד</th>

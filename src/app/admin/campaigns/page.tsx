@@ -83,8 +83,8 @@ export default function CampaignsAdmin() {
         />
       </div>
 
-      <div className="bg-charcoal border border-white/5 rounded-lg overflow-hidden">
-        <table className="w-full">
+      <div className="bg-charcoal border border-white/5 rounded-lg overflow-x-auto">
+        <table className="w-full min-w-[640px]">
           <thead>
             <tr className="border-b border-white/5">
               <th className="text-right px-5 py-3 text-[10px] text-white/30 tracking-wider uppercase font-medium">קמפיין</th>
