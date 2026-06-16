@@ -57,7 +57,33 @@ export default function CheckoutPage() {
   const items = store.items;
   const subtotal = store.subtotal();
   const shipping = shippingMethod === "express" ? 49 : shippingMethod === "pickup" ? 0 : subtotal >= 500 ? 0 : 29;
-  const total = subtotal + shipping;
+
+  // Promo code
+  const [promoCode, setPromoCode] = useState("");
+  const [promo, setPromo] = useState<{ valid: boolean; discount?: number; message: string; code?: string } | null>(null);
+  const [promoLoading, setPromoLoading] = useState(false);
+  const discount = promo?.valid ? promo.discount ?? 0 : 0;
+  const total = Math.max(0, subtotal + shipping - discount);
+
+  const applyPromo = async () => {
+    if (!promoCode.trim()) return;
+    setPromoLoading(true);
+    try {
+      const res = await fetch("/api/promo/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: promoCode, subtotal }),
+      });
+      const data = await res.json();
+      setPromo(data);
+      if (!data.valid) notifyError(data.message);
+      else notifyAction(data.message);
+    } catch {
+      notifyError("שגיאה באימות הקוד");
+    } finally {
+      setPromoLoading(false);
+    }
+  };
 
   const stepIndex = STEPS.findIndex((s) => s.key === currentStep);
 
@@ -123,6 +149,8 @@ export default function CheckoutPage() {
           })),
           subtotal,
           shippingCost: shipping,
+          discount,
+          promoCode: promo?.valid ? promo.code : undefined,
           total,
         }),
       });
@@ -378,6 +406,31 @@ export default function CheckoutPage() {
                     <p className="text-xs text-white/30 text-center py-4">הסל ריק</p>
                   )}
                 </div>
+                {/* Promo code */}
+                <div className="border-t border-white/5 pt-4">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                      onKeyDown={(e) => e.key === "Enter" && applyPromo()}
+                      placeholder="קוד הנחה"
+                      className="flex-1 min-w-0 bg-smoke border border-white/5 rounded-lg px-3 py-2 text-xs text-white placeholder:text-white/20 focus:outline-none focus:border-gold/30 transition-colors tracking-wider"
+                    />
+                    <button
+                      type="button"
+                      onClick={applyPromo}
+                      disabled={promoLoading || !promoCode.trim()}
+                      className="px-4 py-2 text-xs border border-gold/30 text-gold/80 rounded-lg hover:bg-gold/5 disabled:opacity-30 transition-colors"
+                    >
+                      {promoLoading ? "..." : "החל"}
+                    </button>
+                  </div>
+                  {promo?.valid && (
+                    <p className="text-[11px] text-green-400/70 mt-2">{promo.message}</p>
+                  )}
+                </div>
+
                 <div className="border-t border-white/5 pt-4 space-y-2 text-sm">
                   <div className="flex justify-between text-white/40">
                     <span>סכום ביניים</span>
@@ -387,6 +440,12 @@ export default function CheckoutPage() {
                     <span>משלוח</span>
                     <span>{shipping === 0 ? "חינם" : formatPrice(shipping)}</span>
                   </div>
+                  {discount > 0 && (
+                    <div className="flex justify-between text-gold/80">
+                      <span>הנחה{promo?.code ? ` (${promo.code})` : ""}</span>
+                      <span>−{formatPrice(discount)}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-white font-medium pt-2 border-t border-white/5">
                     <span>סה&quot;כ</span>
                     <span className="text-gold text-lg">{formatPrice(total)}</span>

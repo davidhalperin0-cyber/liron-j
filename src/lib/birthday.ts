@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { sendBirthdayEmail } from "@/lib/email/send";
+import { createPercentCode } from "@/lib/promo";
 
 export const BIRTHDAY_PERCENT_OFF = 15;
 
@@ -88,6 +89,17 @@ export async function issueBirthdayGift(
   }
 
   const code = genCode();
+
+  // Make the code actually redeemable at checkout: single-use, 30-day expiry.
+  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  await createPercentCode({
+    code,
+    percent: BIRTHDAY_PERCENT_OFF,
+    expiresAt,
+    note: `Birthday gift — ${email}`,
+    maxUses: 1,
+  });
+
   const ok = await sendBirthdayEmail(email, recipient.name || "", code, BIRTHDAY_PERCENT_OFF);
   if (!ok) return { sent: false, reason: "send-failed", code };
 

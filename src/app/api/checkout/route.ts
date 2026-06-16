@@ -3,6 +3,7 @@ import { getStripe, hasStripeConfig } from "@/lib/stripe/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
 import { orderSchema, validateForm } from "@/lib/validations";
 import { sendOrderConfirmation } from "@/lib/email/send";
+import { redeemPromoCode } from "@/lib/promo";
 import { rateLimit } from "@/lib/api-auth";
 
 export async function POST(request: NextRequest) {
@@ -67,6 +68,11 @@ export async function POST(request: NextRequest) {
     orderNumber = data.order_number;
   } catch {
     return NextResponse.json({ error: "Failed to create order" }, { status: 500 });
+  }
+
+  // Consume the promo code (if any) now that the order exists.
+  if (body.promoCode) {
+    redeemPromoCode(body.promoCode).catch(() => {});
   }
 
   // 2) If Stripe not configured, return order without payment
