@@ -14,6 +14,7 @@ export interface AdminProduct {
   stock: number;
   status: "active" | "draft" | "archived";
   category: string;
+  gender?: "women" | "men" | "unisex";
   material?: string;
   color?: string;
   gemstone?: string;
@@ -43,6 +44,7 @@ export function productRowToAdminProduct(row: ProductRow): AdminProduct {
     stock: row.stock,
     status: row.status,
     category: row.category,
+    gender: row.gender,
     material: row.material,
     color: row.color,
     gemstone: row.gemstone,
@@ -70,6 +72,7 @@ export function adminProductToProductPayload(product: AdminProduct) {
     stock: product.stock,
     status: product.status,
     category: product.category,
+    gender: product.gender ?? "women",
     material: product.material ?? "",
     color: product.color ?? "",
     gemstone: product.gemstone ?? "",

@@ -30,6 +30,7 @@ export type Database = {
           stock: number;
           status: "active" | "draft" | "archived";
           category: string;
+          gender: "women" | "men" | "unisex";
           material: string;
           color: string;
           gemstone: string;
@@ -57,6 +58,7 @@ export type Database = {
           stock?: number;
           status?: "active" | "draft" | "archived";
           category: string;
+          gender?: "women" | "men" | "unisex";
           material?: string;
           color?: string;
           gemstone?: string;

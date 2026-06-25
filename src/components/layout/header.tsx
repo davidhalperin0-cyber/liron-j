@@ -9,6 +9,8 @@ import { useWishlistStore } from "@/stores/wishlist-store";
 import Link from "next/link";
 
 const NAV_ITEMS = [
+  { label: "לאישה", labelEn: "For Her", href: "/collections/women" },
+  { label: "לגבר", labelEn: "For Him", href: "/collections/men" },
   {
     label: "תכשיטים",
     labelEn: "Jewelry",

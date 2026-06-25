@@ -582,6 +582,18 @@ function EditProductModal({
                 </select>
               </label>
               <label className="space-y-1.5">
+                <span className="text-xs text-white/50">מגדר *</span>
+                <select
+                  value={product.gender ?? "women"}
+                  onChange={(e) => update("gender", e.target.value as AdminProduct["gender"])}
+                  className={inputClass}
+                >
+                  <option value="women">לאישה</option>
+                  <option value="men">לגבר</option>
+                  <option value="unisex">יוניסקס</option>
+                </select>
+              </label>
+              <label className="space-y-1.5">
                 <span className="text-xs text-white/50">סטטוס</span>
                 <select
                   value={product.status}

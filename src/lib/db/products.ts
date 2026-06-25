@@ -154,6 +154,17 @@ export async function getAllActiveProducts(): Promise<ProductCard[]> {
   return rows.map(rowToProductCard);
 }
 
+export async function getProductsByGender(gender: "women" | "men"): Promise<ProductCard[]> {
+  const rows = await queryProducts((q) =>
+    q
+      .eq("status", "active")
+      .in("gender", [gender, "unisex"])
+      .order("created_at", { ascending: false })
+  );
+
+  return rows.map(rowToProductCard);
+}
+
 export async function searchProducts(query: string): Promise<ProductCard[]> {
   const normalized = query.trim().toLowerCase();
   if (!normalized) return [];

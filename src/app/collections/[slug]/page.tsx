@@ -3,7 +3,7 @@ import { CollectionPage } from "@/components/collection/collection-page";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/cart/cart-drawer";
-import { getAllActiveProducts, getNewProducts, getProductsByCategory } from "@/lib/db/products";
+import { getAllActiveProducts, getNewProducts, getProductsByCategory, getProductsByGender } from "@/lib/db/products";
 import { getCategoryBySlug } from "@/lib/db/categories";
 import type { Metadata } from "next";
 
@@ -39,6 +39,8 @@ function buildBreadcrumbJsonLd(categoryName: string, slug: string) {
 
 // Special (non-DB) collections that aren't product categories
 const SPECIAL_COLLECTIONS: Record<string, { name: string; nameEn: string; description: string }> = {
+  women: { name: "לאישה", nameEn: "For Her", description: "תכשיטי יוקרה לאישה — שרשראות, טבעות, עגילים וצמידים." },
+  men: { name: "לגבר", nameEn: "For Him", description: "תכשיטי יוקרה לגבר — שרשראות, צמידים וטבעות." },
   new: { name: "חדש באתר", nameEn: "New Arrivals", description: "הפריטים החדשים ביותר שהגיעו לקולקציה." },
   bestsellers: { name: "בסט סלרס", nameEn: "Best Sellers", description: "המוצרים הכי אהובים על הלקוחות שלנו." },
   limited: { name: "מהדורה מוגבלת", nameEn: "Limited Edition", description: "פריטים בלעדיים במהדורה מוגבלת." },
@@ -81,6 +83,8 @@ export default async function Page({
     let products;
     if (slug === "new") {
       products = await getNewProducts(20);
+    } else if (slug === "women" || slug === "men") {
+      products = await getProductsByGender(slug);
     } else {
       products = await getAllActiveProducts();
     }
