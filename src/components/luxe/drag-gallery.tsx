@@ -1,7 +1,5 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { ProductCard } from "@/components/product/product-card";
 import type { ProductCard as ProductCardType } from "@/types";
 
@@ -11,23 +9,9 @@ interface Props {
   title?: string;
 }
 
-// Drag-to-explore horizontal gallery with momentum (framer-motion).
+// Horizontal product gallery using NATIVE scroll — reliable swipe on mobile,
+// trackpad/scroll on desktop, and it never traps vertical page scrolling.
 export function DragGallery({ products, eyebrow = "גלריה", title = "Drag to explore" }: Props) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [constraint, setConstraint] = useState(0);
-
-  useEffect(() => {
-    const measure = () => {
-      if (!trackRef.current) return;
-      const scrollW = trackRef.current.scrollWidth;
-      const clientW = trackRef.current.clientWidth;
-      setConstraint(Math.max(0, scrollW - clientW));
-    };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, [products.length]);
-
   if (products.length === 0) return null;
 
   return (
@@ -38,26 +22,16 @@ export function DragGallery({ products, eyebrow = "גלריה", title = "Drag to
           <h2 className="font-display text-3xl sm:text-5xl text-white">{title}</h2>
         </div>
         <p className="hidden sm:block text-[11px] tracking-[0.3em] uppercase text-white/30">
-          ← גררו →
+          ← החליקו →
         </p>
       </div>
 
-      <div ref={trackRef} className="overflow-hidden cursor-grab active:cursor-grabbing px-4 sm:px-6 lg:px-8">
-        <motion.div
-          drag="x"
-          dragConstraints={{ left: -constraint, right: 0 }}
-          dragElastic={0.08}
-          dragDirectionLock
-          dragTransition={{ power: 0.3, timeConstant: 250, bounceStiffness: 300, bounceDamping: 40 }}
-          style={{ touchAction: "pan-y" }}
-          className="flex gap-5 w-max"
-        >
-          {products.map((p) => (
-            <div key={p.id} className="w-[240px] sm:w-[300px] shrink-0 pointer-events-auto">
-              <ProductCard product={p} />
-            </div>
-          ))}
-        </motion.div>
+      <div className="flex gap-5 overflow-x-auto snap-x snap-mandatory px-4 sm:px-6 lg:px-8 pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        {products.map((p) => (
+          <div key={p.id} className="w-[230px] sm:w-[300px] shrink-0 snap-start">
+            <ProductCard product={p} />
+          </div>
+        ))}
       </div>
     </section>
   );

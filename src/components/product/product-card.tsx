@@ -116,12 +116,12 @@ export function ProductCard({ product, size = "md" }: Props) {
             )}
           </div>
 
-          {/* Quick Actions */}
+          {/* Quick Actions — hover only (hidden on touch so a tap opens the product) */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={isHovered ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
-            className="absolute bottom-3 left-3 right-3 flex gap-2 z-20"
+            className="absolute bottom-3 left-3 right-3 gap-2 z-20 hidden [@media(hover:hover)]:flex"
           >
             <button
               onClick={(e) => {
