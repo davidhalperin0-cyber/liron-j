@@ -37,6 +37,7 @@ function rowToProductCard(row: ProductRow): ProductCard {
     price: row.price,
     compareAtPrice: row.compare_at_price ?? undefined,
     image: row.image_url || row.images[0] || "",
+    hoverImage: row.images?.[1] || undefined,
     material: row.material,
     color: row.color,
     isNew: row.is_new,
