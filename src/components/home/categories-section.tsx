@@ -4,34 +4,10 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 
 const CATEGORIES = [
-  {
-    name: "טבעות",
-    nameEn: "Rings",
-    href: "/collections/rings",
-    image: "/images/products/diamond-halo-ring.webp",
-    count: 45,
-  },
-  {
-    name: "עגילים",
-    nameEn: "Earrings",
-    href: "/collections/earrings",
-    image: "/images/products/diamond-chandelier-earrings.webp",
-    count: 62,
-  },
-  {
-    name: "שרשראות",
-    nameEn: "Necklaces",
-    href: "/collections/necklaces",
-    image: "/images/products/emerald-pendant-necklace.webp",
-    count: 38,
-  },
-  {
-    name: "צמידים",
-    nameEn: "Bracelets",
-    href: "/collections/bracelets",
-    image: "/images/products/gold-diamond-cuff.webp",
-    count: 24,
-  },
+  { name: "טבעות", nameEn: "Rings", href: "/collections/rings", image: "/images/categories/rings.jpg" },
+  { name: "עגילים", nameEn: "Earrings", href: "/collections/earrings", image: "/images/categories/earrings.jpg" },
+  { name: "שרשראות", nameEn: "Necklaces", href: "/collections/necklaces", image: "/images/categories/necklaces.jpg" },
+  { name: "צמידים", nameEn: "Bracelets", href: "/collections/bracelets", image: "/images/categories/bracelets.jpg" },
 ];
 
 export function CategoriesSection() {
@@ -85,8 +61,8 @@ export function CategoriesSection() {
                     <h3 className="font-display text-2xl sm:text-3xl text-white group-hover:text-gold transition-colors duration-300">
                       {category.name}
                     </h3>
-                    <p className="text-xs text-white/40 tracking-widest uppercase mt-1">
-                      {category.count} מוצרים
+                    <p className="text-xs text-white/50 tracking-widest uppercase mt-1">
+                      {category.nameEn}
                     </p>
                   </div>
 

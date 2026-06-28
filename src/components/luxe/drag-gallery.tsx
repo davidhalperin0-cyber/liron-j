@@ -47,7 +47,9 @@ export function DragGallery({ products, eyebrow = "גלריה", title = "Drag to
           drag="x"
           dragConstraints={{ left: -constraint, right: 0 }}
           dragElastic={0.08}
+          dragDirectionLock
           dragTransition={{ power: 0.3, timeConstant: 250, bounceStiffness: 300, bounceDamping: 40 }}
+          style={{ touchAction: "pan-y" }}
           className="flex gap-5 w-max"
         >
           {products.map((p) => (
