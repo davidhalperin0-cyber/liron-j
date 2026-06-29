@@ -123,27 +123,35 @@ export function ProductPage({ product, similarProducts, completeTheLook = [], fr
               {product.description}
             </p>
 
-            {/* Specs */}
-            <div className="flex gap-6 py-4 border-y border-white/5">
-              <div>
-                <p className="text-[10px] text-white/30 tracking-wider uppercase mb-1">
-                  חומר
-                </p>
-                <p className="text-sm text-white/70">{product.material}</p>
+            {/* Specs — only render fields that have a value */}
+            {(product.material || product.gemstone || product.weight) && (
+              <div className="flex gap-6 py-4 border-y border-white/5">
+                {product.material && (
+                  <div>
+                    <p className="text-[10px] text-white/30 tracking-wider uppercase mb-1">
+                      חומר
+                    </p>
+                    <p className="text-sm text-white/70">{product.material}</p>
+                  </div>
+                )}
+                {product.gemstone && (
+                  <div>
+                    <p className="text-[10px] text-white/30 tracking-wider uppercase mb-1">
+                      אבן
+                    </p>
+                    <p className="text-sm text-white/70">{product.gemstone}</p>
+                  </div>
+                )}
+                {product.weight && (
+                  <div>
+                    <p className="text-[10px] text-white/30 tracking-wider uppercase mb-1">
+                      משקל
+                    </p>
+                    <p className="text-sm text-white/70">{product.weight}</p>
+                  </div>
+                )}
               </div>
-              <div>
-                <p className="text-[10px] text-white/30 tracking-wider uppercase mb-1">
-                  אבן
-                </p>
-                <p className="text-sm text-white/70">{product.gemstone}</p>
-              </div>
-              <div>
-                <p className="text-[10px] text-white/30 tracking-wider uppercase mb-1">
-                  משקל
-                </p>
-                <p className="text-sm text-white/70">{product.weight}</p>
-              </div>
-            </div>
+            )}
 
             {/* Color Selection */}
             <div>

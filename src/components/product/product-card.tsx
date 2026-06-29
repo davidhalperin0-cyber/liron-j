@@ -181,7 +181,9 @@ export function ProductCard({ product, size = "md" }: Props) {
         </Link>
 
         {product.material && (
-          <p className="text-xs text-white/40">{product.material}</p>
+          <span className="inline-block px-2 py-0.5 text-[10px] tracking-wider text-gold/85 border border-gold/30 rounded-[2px] leading-none">
+            {product.material}
+          </span>
         )}
 
         <div className="flex items-center gap-2">
