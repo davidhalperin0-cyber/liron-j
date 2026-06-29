@@ -137,6 +137,34 @@ export async function getNewProducts(limit = 4): Promise<ProductCard[]> {
     q.eq("status", "active").eq("is_new", true).order("created_at", { ascending: false }).limit(limit)
   );
 
+  // Fallback: if nothing is flagged "מוצר חדש" yet, show the most recent items
+  // so the "גלו את הקולקציה" page is never empty.
+  if (rows.length === 0) {
+    const recent = await queryProducts((q) =>
+      q.eq("status", "active").order("created_at", { ascending: false }).limit(limit)
+    );
+    return recent.map(rowToProductCard);
+  }
+
+  return rows.map(rowToProductCard);
+}
+
+// Best Sellers — products flagged "מוצר מומלץ" (is_featured), capped (max 10).
+// Fully controlled per-product from the admin. Falls back to recent items
+// only when nothing has been flagged yet, so the page is never empty.
+export async function getBestSellers(limit = 10): Promise<ProductCard[]> {
+  const capped = Math.min(limit, 10);
+  const rows = await queryProducts((q) =>
+    q.eq("status", "active").eq("is_featured", true).order("created_at", { ascending: false }).limit(capped)
+  );
+
+  if (rows.length === 0) {
+    const recent = await queryProducts((q) =>
+      q.eq("status", "active").order("created_at", { ascending: false }).limit(capped)
+    );
+    return recent.map(rowToProductCard);
+  }
+
   return rows.map(rowToProductCard);
 }
 

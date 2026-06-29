@@ -4,7 +4,7 @@ import { GenderedCollection } from "@/components/collection/gendered-collection"
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/cart/cart-drawer";
-import { getAllActiveProducts, getNewProducts, getProductsByCategory, getProductsByGender, getProductsByCategoryAndGender } from "@/lib/db/products";
+import { getAllActiveProducts, getNewProducts, getBestSellers, getProductsByCategory, getProductsByGender, getProductsByCategoryAndGender } from "@/lib/db/products";
 import { getCategoryBySlug } from "@/lib/db/categories";
 import type { Metadata } from "next";
 
@@ -103,7 +103,12 @@ export default async function Page({
   // Other special collections
   const special = SPECIAL_COLLECTIONS[slug];
   if (special) {
-    const products = slug === "new" ? await getNewProducts(20) : await getAllActiveProducts();
+    const products =
+      slug === "new"
+        ? await getNewProducts(20)
+        : slug === "bestsellers"
+          ? await getBestSellers(10)
+          : await getAllActiveProducts();
     return (
       <>
         <JsonLd data={buildBreadcrumbJsonLd(special.name, slug)} />
