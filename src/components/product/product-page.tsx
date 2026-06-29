@@ -16,22 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product/product-card";
 import { SizeGuideModal } from "@/components/product/size-guide-modal";
-import dynamic from "next/dynamic";
-
-const ProductPresentation = dynamic(
-  () =>
-    import("@/components/product/product-presentation").then(
-      (mod) => mod.ProductPresentation
-    ),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="aspect-square bg-charcoal animate-pulse flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
-      </div>
-    ),
-  }
-);
+import { ProductGallery } from "@/components/product/product-gallery";
 import { cn, formatPrice } from "@/lib/utils";
 import { useCartStore } from "@/stores/cart-store";
 import { useWishlistStore } from "@/stores/wishlist-store";
@@ -93,20 +78,9 @@ export function ProductPage({ product, similarProducts, completeTheLook = [], fr
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Main Product Section */}
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16">
-          {/* Premium interactive product presentation */}
+          {/* Product gallery */}
           <div className="space-y-4">
-            <ProductPresentation
-              media={product.media}
-              fallbackImage={product.images[0]}
-              productName={product.name.he}
-            />
-
-            <div className="glass flex items-center justify-between px-4 py-3 text-xs text-white/50">
-              <span>
-                <span className="text-gold">32</span> צפו היום
-              </span>
-              <span>חוויה אינטראקטיבית עבור /{product.slug}</span>
-            </div>
+            <ProductGallery images={product.images} name={product.name.he} />
           </div>
 
           {/* Product Info */}

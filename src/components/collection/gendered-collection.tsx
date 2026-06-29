@@ -33,7 +33,7 @@ export function GenderedCollection({ gender, products }: Props) {
   const categories = [...seen.entries()].map(([cat, p]) => ({
     cat,
     label: HE_CAT[cat] || cat,
-    image: p.hoverImage || p.image,
+    image: p.image,
     href: `/collections/${cat}?gender=${gender}`,
   }));
 
