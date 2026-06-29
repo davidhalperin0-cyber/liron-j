@@ -38,6 +38,7 @@ function rowToProductCard(row: ProductRow): ProductCard {
     compareAtPrice: row.compare_at_price ?? undefined,
     image: row.image_url || row.images[0] || "",
     hoverImage: row.images?.[1] || undefined,
+    category: row.category,
     material: row.material,
     color: row.color,
     isNew: row.is_new,
@@ -159,6 +160,21 @@ export async function getProductsByGender(gender: "women" | "men"): Promise<Prod
   const rows = await queryProducts((q) =>
     q
       .eq("status", "active")
+      .in("gender", [gender, "unisex"])
+      .order("created_at", { ascending: false })
+  );
+
+  return rows.map(rowToProductCard);
+}
+
+export async function getProductsByCategoryAndGender(
+  category: string,
+  gender: "women" | "men"
+): Promise<ProductCard[]> {
+  const rows = await queryProducts((q) =>
+    q
+      .eq("status", "active")
+      .eq("category", category)
       .in("gender", [gender, "unisex"])
       .order("created_at", { ascending: false })
   );

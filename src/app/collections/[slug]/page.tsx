@@ -1,11 +1,14 @@
 import { JsonLd } from "@/components/seo/json-ld";
 import { CollectionPage } from "@/components/collection/collection-page";
+import { GenderedCollection } from "@/components/collection/gendered-collection";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/cart/cart-drawer";
-import { getAllActiveProducts, getNewProducts, getProductsByCategory, getProductsByGender } from "@/lib/db/products";
+import { getAllActiveProducts, getNewProducts, getProductsByCategory, getProductsByGender, getProductsByCategoryAndGender } from "@/lib/db/products";
 import { getCategoryBySlug } from "@/lib/db/categories";
 import type { Metadata } from "next";
+
+const GENDER_LABEL: Record<string, string> = { men: "לגבר", women: "לאישה" };
 
 // Re-validate every 60 seconds — cached between requests
 export const revalidate = 60;
@@ -72,23 +75,35 @@ export async function generateMetadata({
 
 export default async function Page({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ gender?: string }>;
 }) {
   const { slug } = await params;
+  const sp = await searchParams;
+  const gender = sp.gender === "men" || sp.gender === "women" ? sp.gender : undefined;
 
-  // Check special collections first
+  // Gender landing pages — a mini-home for that gender
+  if (slug === "women" || slug === "men") {
+    const products = await getProductsByGender(slug);
+    return (
+      <>
+        <JsonLd data={buildBreadcrumbJsonLd(SPECIAL_COLLECTIONS[slug].name, slug)} />
+        <Header />
+        <CartDrawer />
+        <main>
+          <GenderedCollection gender={slug} products={products} />
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  // Other special collections
   const special = SPECIAL_COLLECTIONS[slug];
   if (special) {
-    let products;
-    if (slug === "new") {
-      products = await getNewProducts(20);
-    } else if (slug === "women" || slug === "men") {
-      products = await getProductsByGender(slug);
-    } else {
-      products = await getAllActiveProducts();
-    }
-
+    const products = slug === "new" ? await getNewProducts(20) : await getAllActiveProducts();
     return (
       <>
         <JsonLd data={buildBreadcrumbJsonLd(special.name, slug)} />
@@ -111,19 +126,22 @@ export default async function Page({
   // Dynamic category from DB
   const category = await getCategoryBySlug(slug);
 
-  // If category exists in DB — use it
+  // If category exists in DB — use it (optionally gender-filtered)
   if (category) {
-    const products = await getProductsByCategory(category.slug);
+    const products = gender
+      ? await getProductsByCategoryAndGender(category.slug, gender)
+      : await getProductsByCategory(category.slug);
+    const name = gender ? `${category.name} ${GENDER_LABEL[gender]}` : category.name;
 
     return (
       <>
-        <JsonLd data={buildBreadcrumbJsonLd(category.name, slug)} />
+        <JsonLd data={buildBreadcrumbJsonLd(name, slug)} />
         <Header />
         <CartDrawer />
         <main>
           <CollectionPage
             slug={slug}
-            name={category.name}
+            name={name}
             nameEn={category.name_en}
             description={category.description}
             products={products}
