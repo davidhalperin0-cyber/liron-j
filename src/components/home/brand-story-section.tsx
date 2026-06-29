@@ -15,17 +15,19 @@ export function BrandStorySection() {
             transition={{ duration: 1 }}
             className="relative"
           >
-            <div className="bg-smoke overflow-hidden">
-              {/* Editorial moodboard collage — full 3-panel ratio */}
-              <img
-                src="/images/brand-story.jpg"
-                alt="AURÉA — מלאכת יד יוקרתית"
-                loading="lazy"
-                className="block w-full h-auto image-dramatic"
-              />
+            <div className="relative max-w-[300px] sm:max-w-[340px] mx-auto">
+              <div className="bg-smoke overflow-hidden">
+                {/* Editorial moodboard collage — full 3-panel ratio, proportional */}
+                <img
+                  src="/images/brand-story.jpg"
+                  alt="AURÉA — מלאכת יד יוקרתית"
+                  loading="lazy"
+                  className="block w-full h-auto image-dramatic"
+                />
+              </div>
+              {/* Gold frame accent */}
+              <div className="absolute -bottom-4 -left-4 w-full h-full border border-gold/20 -z-10" />
             </div>
-            {/* Gold frame accent */}
-            <div className="absolute -bottom-4 -left-4 w-full h-full border border-gold/20 -z-10" />
           </motion.div>
 
           {/* Content */}
