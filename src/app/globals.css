@@ -212,6 +212,44 @@ body {
   filter: contrast(1.02);
 }
 
+/* Gold shimmer sweep — a slow specular glint across luxury CTAs */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  animation: btnShimmer 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes btnShimmer {
+  0%,
+  100% {
+    left: -150%;
+  }
+  18%,
+  82% {
+    left: 150%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-shimmer::after {
+    animation: none;
+  }
+}
+
 .luxury-shadow {
   box-shadow:
     0 1px 2px rgba(28, 25, 21, 0.04),
