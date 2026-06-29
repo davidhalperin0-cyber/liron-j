@@ -358,8 +358,8 @@ export function ProductPage({ product, similarProducts, completeTheLook = [], fr
         )}
       </div>
 
-      {/* Sticky Mobile CTA */}
-      <div className="fixed bottom-0 left-0 right-0 lg:hidden z-30 bg-charcoal/95 backdrop-blur-md border-t border-white/5 px-4 py-3 safe-area-pb">
+      {/* Sticky Mobile CTA — above the concierge/whatsapp bars so nothing peeks */}
+      <div className="fixed bottom-0 left-0 right-0 lg:hidden z-50 bg-charcoal border-t border-gold/15 px-4 py-3 safe-area-pb shadow-[0_-8px_24px_rgba(28,25,21,0.08)]">
         <div className="flex items-center gap-3">
           <div className="flex-1 min-w-0">
             <p className="text-xs text-white/50 truncate">{product.name.he}</p>
