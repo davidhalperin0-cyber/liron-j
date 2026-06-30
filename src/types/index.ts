@@ -16,6 +16,7 @@ export interface ProductCard {
   hoverImage?: string;
   category?: string;
   material?: string;
+  tagline?: string;
   color?: string;
   isNew?: boolean;
   isLimited?: boolean;

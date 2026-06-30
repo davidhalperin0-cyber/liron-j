@@ -29,6 +29,17 @@ export interface ProductDetail {
   };
 }
 
+// A short, elegant fragment of the story for product cards — first clause,
+// trimmed to a tasteful length so it never wraps to multiple lines.
+function shortExcerpt(text: string | undefined, max = 52): string | undefined {
+  if (!text) return undefined;
+  const firstSentence = text.split(/(?<=[.!?…])\s/)[0].trim();
+  if (firstSentence.length <= max) return firstSentence.replace(/[.…]+$/, "");
+  const cut = firstSentence.slice(0, max);
+  const lastSpace = cut.lastIndexOf(" ");
+  return (lastSpace > 20 ? cut.slice(0, lastSpace) : cut).replace(/[.,…]+$/, "") + "…";
+}
+
 function rowToProductCard(row: ProductRow): ProductCard {
   return {
     id: row.id,
@@ -40,6 +51,7 @@ function rowToProductCard(row: ProductRow): ProductCard {
     hoverImage: row.images?.[1] || undefined,
     category: row.category,
     material: row.material,
+    tagline: shortExcerpt(row.story || row.description),
     color: row.color,
     isNew: row.is_new,
     isLimited: row.is_limited,

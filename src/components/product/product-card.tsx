@@ -180,10 +180,10 @@ export function ProductCard({ product, size = "md" }: Props) {
           <span className="block h-px bg-gold/70 w-0 group-hover:w-full transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
         </Link>
 
-        {product.material && (
-          <span className="inline-block px-2 py-0.5 text-[10px] tracking-wider text-gold/85 border border-gold/30 rounded-[2px] leading-none">
-            {product.material}
-          </span>
+        {product.tagline && (
+          <p className="text-xs text-white/45 leading-snug line-clamp-1">
+            {product.tagline}
+          </p>
         )}
 
         <div className="flex items-center gap-2">
