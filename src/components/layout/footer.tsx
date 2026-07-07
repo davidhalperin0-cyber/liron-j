@@ -22,6 +22,7 @@ const FOOTER_LINKS = {
       { label: "מדיניות החזרות", href: "/returns" },
       { label: "מדיניות פרטיות", href: "/privacy" },
       { label: "תקנון", href: "/terms" },
+      { label: "הצהרת נגישות", href: "/accessibility" },
     ],
   },
 };

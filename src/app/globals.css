@@ -212,6 +212,51 @@ body {
   filter: contrast(1.02);
 }
 
+/* ── Accessibility modes (IS 5568 / WCAG 2.0 AA adjustments) ──────────── */
+/* High contrast — strengthen muted text and borders for low-vision users */
+html.a11y-contrast body {
+  filter: contrast(1.18);
+}
+html.a11y-contrast {
+  --tw-text-opacity: 1;
+}
+html.a11y-contrast .text-white\/40,
+html.a11y-contrast .text-white\/45,
+html.a11y-contrast .text-white\/50,
+html.a11y-contrast .text-white\/60,
+html.a11y-contrast .text-white\/70 {
+  color: rgb(28 25 21) !important;
+}
+/* Highlight links — underline + weight so links are unmistakable */
+html.a11y-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+  font-weight: 600 !important;
+}
+/* Readable font — swap display/serif for a plain, legible sans */
+html.a11y-readable,
+html.a11y-readable * {
+  font-family: Arial, "Heebo", var(--font-hebrew), sans-serif !important;
+  letter-spacing: 0.01em !important;
+}
+/* Grayscale */
+html.a11y-grayscale {
+  filter: grayscale(1);
+}
+/* Stop animations (also honors users who need reduced motion) */
+html.a11y-noanim *,
+html.a11y-noanim *::before,
+html.a11y-noanim *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+/* Visible keyboard focus everywhere (a legal baseline) */
+:focus-visible {
+  outline: 2px solid #9a7b3c;
+  outline-offset: 2px;
+}
+
 /* Gold shimmer sweep — a slow specular glint across luxury CTAs */
 .btn-shimmer {
   position: relative;

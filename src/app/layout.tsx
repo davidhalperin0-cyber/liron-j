@@ -6,6 +6,7 @@ import { AiChatWidget } from "@/components/chat/ai-chat-widget";
 import { GrainOverlay } from "@/components/luxe/grain-overlay";
 import { IntroReveal } from "@/components/luxe/intro-reveal";
 import { LuxeCursor } from "@/components/luxe/luxe-cursor";
+import { AccessibilityMenu } from "@/components/a11y/accessibility-menu";
 import "./globals.css";
 
 const inter = Inter({
@@ -87,6 +88,7 @@ export default function RootLayout({
         <Toaster />
         <WhatsAppButton />
         <AiChatWidget />
+        <AccessibilityMenu />
       </body>
     </html>
   );
