@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowRight, Lock, Truck, Shield } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight, Lock, Truck, Shield, Plus, Sparkles, Check } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
@@ -63,7 +65,17 @@ export default function CheckoutPage() {
   const [promo, setPromo] = useState<{ valid: boolean; discount?: number; message: string; code?: string } | null>(null);
   const [promoLoading, setPromoLoading] = useState(false);
   const discount = promo?.valid ? promo.discount ?? 0 : 0;
-  const total = Math.max(0, subtotal + shipping - discount);
+
+  // AURÉA Club — 5% first-purchase gift, stacks on top of any promo code.
+  const [joinClub, setJoinClub] = useState(false);
+  const clubDiscount = joinClub ? Math.round(subtotal * 0.05) : 0;
+
+  const total = Math.max(0, subtotal + shipping - discount - clubDiscount);
+
+  // Checkout recommendations ("complete the look"), fetched when reaching payment.
+  type Rec = { id: string; slug: string; name: string; price: number; image: string };
+  const [recs, setRecs] = useState<Rec[]>([]);
+  const addItem = store.addItem;
 
   const applyPromo = async () => {
     if (!promoCode.trim()) return;
@@ -86,6 +98,33 @@ export default function CheckoutPage() {
   };
 
   const stepIndex = STEPS.findIndex((s) => s.key === currentStep);
+
+  // Load "complete the look" recommendations once we reach the payment step.
+  useEffect(() => {
+    if (currentStep !== "payment" || items.length === 0) return;
+    let cancelled = false;
+    fetch("/api/checkout/recommendations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productIds: items.map((i) => i.product.id) }),
+    })
+      .then((r) => r.json())
+      .then((d) => { if (!cancelled) setRecs(Array.isArray(d.products) ? d.products : []); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep]);
+
+  const addRecToCart = (rec: Rec) => {
+    addItem({
+      id: `${rec.id}-default`,
+      product: { id: rec.id, slug: rec.slug, name: { he: rec.name, en: rec.name }, price: rec.price, image: rec.image },
+      quantity: 1,
+      price: rec.price,
+    });
+    notifyAction(`${rec.name} נוסף לסל`);
+    setRecs((prev) => prev.filter((r) => r.id !== rec.id));
+  };
 
   // Form state
   const [info, setInfo] = useState<Partial<CheckoutInfo>>({
@@ -126,6 +165,15 @@ export default function CheckoutPage() {
 
     setSubmitting(true);
     try {
+      // Register the club membership (frictionless — email/name from step 1).
+      if (joinClub) {
+        fetch("/api/club/join", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: info.email, name: `${info.firstName} ${info.lastName}`.trim(), phone: info.phone }),
+        }).catch(() => {});
+      }
+
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -149,8 +197,10 @@ export default function CheckoutPage() {
           })),
           subtotal,
           shippingCost: shipping,
-          discount,
+          discount: discount + clubDiscount,
           promoCode: promo?.valid ? promo.code : undefined,
+          joinedClub: joinClub,
+          clubDiscount,
           total,
         }),
       });
@@ -353,6 +403,81 @@ export default function CheckoutPage() {
                         </p>
                       </div>
 
+                      {/* AURÉA Club — 5% first-purchase gift, stacks with promos */}
+                      <button
+                        type="button"
+                        onClick={() => setJoinClub((v) => !v)}
+                        className={`w-full text-right rounded-lg border p-4 transition-all ${
+                          joinClub
+                            ? "border-gold/60 bg-gold/[0.07]"
+                            : "border-gold/20 bg-gold/[0.03] hover:border-gold/40"
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <span
+                            className={`mt-0.5 w-5 h-5 rounded-[5px] border flex items-center justify-center shrink-0 transition-colors ${
+                              joinClub ? "bg-gold border-gold text-black" : "border-gold/40 text-transparent"
+                            }`}
+                          >
+                            <Check size={13} strokeWidth={3} />
+                          </span>
+                          <div className="flex-1">
+                            <p className="text-sm text-white flex items-center gap-1.5">
+                              <Sparkles size={13} className="text-gold" />
+                              הצטרפו למועדון AURÉA — <span className="text-gold">5% מתנה</span> לקנייה הראשונה
+                            </p>
+                            <p className="text-[11px] text-white/45 mt-1 leading-relaxed">
+                              ההנחה מצטברת על כל מבצע קיים. גישה מוקדמת לקולקציות והטבות חברים — ללא עלות.
+                            </p>
+                            {joinClub && clubDiscount > 0 && (
+                              <p className="text-[11px] text-gold/90 mt-1.5">
+                                נחסכו לך {formatPrice(clubDiscount)} 🎁
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </button>
+
+                      {/* Complete the look — two recommendations before payment */}
+                      {recs.length > 0 && (
+                        <div className="rounded-lg border border-white/5 bg-smoke/30 p-4">
+                          <p className="text-xs tracking-wider text-white/50 mb-3">
+                            משלימים את המראה
+                          </p>
+                          <div className="grid grid-cols-2 gap-3">
+                            {recs.slice(0, 2).map((rec) => (
+                              <div key={rec.id} className="group">
+                                <Link href={`/products/${rec.slug}`} className="block relative aspect-square overflow-hidden rounded-md bg-charcoal">
+                                  {rec.image && (
+                                    <Image
+                                      src={rec.image}
+                                      alt={rec.name}
+                                      fill
+                                      sizes="150px"
+                                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                    />
+                                  )}
+                                </Link>
+                                <div className="mt-2 flex items-center justify-between gap-2">
+                                  <div className="min-w-0">
+                                    <p className="text-xs text-white/80 truncate">{rec.name}</p>
+                                    <p className="text-xs text-gold/80">{formatPrice(rec.price)}</p>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => addRecToCart(rec)}
+                                    aria-label="הוספה לסל"
+                                    className="w-7 h-7 shrink-0 rounded-full border border-gold/30 text-gold flex items-center justify-center hover:bg-gold/10 transition-colors"
+                                  >
+                                    <Plus size={14} />
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
                       <div className="space-y-3 text-sm">
                         <div className="flex justify-between text-white/40">
                           <span>סכום ביניים</span>
@@ -362,6 +487,18 @@ export default function CheckoutPage() {
                           <span>משלוח</span>
                           <span>{shipping === 0 ? "חינם" : formatPrice(shipping)}</span>
                         </div>
+                        {discount > 0 && (
+                          <div className="flex justify-between text-gold/80">
+                            <span>הנחה{promo?.code ? ` (${promo.code})` : ""}</span>
+                            <span>−{formatPrice(discount)}</span>
+                          </div>
+                        )}
+                        {clubDiscount > 0 && (
+                          <div className="flex justify-between text-gold/80">
+                            <span>מתנת מועדון (5%)</span>
+                            <span>−{formatPrice(clubDiscount)}</span>
+                          </div>
+                        )}
                         <div className="flex justify-between text-white font-medium pt-2 border-t border-white/5">
                           <span>סה&quot;כ לתשלום</span>
                           <span className="text-gold text-lg">{formatPrice(total)}</span>
@@ -444,6 +581,12 @@ export default function CheckoutPage() {
                     <div className="flex justify-between text-gold/80">
                       <span>הנחה{promo?.code ? ` (${promo.code})` : ""}</span>
                       <span>−{formatPrice(discount)}</span>
+                    </div>
+                  )}
+                  {clubDiscount > 0 && (
+                    <div className="flex justify-between text-gold/80">
+                      <span>מתנת מועדון (5%)</span>
+                      <span>−{formatPrice(clubDiscount)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-white font-medium pt-2 border-t border-white/5">
