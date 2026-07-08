@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/stores/cart-store";
 import { formatPrice } from "@/lib/utils";
 import { notifyAction, notifyError } from "@/lib/ui-actions";
+import { analytics } from "@/lib/analytics";
 import {
   checkoutInfoSchema,
   type CheckoutInfo,
@@ -98,6 +99,18 @@ export default function CheckoutPage() {
   };
 
   const stepIndex = STEPS.findIndex((s) => s.key === currentStep);
+
+  // Funnel step 3 — checkout started
+  useEffect(() => {
+    if (items.length > 0) analytics.beginCheckout(subtotal, items.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Funnel step 4 — reached the payment step (right before paying)
+  useEffect(() => {
+    if (currentStep === "payment" && items.length > 0) analytics.addPaymentInfo(total);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep]);
 
   // Load "complete the look" recommendations once we reach the payment step.
   useEffect(() => {
@@ -219,7 +232,7 @@ export default function CheckoutPage() {
       // Fallback: Stripe not configured, order created without payment
       store.clear();
       notifyAction(`ההזמנה נוצרה! מספר הזמנה: ${data.orderNumber ?? "ממתין"}`);
-      router.push(`/checkout/success?order=${data.orderNumber ?? ""}`);
+      router.push(`/checkout/success?order=${data.orderNumber ?? ""}&total=${total}`);
     } catch {
       notifyError("שגיאה ביצירת ההזמנה. נסי שנית.");
     } finally {

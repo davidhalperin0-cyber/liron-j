@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Heart,
@@ -21,6 +21,7 @@ import { cn, formatPrice } from "@/lib/utils";
 import { useCartStore } from "@/stores/cart-store";
 import { useWishlistStore } from "@/stores/wishlist-store";
 import { notifyAction } from "@/lib/ui-actions";
+import { analytics } from "@/lib/analytics";
 import type { ProductCard as ProductCardType } from "@/types";
 import type { ProductDetail } from "@/lib/db/products";
 
@@ -48,7 +49,25 @@ export function ProductPage({ product, similarProducts, completeTheLook = [], fr
   const { toggle, has } = useWishlistStore();
   const isWishlisted = has(product.id);
 
+  // Funnel step 1 — product viewed
+  useEffect(() => {
+    analytics.viewItem({
+      id: product.id,
+      name: product.name.he,
+      price: product.price,
+      category: product.category,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product.id]);
+
   const handleAddToCart = () => {
+    // Funnel step 2 — added to cart
+    analytics.addToCart({
+      id: product.id,
+      name: product.name.he,
+      price: product.price,
+      quantity,
+    });
     addItem({
       id: `${product.id}-${selectedColor}-${selectedSize}`,
       product: {

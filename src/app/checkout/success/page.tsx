@@ -1,7 +1,8 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { analytics } from "@/lib/analytics";
 import Link from "next/link";
 import { CheckCircle, Package, ArrowRight, Loader2 } from "lucide-react";
 import { Header } from "@/components/layout/header";
@@ -12,6 +13,13 @@ import { motion } from "framer-motion";
 function SuccessContent() {
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("order") ?? "";
+  const total = Number(searchParams.get("total") ?? 0);
+
+  // Funnel step 5 — purchase completed
+  useEffect(() => {
+    if (orderNumber) analytics.purchase({ id: orderNumber, value: total });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderNumber]);
 
   return (
     <motion.div
