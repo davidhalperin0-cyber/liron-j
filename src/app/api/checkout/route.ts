@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe, hasStripeConfig } from "@/lib/stripe/server";
+import { hasHypConfig, createHypPaymentUrl } from "@/lib/hyp/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
 import { orderSchema, validateForm } from "@/lib/validations";
 import { sendOrderConfirmation } from "@/lib/email/send";
@@ -75,7 +76,42 @@ export async function POST(request: NextRequest) {
     redeemPromoCode(body.promoCode).catch(() => {});
   }
 
-  // 2) If Stripe not configured, return order without payment
+  // 2) Hyp (Yaad Sarig) — Israeli card processing. Takes priority when configured.
+  if (hasHypConfig()) {
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? request.nextUrl.origin;
+      const [firstName, ...rest] = String(body.customerName ?? "").trim().split(/\s+/);
+      const paymentUrl = await createHypPaymentUrl({
+        amount: Math.round((body.total ?? 0) * 100) / 100,
+        order: orderNumber,
+        info: `AURÉA — הזמנה ${orderNumber}`,
+        clientName: firstName || undefined,
+        clientLName: rest.join(" ") || undefined,
+        email: body.customerEmail,
+        cell: body.customerPhone || undefined,
+        successUrl: `${baseUrl}/api/checkout/hyp-callback`,
+        errorUrl: `${baseUrl}/checkout/cancel?order=${orderNumber}`,
+      });
+      try {
+        const supabase = createSupabaseAdminClient();
+        await supabase
+          .from("orders")
+          .update({ payment_method: "hyp" })
+          .eq("id", orderId);
+      } catch {
+        // Non-critical
+      }
+      return NextResponse.json({ orderId, orderNumber, checkoutUrl: paymentUrl });
+    } catch (err) {
+      console.error("[checkout] Hyp error:", err);
+      return NextResponse.json(
+        { error: "Payment session creation failed" },
+        { status: 500 }
+      );
+    }
+  }
+
+  // 3) If Stripe not configured, return order without payment
   if (!hasStripeConfig()) {
     // Send order confirmation email (fire-and-forget)
     sendOrderConfirmation(body.customerEmail, {
