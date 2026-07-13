@@ -40,9 +40,21 @@ export async function GET(request: NextRequest) {
 
   if (!verified) return fail();
 
-  // Mark the order paid.
+  // Mark the order paid — but only if the paid amount matches the order total.
   try {
     const supabase = createSupabaseAdminClient();
+    const { data: order_row } = await supabase
+      .from("orders")
+      .select("total")
+      .eq("order_number", order)
+      .single();
+
+    // Reject if the order is unknown or the paid amount doesn't match its total.
+    if (!order_row || Math.abs(Number(order_row.total) - Number(amount)) > 0.5) {
+      console.error("[hyp-callback] amount mismatch", { order, amount, expected: order_row?.total });
+      return fail();
+    }
+
     await supabase
       .from("orders")
       .update({
@@ -53,6 +65,7 @@ export async function GET(request: NextRequest) {
       .eq("order_number", order);
   } catch (err) {
     console.error("[hyp-callback] order update error:", err);
+    return fail();
   }
 
   return succeed();

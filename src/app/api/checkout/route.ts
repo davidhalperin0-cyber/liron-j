@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe, hasStripeConfig } from "@/lib/stripe/server";
 import { hasHypConfig, createHypPaymentUrl } from "@/lib/hyp/server";
+import { getProductsByIds } from "@/lib/db/products";
+import { validatePromoCode } from "@/lib/promo";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
 import { orderSchema, validateForm } from "@/lib/validations";
 import { sendOrderConfirmation } from "@/lib/email/send";
@@ -32,6 +34,56 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
   }
 
+  // ── SECURITY: recompute all money server-side. Never trust client prices. ──
+  const reqItems: { productId?: string; quantity?: number; productName?: string }[] =
+    body.items;
+  const ids = [
+    ...new Set(reqItems.map((i) => i.productId).filter(Boolean)),
+  ] as string[];
+  const dbProducts = await getProductsByIds(ids);
+  const priceById = new Map(dbProducts.map((p) => [p.id, p.price]));
+
+  const pricedItems: {
+    productId: string;
+    productName: string;
+    quantity: number;
+    price: number;
+  }[] = [];
+  for (const it of reqItems) {
+    const price = it.productId ? priceById.get(it.productId) : undefined;
+    if (price == null) {
+      return NextResponse.json(
+        { error: "פריט לא תקין בעגלה" },
+        { status: 400 }
+      );
+    }
+    const quantity = Math.max(1, Math.floor(Number(it.quantity) || 1));
+    pricedItems.push({
+      productId: it.productId as string,
+      productName: it.productName ?? "פריט",
+      quantity,
+      price,
+    });
+  }
+
+  const subtotal = pricedItems.reduce((s, i) => s + i.price * i.quantity, 0);
+
+  // Shipping — only the known published tiers are accepted.
+  const allowedShipping = new Set([0, 29, 49]);
+  let shippingCost = allowedShipping.has(body.shippingCost) ? body.shippingCost : 29;
+  if (subtotal >= 500 && shippingCost === 29) shippingCost = 0;
+
+  // Discounts — re-validate the promo server-side; recompute the club gift.
+  let discount = 0;
+  if (body.promoCode) {
+    const pv = await validatePromoCode(body.promoCode, subtotal);
+    if (pv.valid) discount += pv.discount ?? 0;
+  }
+  if (body.joinedClub) discount += Math.round(subtotal * 0.05);
+  discount = Math.min(discount, subtotal);
+
+  const total = Math.max(0, subtotal + shippingCost - discount);
+
   // 1) Create order in DB with status "pending"
   const orderData = {
     order_number: "",
@@ -39,10 +91,10 @@ export async function POST(request: NextRequest) {
     customer_name: body.customerName,
     customer_phone: body.customerPhone ?? "",
     shipping_address: body.shippingAddress,
-    items: body.items,
-    subtotal: body.subtotal ?? 0,
-    shipping_cost: body.shippingCost ?? 0,
-    total: body.total ?? 0,
+    items: pricedItems,
+    subtotal,
+    shipping_cost: shippingCost,
+    total,
     status: "pending" as const,
     payment_status: "pending" as const,
     payment_method: "stripe",
@@ -82,7 +134,7 @@ export async function POST(request: NextRequest) {
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? request.nextUrl.origin;
       const [firstName, ...rest] = String(body.customerName ?? "").trim().split(/\s+/);
       const paymentUrl = await createHypPaymentUrl({
-        amount: Math.round((body.total ?? 0) * 100) / 100,
+        amount: Math.round(total * 100) / 100,
         order: orderNumber,
         info: `AURÉA — הזמנה ${orderNumber}`,
         clientName: firstName || undefined,
@@ -117,10 +169,10 @@ export async function POST(request: NextRequest) {
     sendOrderConfirmation(body.customerEmail, {
       orderNumber,
       customerName: body.customerName,
-      items: body.items,
-      subtotal: body.subtotal ?? 0,
-      shippingCost: body.shippingCost ?? 0,
-      total: body.total ?? 0,
+      items: pricedItems,
+      subtotal,
+      shippingCost,
+      total,
     }).catch((err) => { console.error("[email] send failed:", err); });
 
     return NextResponse.json({
@@ -136,7 +188,7 @@ export async function POST(request: NextRequest) {
     const stripe = getStripe();
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? `http://localhost:3000`;
 
-    const lineItems = body.items.map((item: { productName: string; quantity: number; price: number }) => ({
+    const lineItems = pricedItems.map((item) => ({
       price_data: {
         currency: "ils",
         product_data: {
@@ -148,21 +200,38 @@ export async function POST(request: NextRequest) {
     }));
 
     // Add shipping as a line item if > 0
-    if (body.shippingCost > 0) {
+    if (shippingCost > 0) {
       lineItems.push({
         price_data: {
           currency: "ils",
           product_data: { name: "משלוח" },
-          unit_amount: Math.round(body.shippingCost * 100),
+          unit_amount: Math.round(shippingCost * 100),
         },
         quantity: 1,
       });
+    }
+
+    // Apply the server-validated discount as a Stripe coupon, if any.
+    let discounts: { coupon: string }[] | undefined;
+    if (discount > 0) {
+      try {
+        const coupon = await stripe.coupons.create({
+          amount_off: Math.round(discount * 100),
+          currency: "ils",
+          duration: "once",
+          name: "הנחה",
+        });
+        discounts = [{ coupon: coupon.id }];
+      } catch {
+        // If coupon creation fails, proceed without the discount rather than block checkout.
+      }
     }
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
       line_items: lineItems,
+      discounts,
       customer_email: body.customerEmail,
       metadata: {
         order_id: orderId,
