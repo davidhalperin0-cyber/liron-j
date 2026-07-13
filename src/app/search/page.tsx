@@ -10,7 +10,7 @@ import { ProductCard } from "@/components/product/product-card";
 import type { ProductCard as ProductCardType } from "@/types";
 import Link from "next/link";
 
-const POPULAR_SEARCHES = ["טבעת יהלום", "עגילי זהב", "שרשרת", "מתנה", "קולקציית כלות", "זהב ורוד"];
+const POPULAR_SEARCHES = ["שרשרת", "עגילים", "צמיד", "מתנה", "רוז גולד", "כסף 925"];
 
 export default function SearchPage() {
   const [query, setQuery] = useState("");

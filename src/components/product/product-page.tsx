@@ -28,7 +28,7 @@ import type { ProductDetail } from "@/lib/db/products";
 const TRUST_ITEMS = [
   { icon: Truck, text: "משלוח חינם מעל ₪500" },
   { icon: RotateCcw, text: "14 יום להחזרה" },
-  { icon: Shield, text: "אחריות לכל החיים" },
+  { icon: Shield, text: "אחריות על פגמי ייצור" },
   { icon: Gift, text: "אריזת מתנה יוקרתית" },
 ];
 

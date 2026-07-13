@@ -72,7 +72,7 @@ export function EditorialSection() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-[#FBF8F3]/80 text-lg leading-relaxed mb-10 max-w-lg drop-shadow-[0_1px_12px_rgba(0,0,0,0.4)]"
           >
-            כל תכשיט נוצר בעבודת יד קפדנית, מזהב טהור ויהלומים שנבחרו בקפידה. אנחנו לא מתפשרים על שום פרט.
+            כל תכשיט מעוצב בקפידה — ציפוי זהב עמיד, כסף 925 וזרקונים שנבחרו אחד-אחד. אנחנו לא מתפשרים על שום פרט.
           </motion.p>
 
           <motion.div

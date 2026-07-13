@@ -16,7 +16,7 @@ interface Props {
   heroImage?: string;
 }
 
-const MATERIALS = ["14K Gold", "18K Gold", "Silver", "Rose Gold"];
+const MATERIALS = ["מצופה זהב", "מצופה רוז גולד", "כסף 925", "אבן טבעית", "פלדת אל-חלד"];
 const COLORS = [
   { name: "זהב צהוב", value: "yellow", bg: "bg-yellow-600" },
   { name: "זהב לבן", value: "white", bg: "bg-gray-200" },
