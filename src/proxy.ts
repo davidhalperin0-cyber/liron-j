@@ -35,7 +35,8 @@ export async function proxy(request: NextRequest) {
           return response;
         }
 
-        const role = data.user.user_metadata?.role;
+        // Use app_metadata (server-only), not user_metadata (user-writable).
+        const role = data.user.app_metadata?.role;
         if (role !== "admin") {
           // Not an admin — redirect to account page
           return NextResponse.redirect(new URL("/account", request.url));

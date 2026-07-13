@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
         email: user.email,
         name: user.user_metadata?.name ?? user.user_metadata?.full_name ?? null,
         phone: user.user_metadata?.phone ?? user.phone ?? null,
-        role: user.user_metadata?.role ?? "customer",
+        role: user.app_metadata?.role ?? "customer",
         createdAt: user.created_at,
       },
     });

@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       user: {
         id: data.user.id,
         email: data.user.email,
-        role: data.user.user_metadata?.role ?? "customer",
+        role: data.user.app_metadata?.role ?? "customer",
       },
     });
 

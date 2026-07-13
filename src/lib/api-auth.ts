@@ -42,7 +42,9 @@ export async function requireAdmin(request: NextRequest): Promise<
       };
     }
 
-    const role = data.user.user_metadata?.role;
+    // Authorization must use app_metadata (server-only) — user_metadata is
+    // writable by the user themselves and cannot be trusted for privilege checks.
+    const role = data.user.app_metadata?.role;
     if (role !== "admin") {
       return {
         authorized: false,
