@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Eye, Package, Truck, CheckCircle, Clock, XCircle, X, Loader2 } from "lucide-react";
+import { Search, Eye, Package, Truck, CheckCircle, Clock, XCircle, X, Loader2, MessageCircle } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
 import { notifyAction, notifyError } from "@/lib/ui-actions";
 import { Button } from "@/components/ui/button";
@@ -91,6 +91,29 @@ export default function OrdersAdmin() {
       setDbStatus("Supabase לא זמין");
     } finally {
       setLoading(false);
+    }
+  }
+
+  // Build a supplier-grouped WhatsApp message for the order and open wa.me.
+  const [waLoading, setWaLoading] = useState<string | null>(null);
+  async function sendOrderWhatsApp(orderId: string) {
+    setWaLoading(orderId);
+    try {
+      const res = await fetch(`/api/admin/order-message?id=${orderId}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "failed");
+      const groups: { supplierName: string; phone: string; text: string }[] = data.groups ?? [];
+      for (const g of groups) {
+        const url = g.phone
+          ? `https://wa.me/${g.phone}?text=${encodeURIComponent(g.text)}`
+          : `https://wa.me/?text=${encodeURIComponent(g.text)}`;
+        window.open(url, "_blank");
+      }
+      if (groups.length === 0) notifyError("אין פריטים בהזמנה");
+    } catch {
+      notifyError("שגיאה בבניית הודעת וואטסאפ");
+    } finally {
+      setWaLoading(null);
     }
   }
 
@@ -264,9 +287,19 @@ export default function OrdersAdmin() {
                 <h2 className="text-lg font-medium text-white font-mono">{selectedOrder.order_number}</h2>
                 <p className="text-xs text-white/30">{formatDate(selectedOrder.created_at)}</p>
               </div>
-              <button onClick={() => setSelectedOrder(null)} className="p-2 text-white/40 hover:text-white">
-                <X size={18} />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => sendOrderWhatsApp(selectedOrder.id)}
+                  disabled={waLoading === selectedOrder.id}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-600/15 text-green-400 hover:bg-green-600/25 transition-colors text-sm"
+                >
+                  {waLoading === selectedOrder.id ? <Loader2 size={15} className="animate-spin" /> : <MessageCircle size={15} />}
+                  שלח לספק בוואטסאפ
+                </button>
+                <button onClick={() => setSelectedOrder(null)} className="p-2 text-white/40 hover:text-white">
+                  <X size={18} />
+                </button>
+              </div>
             </div>
 
             <div className="p-6 space-y-6">
