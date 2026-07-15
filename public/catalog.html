@@ -721,8 +721,8 @@ figcaption{text-align:center;font-size:12px;color:#aaa;margin-top:6px}figcaption
   <span class="hd-actions"><button class="rv ok" onclick="mark(this,'ok')">✓</button><button class="rv bad" onclick="mark(this,'bad')">✗</button></span>
   <span>שרשרת · גברים · פלדת אל-חלד · ₪149</span></div>
   <div class="trio" style="grid-template-columns:repeat(3,1fr)"><figure><img loading="lazy" src="https://wynvvkzycufnrcgxmycy.supabase.co/storage/v1/object/public/product-images/review/before/284a8610-34b4-4892-b4c7-c1c58d0fe111.jpg" onerror="this.closest('figure').classList.add('err')"><figcaption>לפני · המקור</figcaption></figure>
-    <figure><img loading="lazy" src="https://wynvvkzycufnrcgxmycy.supabase.co/storage/v1/object/public/product-images/bulk/284a8610-34b4-4892-b4c7-c1c58d0fe111.webp"><figcaption class="g">נקי · באתר</figcaption></figure>
-    <figure><img loading="lazy" src="https://wynvvkzycufnrcgxmycy.supabase.co/storage/v1/object/public/product-images/model/262d2eea-6f7a-463e-9509-65685008a0c6.webp"><figcaption class="g">על הדוגמן/ית</figcaption></figure>
+    <figure><img loading="lazy" src="https://wynvvkzycufnrcgxmycy.supabase.co/storage/v1/object/public/product-images/bulk/284a8610-34b4-4892-b4c7-c1c58d0fe111.webp?v=1784115721890"><figcaption class="g">נקי · באתר</figcaption></figure>
+    <figure><img loading="lazy" src="https://wynvvkzycufnrcgxmycy.supabase.co/storage/v1/object/public/product-images/model/262d2eea-6f7a-463e-9509-65685008a0c6.webp?v=1784115721890"><figcaption class="g">על הדוגמן/ית</figcaption></figure>
   </div></div><div class="card" data-key="953a7a6b-cfda-4aa9-bb5b-7d0fb4753d75" data-name="בַּזֶּלֶת"><div class="hd"><b>בַּזֶּלֶת</b>
   <span class="hd-actions"><button class="rv ok" onclick="mark(this,'ok')">✓</button><button class="rv bad" onclick="mark(this,'bad')">✗</button></span>
   <span>שרשרת · גברים · אבן טבעית · ₪179</span></div>
@@ -1051,8 +1051,8 @@ figcaption{text-align:center;font-size:12px;color:#aaa;margin-top:6px}figcaption
   <span class="hd-actions"><button class="rv ok" onclick="mark(this,'ok')">✓</button><button class="rv bad" onclick="mark(this,'bad')">✗</button></span>
   <span>טבעת · נשים · מצופה זהב · ₪319</span></div>
   <div class="trio" style="grid-template-columns:repeat(3,1fr)"><figure><img loading="lazy" src="https://wynvvkzycufnrcgxmycy.supabase.co/storage/v1/object/public/product-images/review/before/3CB81BF6-C1E4-4A51-96DA-36B4AA2C1571.jpg" onerror="this.closest('figure').classList.add('err')"><figcaption>לפני · המקור</figcaption></figure>
-    <figure><img loading="lazy" src="https://wynvvkzycufnrcgxmycy.supabase.co/storage/v1/object/public/product-images/bulk/3CB81BF6-C1E4-4A51-96DA-36B4AA2C1571.webp"><figcaption class="g">נקי · באתר</figcaption></figure>
-    <figure><img loading="lazy" src="https://wynvvkzycufnrcgxmycy.supabase.co/storage/v1/object/public/product-images/model/6cfaf27a-f96e-44e8-b619-fa6e01269f18.webp"><figcaption class="g">על הדוגמן/ית</figcaption></figure>
+    <figure><img loading="lazy" src="https://wynvvkzycufnrcgxmycy.supabase.co/storage/v1/object/public/product-images/bulk/3CB81BF6-C1E4-4A51-96DA-36B4AA2C1571.webp?v=1784115689930"><figcaption class="g">נקי · באתר</figcaption></figure>
+    <figure><img loading="lazy" src="https://wynvvkzycufnrcgxmycy.supabase.co/storage/v1/object/public/product-images/model/6cfaf27a-f96e-44e8-b619-fa6e01269f18.webp?v=1784115689930"><figcaption class="g">על הדוגמן/ית</figcaption></figure>
   </div></div><div class="card" data-key="54AF93C6-E7C6-4945-B6F2-FDA5DFEA26C4" data-name="דיאדם"><div class="hd"><b>דיאדם</b>
   <span class="hd-actions"><button class="rv ok" onclick="mark(this,'ok')">✓</button><button class="rv bad" onclick="mark(this,'bad')">✗</button></span>
   <span>טבעת · נשים · כסף 925 · ₪319</span></div>
@@ -1166,10 +1166,9 @@ const data=[{"c":"bracelets","n":true,"g":"men"},{"c":"bracelets","n":true,"g":"
 function flt(btn,k){document.querySelectorAll('.filter button').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
 document.querySelectorAll('#wrap .card').forEach((el,i)=>{const d=data[i];
 el.style.display=(k==='all'||(k==='new'&&d.n)||(k==='women'&&d.g==='women')||(k==='men'&&d.g==='men')||(k==='newwomen'&&d.g==='women'&&d.n)||(k==='newmen'&&d.g==='men'&&d.n)||k===d.c)?'':'none';});}
-// ── review marks (persisted in localStorage) ──
 const RV=JSON.parse(localStorage.getItem('aurea-review')||'{}');
-function applyMarks(){document.querySelectorAll('.card').forEach(c=>{const k=c.dataset.key;c.classList.remove('st-ok','st-bad');const st=stOf(RV[k]);if(st==='ok')c.classList.add('st-ok');if(st==='bad')c.classList.add('st-bad');});updateCounts();}
 function stOf(v){return typeof v==='string'?v:(v&&v.s);}
+function applyMarks(){document.querySelectorAll('.card').forEach(c=>{const k=c.dataset.key;c.classList.remove('st-ok','st-bad');const st=stOf(RV[k]);if(st==='ok')c.classList.add('st-ok');if(st==='bad')c.classList.add('st-bad');});updateCounts();}
 function mark(btn,val){const c=btn.closest('.card');const k=c.dataset.key;
 if(stOf(RV[k])===val){delete RV[k];}
 else if(val==='bad'){const note=prompt('מה הבעיה? (אפשר להשאיר ריק)','')||'';RV[k]={s:'bad',n:note};}
@@ -1177,12 +1176,6 @@ else{RV[k]={s:'ok'};}
 localStorage.setItem('aurea-review',JSON.stringify(RV));applyMarks();}
 function updateCounts(){const cards=[...document.querySelectorAll('.card')];const ok=cards.filter(c=>c.classList.contains('st-ok')).length;const bad=cards.filter(c=>c.classList.contains('st-bad')).length;document.getElementById('cok').textContent=ok;document.getElementById('cbad').textContent=bad;document.getElementById('cleft').textContent=cards.length-ok-bad;}
 function fltRv(mode){document.querySelectorAll('.card').forEach(c=>{const st=c.classList.contains('st-ok')?'ok':c.classList.contains('st-bad')?'bad':'none';c.style.display=(mode==='all'||st===mode)?'':'none';});}
-function copyBad(){const rows=[...document.querySelectorAll('.card.st-bad')].map(c=>{const k=c.dataset.key;const v=RV[k];const note=(v&&v.n)?(' — '+v.n):'';return '• '+c.dataset.name+note;});const txt=rows.length?('לא תואמים:'+String.fromCharCode(10)+rows.join(String.fromCharCode(10))):'אין מוצרים מסומנים ✗';navigator.clipboard.writeText(txt).then(()=>alert('הועתק! ('+rows.length+' מוצרים) — הדבק לי בצ׳אט'));}
-applyMarks();}
-function updateCounts(){const cards=[...document.querySelectorAll('.card')];const ok=cards.filter(c=>c.classList.contains('st-ok')).length;const bad=cards.filter(c=>c.classList.contains('st-bad')).length;document.getElementById('cok').textContent=ok;document.getElementById('cbad').textContent=bad;document.getElementById('cleft').textContent=cards.length-ok-bad;}
-function fltRv(mode){document.querySelectorAll('.card').forEach(c=>{const st=c.classList.contains('st-ok')?'ok':c.classList.contains('st-bad')?'bad':'none';c.style.display=(mode==='all'||st===mode)?'':'none';});}
-function copyBad(){const rows=[...document.querySelectorAll('.card.st-bad')].map(c=>{const k=c.dataset.key;const v=RV[k];const note=(v&&v.n)?(' — '+v.n):'';return '• '+c.dataset.name+note;});const txt=rows.length?('לא תואמים:
-'+rows.join('
-')):'אין מוצרים מסומנים ✗';navigator.clipboard.writeText(txt).then(()=>alert('הועתק! ('+rows.length+' מוצרים) — הדבק לי בצ׳אט'));}
+function copyBad(){const NL=String.fromCharCode(10);const rows=[...document.querySelectorAll('.card.st-bad')].map(c=>{const k=c.dataset.key;const v=RV[k];const note=(v&&v.n)?(' — '+v.n):'';return '• '+c.dataset.name+note;});const txt=rows.length?('לא תואמים:'+NL+rows.join(NL)):'אין מוצרים מסומנים ✗';navigator.clipboard.writeText(txt).then(()=>alert('הועתק! ('+rows.length+' מוצרים) — הדבק לי בצ׳אט'));}
 applyMarks();
 </script></body></html>
