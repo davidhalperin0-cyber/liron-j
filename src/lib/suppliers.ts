@@ -12,8 +12,8 @@ export interface Supplier {
 }
 
 export const SUPPLIERS: Supplier[] = [
-  { id: "supplier-1", name: "ספק 1", phone: "" },
-  { id: "supplier-2", name: "ספק 2", phone: "" },
+  { id: "market-israel", name: "מרקט ישראל", phone: "" },
+  { id: "dan-designs", name: "דן עיצובים", phone: "" },
 ];
 
 export function getSupplier(id?: string | null): Supplier | undefined {

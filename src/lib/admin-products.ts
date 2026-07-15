@@ -25,7 +25,7 @@ export interface AdminProduct {
   image: string;
   images?: string[];
   media: ProductMedia;
-  options?: { colors: { id: string; name: string; value: string }[]; sizes: string[] };
+  options?: { colors: { id: string; name: string; value: string }[]; sizes: string[]; supplier?: string };
 }
 
 export type ProductRow = Database["public"]["Tables"]["products"]["Row"];

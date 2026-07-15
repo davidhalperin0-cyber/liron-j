@@ -16,6 +16,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SUPPLIERS } from "@/lib/suppliers";
 import { ImageUploader } from "@/components/admin/image-uploader";
 import { cn, formatPrice, slugify } from "@/lib/utils";
 import { notifyAction, notifyError } from "@/lib/ui-actions";
@@ -657,7 +658,7 @@ function EditProductModal({
                 <input
                   value={product.material ?? ""}
                   onChange={(e) => update("material", e.target.value)}
-                  placeholder="זהב 14K, כסף 925..."
+                  placeholder="מצופה זהב, כסף 925..."
                   className={inputClass}
                 />
               </label>
@@ -675,7 +676,7 @@ function EditProductModal({
                 <input
                   value={product.gemstone ?? ""}
                   onChange={(e) => update("gemstone", e.target.value)}
-                  placeholder="יהלום, אמרלד, ספיר..."
+                  placeholder="זרקון, אבן טבעית..."
                   className={inputClass}
                 />
               </label>
@@ -687,6 +688,25 @@ function EditProductModal({
                   placeholder="3.5g, 0.5ct..."
                   className={inputClass}
                 />
+              </label>
+              <label className="space-y-1.5">
+                <span className="text-xs text-white/50">ספק</span>
+                <select
+                  value={product.options?.supplier ?? ""}
+                  onChange={(e) =>
+                    update("options", {
+                      colors: product.options?.colors ?? [],
+                      sizes: product.options?.sizes ?? [],
+                      supplier: e.target.value || undefined,
+                    })
+                  }
+                  className={inputClass}
+                >
+                  <option value="">— ללא ספק —</option>
+                  {SUPPLIERS.map((s) => (
+                    <option key={s.id} value={s.id}>{s.name}</option>
+                  ))}
+                </select>
               </label>
             </div>
           </SectionCard>
