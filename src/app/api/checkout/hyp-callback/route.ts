@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyHypTransaction } from "@/lib/hyp/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
+import { sendOrderConfirmation } from "@/lib/email/send";
 
 // Hyp redirects the customer here (GET) after the hosted payment page.
 // We verify the transaction server-side, update the order, then send the
@@ -45,7 +46,7 @@ export async function GET(request: NextRequest) {
     const supabase = createSupabaseAdminClient();
     const { data: order_row } = await supabase
       .from("orders")
-      .select("total")
+      .select("total, customer_email, customer_name, items, subtotal, shipping_cost, payment_status")
       .eq("order_number", order)
       .single();
 
@@ -55,6 +56,9 @@ export async function GET(request: NextRequest) {
       return fail();
     }
 
+    // Only mark + email once (Hyp may call the return URL more than once).
+    const alreadyPaid = order_row.payment_status === "paid";
+
     await supabase
       .from("orders")
       .update({
@@ -63,6 +67,21 @@ export async function GET(request: NextRequest) {
         notes: `hyp_txn:${id}`,
       })
       .eq("order_number", order);
+
+    // Send the receipt / confirmation email (fire-and-forget; never blocks the redirect).
+    if (!alreadyPaid && order_row.customer_email) {
+      const items = Array.isArray(order_row.items)
+        ? (order_row.items as { productName: string; quantity: number; price: number }[])
+        : [];
+      sendOrderConfirmation(order_row.customer_email, {
+        orderNumber: order,
+        customerName: order_row.customer_name ?? "",
+        items,
+        subtotal: Number(order_row.subtotal ?? 0),
+        shippingCost: Number(order_row.shipping_cost ?? 0),
+        total: Number(order_row.total ?? 0),
+      }).catch((e) => console.error("[hyp-callback] email failed:", e));
+    }
   } catch (err) {
     console.error("[hyp-callback] order update error:", err);
     return fail();
