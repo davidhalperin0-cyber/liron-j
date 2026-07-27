@@ -70,9 +70,27 @@ export async function GET(request: NextRequest) {
 
     // Send the receipt / confirmation email (fire-and-forget; never blocks the redirect).
     if (!alreadyPaid && order_row.customer_email) {
-      const items = Array.isArray(order_row.items)
-        ? (order_row.items as { productName: string; quantity: number; price: number }[])
+      const rawItems = Array.isArray(order_row.items)
+        ? (order_row.items as { productId?: string; productName: string; quantity: number; price: number }[])
         : [];
+      // Attach each product's image so the receipt shows thumbnails.
+      const ids = [...new Set(rawItems.map((i) => i.productId).filter(Boolean))] as string[];
+      const imgById = new Map<string, string>();
+      if (ids.length) {
+        const { data: prods } = await supabase
+          .from("products")
+          .select("id,image_url,images")
+          .in("id", ids);
+        for (const p of prods ?? []) {
+          imgById.set(p.id, (p.images?.[1] as string) ?? p.image_url ?? "");
+        }
+      }
+      const items = rawItems.map((i) => ({
+        productName: i.productName,
+        quantity: i.quantity,
+        price: i.price,
+        image: i.productId ? imgById.get(i.productId) : undefined,
+      }));
       sendOrderConfirmation(order_row.customer_email, {
         orderNumber: order,
         customerName: order_row.customer_name ?? "",

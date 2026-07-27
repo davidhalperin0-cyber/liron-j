@@ -66,7 +66,7 @@ export default async function Page({
       price: product.price,
       priceCurrency: "ILS",
       availability: "https://schema.org/InStock",
-      url: `https://aurea.com/products/${product.slug}`,
+      url: `https://www.aureafinejewelry.com/products/${product.slug}`,
     },
   };
 

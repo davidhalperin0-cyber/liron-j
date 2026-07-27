@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllActiveProducts } from "@/lib/db/products";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurea.com";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.aureafinejewelry.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await getAllActiveProducts();

@@ -113,7 +113,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3 text-sm text-white/40">
                 <Mail size={16} className="text-gold/60 shrink-0" />
-                <span>info@aurea.com</span>
+                <span>info@aureafinejewelry.com</span>
               </li>
               <li className="flex items-start gap-3 text-sm text-white/40">
                 <MapPin size={16} className="text-gold/60 shrink-0 mt-0.5" />

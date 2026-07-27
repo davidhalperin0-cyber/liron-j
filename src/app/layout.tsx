@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     "designer earrings",
     "AURÉA",
   ],
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://aurea.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.aureafinejewelry.com"),
   openGraph: {
     type: "website",
     locale: "he_IL",

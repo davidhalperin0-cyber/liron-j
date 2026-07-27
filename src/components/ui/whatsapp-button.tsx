@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 
-// TODO: Replace with actual WhatsApp number (format: country code + number, no leading zeros or symbols)
-const WHATSAPP_NUMBER = "972XXXXXXXXXX";
+// International format: country code + number, no leading zero or symbols.
+const WHATSAPP_NUMBER = "972507816577";
 
 export function WhatsAppButton() {
   const [visible, setVisible] = useState(false);

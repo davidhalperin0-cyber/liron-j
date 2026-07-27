@@ -15,8 +15,8 @@ const SETTINGS_SECTIONS = [
     description: "שם, לוגו, כתובת",
     fields: [
       { label: "שם החנות", value: "AURÉA", type: "text" },
-      { label: "אימייל", value: "info@aurea.com", type: "email" },
-      { label: "טלפון", value: "03-1234567", type: "tel" },
+      { label: "אימייל", value: "info@aureafinejewelry.com", type: "email" },
+      { label: "טלפון", value: "052-4802044", type: "tel" },
       { label: "כתובת", value: "תל אביב, ישראל", type: "text" },
     ],
   },

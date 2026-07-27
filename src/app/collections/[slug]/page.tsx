@@ -22,19 +22,19 @@ function buildBreadcrumbJsonLd(categoryName: string, slug: string) {
         "@type": "ListItem",
         position: 1,
         name: "דף הבית",
-        item: "https://aurea.com",
+        item: "https://www.aureafinejewelry.com",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "קולקציות",
-        item: "https://aurea.com/collections",
+        item: "https://www.aureafinejewelry.com/collections",
       },
       {
         "@type": "ListItem",
         position: 3,
         name: categoryName,
-        item: `https://aurea.com/collections/${slug}`,
+        item: `https://www.aureafinejewelry.com/collections/${slug}`,
       },
     ],
   };

@@ -28,8 +28,8 @@ export default async function Home() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "AURÉA",
-    url: "https://aurea.com",
-    logo: "https://aurea.com/logo.png",
+    url: "https://www.aureafinejewelry.com",
+    logo: "https://www.aureafinejewelry.com/logo.png",
     description: "תכשיטי יוקרה בעיצוב אישי — AURÉA",
   };
 
@@ -37,10 +37,10 @@ export default async function Home() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "AURÉA",
-    url: "https://aurea.com",
+    url: "https://www.aureafinejewelry.com",
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://aurea.com/search?q={search_term_string}",
+      target: "https://www.aureafinejewelry.com/search?q={search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };

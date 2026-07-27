@@ -33,6 +33,7 @@ interface OrderItem {
   productName: string;
   quantity: number;
   price: number;
+  image?: string;
 }
 
 interface OrderEmailData {
@@ -49,10 +50,18 @@ export function orderConfirmationEmail(data: OrderEmailData): { subject: string;
     .map(
       (item) => `
       <tr>
-        <td style="padding:8px 0;color:rgba(255,255,255,0.7);font-size:14px;border-bottom:1px solid rgba(255,255,255,0.05);">
-          ${item.productName} × ${item.quantity}
+        <td style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);width:56px;">
+          ${
+            item.image
+              ? `<img src="${item.image}" width="52" height="52" alt="" style="width:52px;height:52px;border-radius:8px;object-fit:cover;display:block;border:1px solid rgba(255,255,255,0.08);" />`
+              : `<div style="width:52px;height:52px;border-radius:8px;background:rgba(184,155,94,0.1);"></div>`
+          }
         </td>
-        <td style="padding:8px 0;color:${BRAND_COLOR};font-size:14px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.05);">
+        <td style="padding:12px 12px;color:rgba(255,255,255,0.8);font-size:14px;border-bottom:1px solid rgba(255,255,255,0.05);">
+          ${item.productName}
+          <span style="display:block;color:rgba(255,255,255,0.3);font-size:12px;margin-top:2px;">כמות: ${item.quantity}</span>
+        </td>
+        <td style="padding:12px 0;color:${BRAND_COLOR};font-size:14px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.05);white-space:nowrap;">
           ₪${(item.price * item.quantity).toLocaleString()}
         </td>
       </tr>`
@@ -75,16 +84,16 @@ export function orderConfirmationEmail(data: OrderEmailData): { subject: string;
       <table style="width:100%;border-collapse:collapse;">
         ${itemsHtml}
         <tr>
-          <td style="padding:8px 0;color:rgba(255,255,255,0.4);font-size:13px;">סכום ביניים</td>
-          <td style="padding:8px 0;color:rgba(255,255,255,0.4);font-size:13px;text-align:left;">₪${data.subtotal.toLocaleString()}</td>
+          <td colspan="2" style="padding:10px 0 4px;color:rgba(255,255,255,0.4);font-size:13px;">סכום ביניים</td>
+          <td style="padding:10px 0 4px;color:rgba(255,255,255,0.4);font-size:13px;text-align:left;">₪${data.subtotal.toLocaleString()}</td>
         </tr>
         <tr>
-          <td style="padding:8px 0;color:rgba(255,255,255,0.4);font-size:13px;">משלוח</td>
-          <td style="padding:8px 0;color:rgba(255,255,255,0.4);font-size:13px;text-align:left;">${data.shippingCost === 0 ? "חינם" : `₪${data.shippingCost.toLocaleString()}`}</td>
+          <td colspan="2" style="padding:4px 0;color:rgba(255,255,255,0.4);font-size:13px;">משלוח</td>
+          <td style="padding:4px 0;color:rgba(255,255,255,0.4);font-size:13px;text-align:left;">${data.shippingCost === 0 ? "חינם" : `₪${data.shippingCost.toLocaleString()}`}</td>
         </tr>
         <tr>
-          <td style="padding:12px 0 0;color:white;font-size:15px;font-weight:600;border-top:1px solid rgba(255,255,255,0.05);">סה"כ</td>
-          <td style="padding:12px 0 0;color:${BRAND_COLOR};font-size:18px;font-weight:600;text-align:left;border-top:1px solid rgba(255,255,255,0.05);">₪${data.total.toLocaleString()}</td>
+          <td colspan="2" style="padding:12px 0 0;color:white;font-size:15px;font-weight:600;border-top:1px solid rgba(255,255,255,0.05);">סה"כ ששולם</td>
+          <td style="padding:12px 0 0;color:${BRAND_COLOR};font-size:18px;font-weight:600;text-align:left;border-top:1px solid rgba(255,255,255,0.05);white-space:nowrap;">₪${data.total.toLocaleString()}</td>
         </tr>
       </table>
 
@@ -144,7 +153,7 @@ export function welcomeEmail(name: string): { subject: string; html: string } {
         שמחים שהצטרפת אלינו. ב-AURÉA אנחנו מאמינים שתכשיט הוא יותר מאביזר — הוא סיפור, זיכרון, חלק ממך.
       </p>
       <div style="text-align:center;margin:24px 0;">
-        <a href="https://aurea.com/collections" style="display:inline-block;background:${BRAND_COLOR};color:#000;text-decoration:none;padding:12px 32px;border-radius:6px;font-size:14px;font-weight:500;">
+        <a href="https://www.aureafinejewelry.com/collections" style="display:inline-block;background:${BRAND_COLOR};color:#000;text-decoration:none;padding:12px 32px;border-radius:6px;font-size:14px;font-weight:500;">
           גלי את הקולקציות
         </a>
       </div>
@@ -176,7 +185,7 @@ export function birthdayEmail(
         <p style="color:rgba(255,255,255,0.25);font-size:11px;margin:12px 0 0;">בתוקף ל-30 יום</p>
       </div>
       <div style="text-align:center;margin:24px 0 0;">
-        <a href="https://aurea.com/collections" style="display:inline-block;background:${BRAND_COLOR};color:#000;text-decoration:none;padding:12px 32px;border-radius:6px;font-size:14px;font-weight:500;">
+        <a href="https://www.aureafinejewelry.com/collections" style="display:inline-block;background:${BRAND_COLOR};color:#000;text-decoration:none;padding:12px 32px;border-radius:6px;font-size:14px;font-weight:500;">
           לחגיגה — גלי את הקולקציה
         </a>
       </div>
@@ -209,7 +218,7 @@ export function orderStatusEmail(
         שלום ${customerName}, עדכון לגבי הזמנה <strong style="color:${BRAND_COLOR};">${orderNumber}</strong>
       </p>
       <div style="text-align:center;margin:24px 0;">
-        <a href="https://aurea.com/account" style="display:inline-block;background:${BRAND_COLOR};color:#000;text-decoration:none;padding:12px 32px;border-radius:6px;font-size:14px;font-weight:500;">
+        <a href="https://www.aureafinejewelry.com/account" style="display:inline-block;background:${BRAND_COLOR};color:#000;text-decoration:none;padding:12px 32px;border-radius:6px;font-size:14px;font-weight:500;">
           צפי בהזמנה
         </a>
       </div>
