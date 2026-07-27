@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyHypTransaction } from "@/lib/hyp/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
-import { sendOrderConfirmation } from "@/lib/email/send";
+import { sendOrderConfirmation, sendAdminOrderNotification } from "@/lib/email/send";
 
 // Hyp redirects the customer here (GET) after the hosted payment page.
 // We verify the transaction server-side, update the order, then send the
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     const supabase = createSupabaseAdminClient();
     const { data: order_row } = await supabase
       .from("orders")
-      .select("total, customer_email, customer_name, items, subtotal, shipping_cost, payment_status")
+      .select("total, customer_email, customer_name, customer_phone, shipping_address, items, subtotal, shipping_cost, payment_status")
       .eq("order_number", order)
       .single();
 
@@ -91,14 +91,41 @@ export async function GET(request: NextRequest) {
         price: i.price,
         image: i.productId ? imgById.get(i.productId) : undefined,
       }));
+      const subtotal = Number(order_row.subtotal ?? 0);
+      const shippingCost = Number(order_row.shipping_cost ?? 0);
+      const total = Number(order_row.total ?? 0);
+      const customerName = order_row.customer_name ?? "";
+
+      // Receipt to the customer.
       sendOrderConfirmation(order_row.customer_email, {
         orderNumber: order,
-        customerName: order_row.customer_name ?? "",
+        customerName,
         items,
-        subtotal: Number(order_row.subtotal ?? 0),
-        shippingCost: Number(order_row.shipping_cost ?? 0),
-        total: Number(order_row.total ?? 0),
-      }).catch((e) => console.error("[hyp-callback] email failed:", e));
+        subtotal,
+        shippingCost,
+        total,
+      }).catch((e) => console.error("[hyp-callback] customer email failed:", e));
+
+      // Notification to the store owner.
+      const shippingAddress =
+        typeof order_row.shipping_address === "string"
+          ? order_row.shipping_address
+          : order_row.shipping_address
+            ? Object.values(order_row.shipping_address as Record<string, unknown>)
+                .filter(Boolean)
+                .join(", ")
+            : undefined;
+      sendAdminOrderNotification({
+        orderNumber: order,
+        customerName,
+        customerEmail: order_row.customer_email,
+        customerPhone: (order_row as { customer_phone?: string }).customer_phone || undefined,
+        shippingAddress,
+        items,
+        subtotal,
+        shippingCost,
+        total,
+      }).catch((e) => console.error("[hyp-callback] admin email failed:", e));
     }
   } catch (err) {
     console.error("[hyp-callback] order update error:", err);

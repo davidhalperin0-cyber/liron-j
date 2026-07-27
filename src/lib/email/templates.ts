@@ -104,6 +104,76 @@ export function orderConfirmationEmail(data: OrderEmailData): { subject: string;
   };
 }
 
+// ─── New Order Notification (to admin/owner) ────────────────────
+
+interface AdminOrderData {
+  orderNumber: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  shippingAddress?: string;
+  items: OrderItem[];
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+}
+
+export function adminNewOrderEmail(data: AdminOrderData): { subject: string; html: string } {
+  const itemsHtml = data.items
+    .map(
+      (item) => `
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.85);font-size:14px;">
+          ${item.productName}
+          <span style="display:block;color:rgba(255,255,255,0.35);font-size:12px;margin-top:2px;">כמות: ${item.quantity} · ₪${item.price.toLocaleString()} ליחידה</span>
+        </td>
+        <td style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);color:${BRAND_COLOR};font-size:14px;text-align:left;white-space:nowrap;">
+          ₪${(item.price * item.quantity).toLocaleString()}
+        </td>
+      </tr>`
+    )
+    .join("");
+
+  const row = (label: string, value: string) =>
+    `<tr><td style="padding:4px 0;color:rgba(255,255,255,0.4);font-size:12px;width:90px;">${label}</td><td style="padding:4px 0;color:rgba(255,255,255,0.85);font-size:13px;">${value}</td></tr>`;
+
+  return {
+    subject: `🛒 הזמנה חדשה ${data.orderNumber} · ₪${data.total.toLocaleString()} — AURÉA`,
+    html: layout(`
+      <div style="background:rgba(184,155,94,0.08);border:1px solid rgba(184,155,94,0.2);border-radius:6px;padding:14px;text-align:center;margin-bottom:20px;">
+        <p style="color:rgba(255,255,255,0.4);font-size:11px;margin:0 0 2px;">התקבלה הזמנה חדשה ששולמה</p>
+        <p style="color:${BRAND_COLOR};font-size:22px;font-weight:600;margin:0;">₪${data.total.toLocaleString()}</p>
+        <p style="color:rgba(255,255,255,0.5);font-size:13px;font-family:monospace;margin:6px 0 0;">${data.orderNumber}</p>
+      </div>
+
+      <h3 style="color:white;font-size:14px;font-weight:600;margin:0 0 8px;">פרטי הלקוח</h3>
+      <table style="width:100%;margin-bottom:20px;">
+        ${row("שם", data.customerName || "—")}
+        ${row("אימייל", data.customerEmail || "—")}
+        ${data.customerPhone ? row("טלפון", data.customerPhone) : ""}
+        ${data.shippingAddress ? row("כתובת", data.shippingAddress) : ""}
+      </table>
+
+      <h3 style="color:white;font-size:14px;font-weight:600;margin:0 0 8px;">הפריטים</h3>
+      <table style="width:100%;border-collapse:collapse;">
+        ${itemsHtml}
+        <tr>
+          <td style="padding:10px 0 4px;color:rgba(255,255,255,0.4);font-size:13px;">סכום ביניים</td>
+          <td style="padding:10px 0 4px;color:rgba(255,255,255,0.4);font-size:13px;text-align:left;">₪${data.subtotal.toLocaleString()}</td>
+        </tr>
+        <tr>
+          <td style="padding:4px 0;color:rgba(255,255,255,0.4);font-size:13px;">משלוח</td>
+          <td style="padding:4px 0;color:rgba(255,255,255,0.4);font-size:13px;text-align:left;">${data.shippingCost === 0 ? "חינם" : `₪${data.shippingCost.toLocaleString()}`}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 0 0;color:white;font-size:15px;font-weight:600;border-top:1px solid rgba(255,255,255,0.08);">סה"כ</td>
+          <td style="padding:12px 0 0;color:${BRAND_COLOR};font-size:18px;font-weight:600;text-align:left;border-top:1px solid rgba(255,255,255,0.08);white-space:nowrap;">₪${data.total.toLocaleString()}</td>
+        </tr>
+      </table>
+    `),
+  };
+}
+
 // ─── Contact Form Notification (to admin) ───────────────────────
 
 interface ContactEmailData {

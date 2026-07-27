@@ -1,6 +1,7 @@
 import { getResend, hasResendConfig, EMAIL_FROM, ADMIN_EMAIL } from "./client";
 import {
   orderConfirmationEmail,
+  adminNewOrderEmail,
   contactNotificationEmail,
   welcomeEmail,
   orderStatusEmail,
@@ -50,6 +51,21 @@ export async function sendOrderConfirmation(
 ): Promise<boolean> {
   const { subject, html } = orderConfirmationEmail(data);
   return sendEmail(customerEmail, subject, html);
+}
+
+export async function sendAdminOrderNotification(data: {
+  orderNumber: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  shippingAddress?: string;
+  items: { productName: string; quantity: number; price: number }[];
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+}): Promise<boolean> {
+  const { subject, html } = adminNewOrderEmail(data);
+  return sendEmail(ADMIN_EMAIL, subject, html);
 }
 
 export async function sendContactNotification(data: {
