@@ -23,6 +23,23 @@ export default function LoginPage() {
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
+  const handleForgotPassword = async () => {
+    if (!form.email.trim()) {
+      notifyError("הזיני קודם את כתובת האימייל שלך למעלה");
+      return;
+    }
+    try {
+      await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: form.email.trim() }),
+      });
+      notifyAction("אם קיים חשבון עם אימייל זה — נשלח אליו קישור לאיפוס סיסמה");
+    } catch {
+      notifyError("שגיאה בשליחת בקשת האיפוס");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = validateForm(loginSchema, form);
@@ -112,7 +129,7 @@ export default function LoginPage() {
                 </label>
                 <button
                   type="button"
-                  onClick={() => notifyAction("איפוס סיסמה יהיה זמין בקרוב")}
+                  onClick={handleForgotPassword}
                   className="text-xs text-gold/60 hover:text-gold transition-colors"
                 >
                   שכחת סיסמה?

@@ -59,7 +59,24 @@ export default function CheckoutPage() {
   const store = useCartStore();
   const items = store.items;
   const subtotal = store.subtotal();
-  const shipping = shippingMethod === "express" ? 49 : shippingMethod === "pickup" ? 0 : subtotal >= 500 ? 0 : 29;
+
+  // Shipping rates come from the store settings (with the same safe defaults
+  // the server uses), so the displayed price matches what gets charged.
+  const [rates, setRates] = useState({ freeAbove: 500, standard: 29, express: 49 });
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((d) => d?.shipping && setRates(d.shipping))
+      .catch(() => {});
+  }, []);
+  const shipping =
+    shippingMethod === "express"
+      ? rates.express
+      : shippingMethod === "pickup"
+        ? 0
+        : subtotal >= rates.freeAbove
+          ? 0
+          : rates.standard;
 
   // Promo code
   const [promoCode, setPromoCode] = useState("");
@@ -367,8 +384,8 @@ export default function CheckoutPage() {
                     <h2 className="text-lg font-medium text-white mb-6">אפשרויות משלוח</h2>
                     <div className="space-y-3">
                       {[
-                        { id: "standard", name: "משלוח רגיל", price: 29, time: "3-5 ימי עסקים", free: subtotal >= 500 },
-                        { id: "express", name: "משלוח אקספרס", price: 49, time: "1-2 ימי עסקים", free: false },
+                        { id: "standard", name: "משלוח רגיל", price: rates.standard, time: "3-5 ימי עסקים", free: subtotal >= rates.freeAbove },
+                        { id: "express", name: "משלוח אקספרס", price: rates.express, time: "1-2 ימי עסקים", free: false },
                         { id: "pickup", name: "איסוף עצמי", price: 0, time: "מוכן תוך 24 שעות", free: true },
                       ].map((option) => (
                         <label

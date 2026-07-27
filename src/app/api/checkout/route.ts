@@ -8,6 +8,7 @@ import { orderSchema, validateForm } from "@/lib/validations";
 import { sendOrderConfirmation } from "@/lib/email/send";
 import { redeemPromoCode } from "@/lib/promo";
 import { rateLimit } from "@/lib/api-auth";
+import { getStoreSettings } from "@/lib/settings";
 
 export async function POST(request: NextRequest) {
   const limited = rateLimit(request, { maxRequests: 10, windowMs: 60_000 });
@@ -68,10 +69,11 @@ export async function POST(request: NextRequest) {
 
   const subtotal = pricedItems.reduce((s, i) => s + i.price * i.quantity, 0);
 
-  // Shipping — only the known published tiers are accepted.
-  const allowedShipping = new Set([0, 29, 49]);
-  let shippingCost = allowedShipping.has(body.shippingCost) ? body.shippingCost : 29;
-  if (subtotal >= 500 && shippingCost === 29) shippingCost = 0;
+  // Shipping — rates come from the admin settings (with safe defaults).
+  const { shipping } = await getStoreSettings();
+  const allowedShipping = new Set([0, shipping.standard, shipping.express]);
+  let shippingCost = allowedShipping.has(body.shippingCost) ? body.shippingCost : shipping.standard;
+  if (subtotal >= shipping.freeAbove && shippingCost === shipping.standard) shippingCost = 0;
 
   // Discounts — re-validate the promo server-side; recompute the club gift.
   let discount = 0;

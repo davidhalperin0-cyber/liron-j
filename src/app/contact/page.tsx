@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import { Header } from "@/components/layout/header";
@@ -21,6 +21,25 @@ export default function ContactPage() {
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [errors, setErrors] = useState<FieldErrors<ContactForm>>({});
   const [loading, setLoading] = useState(false);
+  const [social, setSocial] = useState<{ instagram: string; facebook: string; whatsapp: string }>({
+    instagram: "",
+    facebook: "",
+    whatsapp: "",
+  });
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((d) => d?.social && setSocial(d.social))
+      .catch(() => {});
+  }, []);
+
+  const socialUrl = (name: string): string | null => {
+    if (name === "Instagram") return social.instagram || null;
+    if (name === "Facebook") return social.facebook || null;
+    if (name === "WhatsApp") return social.whatsapp ? `https://wa.me/${social.whatsapp}` : null;
+    return null;
+  };
 
   const updateField = (field: keyof ContactForm, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -76,15 +95,28 @@ export default function ContactPage() {
               <div className="pt-8 border-t border-white/5">
                 <p className="text-xs text-white/40 mb-3">עקבו אחרינו</p>
                 <div className="flex items-center gap-3">
-                  {["Instagram", "Facebook", "WhatsApp"].map((social) => (
-                    <button
-                      key={social}
-                      onClick={() => notifyAction(`${social} — בקרוב`)}
-                      className="px-4 py-2 bg-charcoal border border-white/5 rounded-lg text-xs text-white/40 hover:text-gold hover:border-gold/20 transition-colors"
-                    >
-                      {social}
-                    </button>
-                  ))}
+                  {["Instagram", "Facebook", "WhatsApp"].map((name) => {
+                    const url = socialUrl(name);
+                    return url ? (
+                      <a
+                        key={name}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 bg-charcoal border border-white/5 rounded-lg text-xs text-white/40 hover:text-gold hover:border-gold/20 transition-colors"
+                      >
+                        {name}
+                      </a>
+                    ) : (
+                      <button
+                        key={name}
+                        onClick={() => notifyAction(`${name} — בקרוב`)}
+                        className="px-4 py-2 bg-charcoal border border-white/5 rounded-lg text-xs text-white/40 hover:text-gold hover:border-gold/20 transition-colors"
+                      >
+                        {name}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
