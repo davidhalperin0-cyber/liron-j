@@ -188,9 +188,9 @@ export function ProductCard({ product, size = "md" }: Props) {
 
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-white">
-            {formatPrice(product.price)}
+            {!product.price || product.price <= 0 ? "בקרוב" : formatPrice(product.price)}
           </span>
-          {product.compareAtPrice && (
+          {product.price > 0 && product.compareAtPrice && (
             <span className="text-xs text-white/40 line-through">
               {formatPrice(product.compareAtPrice)}
             </span>

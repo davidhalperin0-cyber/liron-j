@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 
 const PHOTO = "/images/ofek.jpg";
 const NECKLACE_IMG = "/images/ofek-necklace.png";
-const NECKLACE_SLUG = ""; // slug of the dedicated necklace product (set when ready)
+const NECKLACE_SLUG = "ofek"; // dedicated necklace product
 
 const GOLD = "#B89B5E";
 const PAPER = "#F7F3EC"; // site cream background
@@ -98,15 +98,19 @@ export function OfekTributeSection() {
           className="mt-10 rounded-xl border p-4 sm:p-5 flex items-center gap-4 sm:gap-5"
           style={{ borderColor: "rgba(184,155,94,0.35)", backgroundColor: "rgba(255,255,255,0.5)" }}
         >
-          <div className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-white">
+          <Link
+            href={NECKLACE_SLUG ? `/products/${NECKLACE_SLUG}` : "#"}
+            className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-white block"
+            aria-label="לעמוד השרשרת של אופק"
+          >
             <Image
               src={NECKLACE_IMG}
               alt="השרשרת של אופק — תליון זנב לוויתן"
               width={192}
               height={192}
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
             />
-          </div>
+          </Link>
           <div className="flex-1 min-w-0">
             <p className="text-[10px] tracking-[0.25em] uppercase mb-1" style={{ color: GOLD }}>
               השרשרת של אופק

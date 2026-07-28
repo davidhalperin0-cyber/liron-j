@@ -49,6 +49,9 @@ export function ProductPage({ product, similarProducts, completeTheLook = [], fr
   const { toggle, has } = useWishlistStore();
   const isWishlisted = has(product.id);
 
+  // Price not set yet (0) → show "בקרוב" and disable purchase.
+  const comingSoon = !product.price || product.price <= 0;
+
   // Funnel step 1 — product viewed
   useEffect(() => {
     analytics.viewItem({
@@ -61,6 +64,7 @@ export function ProductPage({ product, similarProducts, completeTheLook = [], fr
   }, [product.id]);
 
   const handleAddToCart = () => {
+    if (comingSoon) return; // no price yet — not purchasable
     // Funnel step 2 — added to cart
     analytics.addToCart({
       id: product.id,
@@ -127,13 +131,19 @@ export function ProductPage({ product, similarProducts, completeTheLook = [], fr
 
             {/* Price */}
             <div className="flex items-baseline gap-3">
-              <span className="text-2xl font-display text-gold">
-                {formatPrice(product.price)}
-              </span>
-              {product.compareAtPrice && (
-                <span className="text-lg text-white/30 line-through">
-                  {formatPrice(product.compareAtPrice)}
-                </span>
+              {comingSoon ? (
+                <span className="text-2xl font-display text-gold">בקרוב</span>
+              ) : (
+                <>
+                  <span className="text-2xl font-display text-gold">
+                    {formatPrice(product.price)}
+                  </span>
+                  {product.compareAtPrice && (
+                    <span className="text-lg text-white/30 line-through">
+                      {formatPrice(product.compareAtPrice)}
+                    </span>
+                  )}
+                </>
               )}
             </div>
 
@@ -257,9 +267,10 @@ export function ProductPage({ product, similarProducts, completeTheLook = [], fr
                 size="lg"
                 className="flex-1"
                 onClick={handleAddToCart}
+                disabled={comingSoon}
               >
                 <ShoppingBag size={18} className="ml-2" />
-                הוסף לסל — {formatPrice(product.price * quantity)}
+                {comingSoon ? "בקרוב" : `הוסף לסל — ${formatPrice(product.price * quantity)}`}
               </Button>
             </div>
 
@@ -390,16 +401,19 @@ export function ProductPage({ product, similarProducts, completeTheLook = [], fr
         <div className="flex items-center gap-3">
           <div className="flex-1 min-w-0">
             <p className="text-xs text-white/50 truncate">{product.name.he}</p>
-            <p className="text-sm font-display text-gold">{formatPrice(product.price * quantity)}</p>
+            <p className="text-sm font-display text-gold">
+              {comingSoon ? "בקרוב" : formatPrice(product.price * quantity)}
+            </p>
           </div>
           <Button
             variant="gold"
             size="md"
             onClick={handleAddToCart}
             className="shrink-0"
+            disabled={comingSoon}
           >
             <ShoppingBag size={16} className="ml-1.5" />
-            הוסף לסל
+            {comingSoon ? "בקרוב" : "הוסף לסל"}
           </Button>
         </div>
       </div>
