@@ -20,4 +20,4 @@ export function hasResendConfig(): boolean {
 
 // Default sender — must be verified in Resend dashboard
 export const EMAIL_FROM = process.env.EMAIL_FROM ?? "AURÉA <orders@aureafinejewelry.com>";
-export const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "david.halperin0@gmail.com";
+export const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "Aureafinejewelryil@gmail.com";
