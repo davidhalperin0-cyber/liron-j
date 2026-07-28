@@ -10,6 +10,7 @@ import Script from "next/script";
 //   NEXT_PUBLIC_GA_ID       = "G-XXXXXXXXXX"   (Google Analytics 4)
 //   NEXT_PUBLIC_CLARITY_ID  = "xxxxxxxxxx"      (Microsoft Clarity)
 
+// build marker: clarity enabled 2026-07-28
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID;
 
