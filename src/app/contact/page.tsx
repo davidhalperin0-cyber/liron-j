@@ -13,6 +13,7 @@ import { contactSchema, validateForm, type ContactForm, type FieldErrors } from 
 const CONTACT_INFO = [
   { icon: MapPin, label: "כתובת", value: "תל אביב, ישראל" },
   { icon: Phone, label: "טלפון", value: "052-4802044" },
+  { icon: Phone, label: "טלפון נוסף", value: "050-7816577" },
   { icon: Mail, label: "אימייל", value: "Aureafinejewelryil@gmail.com" },
   { icon: Clock, label: "שעות פעילות", value: "א׳-ה׳ 9:00-18:00" },
 ];
