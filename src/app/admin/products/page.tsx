@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { SUPPLIERS } from "@/lib/suppliers";
 import { ImageUploader } from "@/components/admin/image-uploader";
-import { cn, formatPrice, slugify } from "@/lib/utils";
+import { cn, formatPrice, slugify, matchesSearch } from "@/lib/utils";
 import { notifyAction, notifyError } from "@/lib/ui-actions";
 import { useRouter } from "next/navigation";
 import {
@@ -159,12 +159,13 @@ export default function ProductsAdmin() {
   };
 
   const filtered = products.filter((p) => {
-    const matchesSearch =
-      p.name.includes(search) ||
-      p.nameEn.toLowerCase().includes(search.toLowerCase()) ||
-      p.sku.toLowerCase().includes(search.toLowerCase());
+    const searchHit =
+      !search.trim() ||
+      matchesSearch(p.name, search) ||
+      matchesSearch(p.nameEn, search) ||
+      matchesSearch(p.sku, search);
     const matchesStock = !lowStockOnly || p.stock <= 5;
-    return matchesSearch && matchesStock;
+    return searchHit && matchesStock;
   });
 
   // Get first image for thumbnail

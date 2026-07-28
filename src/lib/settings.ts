@@ -26,7 +26,7 @@ export interface StoreSettings {
 export const DEFAULT_SETTINGS: StoreSettings = {
   store: {
     name: "AURÉA",
-    email: "info@aureafinejewelry.com",
+    email: "Aureafinejewelryil@gmail.com",
     phone: "052-4802044",
     address: "תל אביב, ישראל",
   },

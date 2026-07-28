@@ -142,7 +142,7 @@ export function Header() {
               <Link
                 href="/account"
                 className="p-2 text-white/80 hover:text-gold transition-colors hidden sm:block"
-                aria-label="Account"
+                aria-label="החשבון שלי"
               >
                 <User size={20} />
               </Link>
@@ -218,22 +218,24 @@ export function Header() {
                 </div>
               ))}
 
-              <div className="mt-8 flex gap-6">
-                <Link
-                  href="/search"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-white/60 hover:text-gold transition-colors"
-                >
-                  <Search size={22} />
-                </Link>
-                <Link
-                  href="/account"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-white/60 hover:text-gold transition-colors"
-                >
-                  <User size={22} />
-                </Link>
-              </div>
+              {/* Account — clear, labeled entry point */}
+              <Link
+                href="/account"
+                onClick={() => setMobileMenuOpen(false)}
+                className="mt-8 flex items-center justify-center gap-2 w-full py-3.5 rounded-lg border border-gold/30 bg-gold/5 text-gold text-base tracking-wide hover:bg-gold/10 transition-colors"
+              >
+                <User size={20} />
+                התחברות / החשבון שלי
+              </Link>
+
+              <Link
+                href="/search"
+                onClick={() => setMobileMenuOpen(false)}
+                className="mt-3 flex items-center justify-center gap-2 w-full py-3 text-white/60 hover:text-gold transition-colors"
+              >
+                <Search size={20} />
+                חיפוש
+              </Link>
             </div>
           </motion.div>
         )}

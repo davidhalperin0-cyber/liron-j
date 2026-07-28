@@ -1,6 +1,7 @@
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
 import type { Database, ProductOptions } from "@/lib/supabase/database.types";
 import type { ProductCard, ProductMedia } from "@/types";
+import { matchesSearch } from "@/lib/utils";
 
 type ProductRow = Database["public"]["Tables"]["products"]["Row"];
 
@@ -223,21 +224,31 @@ export async function getProductsByCategoryAndGender(
 }
 
 export async function searchProducts(query: string): Promise<ProductCard[]> {
-  const normalized = query.trim().toLowerCase();
-  if (!normalized) return [];
+  const q = query.trim();
+  if (!q) return [];
 
   if (!hasSupabaseConfig()) return [];
 
   const supabase = createSupabaseAdminClient();
+  // Fetch active products and match in JS: the DB names carry niqqud, so a plain
+  // ilike misses queries typed without it (or with full spelling). matchesSearch
+  // normalizes both sides (strips niqqud, ignores matres lectionis).
   const { data, error } = await supabase
     .from("products")
     .select("*")
-    .eq("status", "active")
-    .or(`name_he.ilike.%${normalized}%,name_en.ilike.%${normalized}%,material.ilike.%${normalized}%,gemstone.ilike.%${normalized}%`);
+    .eq("status", "active");
 
   if (error || !data) return [];
 
-  return (data as ProductRow[]).map(rowToProductCard);
+  return (data as ProductRow[])
+    .filter(
+      (r) =>
+        matchesSearch(r.name_he ?? "", q) ||
+        matchesSearch(r.name_en ?? "", q) ||
+        matchesSearch(r.material ?? "", q) ||
+        matchesSearch(r.gemstone ?? "", q)
+    )
+    .map(rowToProductCard);
 }
 
 export async function getProductsByIds(ids: string[]): Promise<ProductCard[]> {

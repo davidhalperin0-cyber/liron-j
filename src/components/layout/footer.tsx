@@ -109,11 +109,15 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-center gap-3 text-sm text-white/40">
                 <Phone size={16} className="text-gold/60 shrink-0" />
-                <span dir="ltr">+972-3-123-4567</span>
+                <a href="tel:+972524802044" dir="ltr" className="hover:text-gold transition-colors">
+                  052-4802044
+                </a>
               </li>
               <li className="flex items-center gap-3 text-sm text-white/40">
                 <Mail size={16} className="text-gold/60 shrink-0" />
-                <span>info@aureafinejewelry.com</span>
+                <a href="mailto:Aureafinejewelryil@gmail.com" className="hover:text-gold transition-colors break-all">
+                  Aureafinejewelryil@gmail.com
+                </a>
               </li>
               <li className="flex items-start gap-3 text-sm text-white/40">
                 <MapPin size={16} className="text-gold/60 shrink-0 mt-0.5" />
