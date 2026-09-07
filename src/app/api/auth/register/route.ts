@@ -16,57 +16,69 @@ export async function POST(request: NextRequest) {
 
   try {
     const supabase = createSupabaseAdminClient();
-    const { data, error } = await supabase.auth.signUp({
+
+    // Create the account already confirmed — the store does not gate signup on a
+    // verification email, so the customer is signed in the moment she registers.
+    const { data: created, error: createError } = await supabase.auth.admin.createUser({
       email,
       password,
-      options: {
-        data: {
-          first_name: firstName,
-          last_name: lastName,
-          full_name: `${firstName} ${lastName}`,
-          phone: phone ?? "",
-          birthday: birthday ?? "",
-          marketing_consent: marketingConsent ? "true" : "false",
-          role: "customer",
-        },
+      email_confirm: true,
+      user_metadata: {
+        first_name: firstName,
+        last_name: lastName,
+        full_name: `${firstName} ${lastName}`,
+        phone: phone ?? "",
+        birthday: birthday ?? "",
+        marketing_consent: marketingConsent ? "true" : "false",
+        role: "customer",
       },
     });
 
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 400 });
-    }
-
-    // Send welcome email (fire-and-forget)
-    if (data.user?.email) {
-      sendWelcomeEmail(data.user.email, `${firstName} ${lastName}`).catch((err) => { console.error("[email] send failed:", err); });
-    }
-
-    // If email confirmation is required, session will be null
-    if (!data.session) {
-      return NextResponse.json({
-        user: {
-          id: data.user?.id,
-          email: data.user?.email,
+    if (createError) {
+      const alreadyRegistered = /already|exists|registered/i.test(createError.message);
+      return NextResponse.json(
+        {
+          error: alreadyRegistered
+            ? "כתובת האימייל הזו כבר רשומה. אפשר להתחבר או לאפס סיסמה."
+            : createError.message,
         },
-        needsEmailConfirmation: true,
+        { status: 400 }
+      );
+    }
+
+    // Sign her straight in so registration ends inside the account, not on a form.
+    const { data: signedIn, error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (created.user?.email) {
+      sendWelcomeEmail(created.user.email, `${firstName} ${lastName}`).catch((err) => { console.error("[email] send failed:", err); });
+    }
+
+    if (signInError || !signedIn?.session) {
+      // Account exists; only the auto-login failed. Send her to the login page.
+      return NextResponse.json({
+        user: { id: created.user?.id, email: created.user?.email },
+        needsLogin: true,
       });
     }
 
     const response = NextResponse.json({
       user: {
-        id: data.user?.id,
-        email: data.user?.email,
+        id: signedIn.user.id,
+        email: signedIn.user.email,
       },
     });
 
-    response.cookies.set("sb-access-token", data.session.access_token, {
+    response.cookies.set("sb-access-token", signedIn.session.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7,
       path: "/",
     });
-    response.cookies.set("sb-refresh-token", data.session.refresh_token, {
+    response.cookies.set("sb-refresh-token", signedIn.session.refresh_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

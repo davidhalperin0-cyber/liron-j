@@ -20,6 +20,14 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
+      // Legacy accounts created before signup auto-confirm can still be unverified;
+      // the generic message made that look like a wrong password.
+      if (/not confirmed/i.test(error.message)) {
+        return NextResponse.json(
+          { error: "החשבון עדיין לא אומת. פני אלינו ונפעיל אותו." },
+          { status: 401 }
+        );
+      }
       return NextResponse.json({ error: "אימייל או סיסמה לא נכונים" }, { status: 401 });
     }
 

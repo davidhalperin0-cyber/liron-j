@@ -65,8 +65,8 @@ export default function RegisterPage() {
         return;
       }
 
-      if (data.needsEmailConfirmation) {
-        notifyAction("החשבון נוצר! בדקי את האימייל לאימות, ואז היכנסי דרך התחברות.");
+      if (data.needsLogin) {
+        notifyAction("החשבון נוצר! נותר רק להתחבר.");
         router.push("/auth/login");
         return;
       }
