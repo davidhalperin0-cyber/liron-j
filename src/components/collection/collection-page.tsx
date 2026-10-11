@@ -16,12 +16,22 @@ interface Props {
   heroImage?: string;
 }
 
-const MATERIALS = ["מצופה זהב", "מצופה רוז גולד", "כסף 925", "אבן טבעית", "פלדת אל-חלד"];
+// Filter label → which material values it covers. Materials are free text
+// ("כסף 925 בציפוי זהב", "פלדת אל-חלד"…), so match by keyword, not equality.
+const MATERIAL_MATCH: Record<string, RegExp> = {
+  "ציפוי זהב": /זהב/,
+  "ציפוי רוז גולד": /רוז/,
+  "כסף 925": /כסף 925/,
+  "פלדת אל-חלד": /פלדת/,
+  "אבן טבעית": /אבן|צדף|פנינ|חרוז/,
+};
+const MATERIALS = Object.keys(MATERIAL_MATCH);
+// We sell plated jewelry only — color names describe the tone, not the metal.
 const COLORS = [
-  { name: "זהב צהוב", value: "yellow", bg: "bg-yellow-600" },
-  { name: "זהב לבן", value: "white", bg: "bg-gray-200" },
-  { name: "זהב ורוד", value: "rose", bg: "bg-rose-300" },
-  { name: "כסף", value: "silver", bg: "bg-gray-400" },
+  { name: "גוון זהב", value: "gold", bg: "bg-yellow-600" },
+  { name: "רוז גולד", value: "rose", bg: "bg-rose-300" },
+  { name: "כסוף", value: "silver", bg: "bg-gray-300" },
+  { name: "שחור / גראפיט", value: "black", bg: "bg-neutral-800" },
 ];
 const SORT_OPTIONS = [
   { value: "popular", label: "פופולרי" },
@@ -43,7 +53,9 @@ export function CollectionPage({ slug, name, nameEn, description, products: init
     let result = [...initialProducts];
 
     if (activeMaterials.length > 0) {
-      result = result.filter((p) => p.material && activeMaterials.includes(p.material));
+      result = result.filter(
+        (p) => p.material && activeMaterials.some((m) => MATERIAL_MATCH[m]?.test(p.material!))
+      );
     }
     if (activeColors.length > 0) {
       result = result.filter((p) => p.color && activeColors.includes(p.color));
