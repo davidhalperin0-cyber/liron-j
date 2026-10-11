@@ -6,13 +6,13 @@ import { useCartStore } from "@/stores/cart-store";
 import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-const FREE_SHIPPING_THRESHOLD = 500;
+import { useShippingRates } from "@/lib/use-shipping-rates";
 
 export function CartDrawer() {
   const { items, isOpen, close, removeItem, updateQuantity, subtotal } =
     useCartStore();
 
+  const { freeAbove: FREE_SHIPPING_THRESHOLD } = useShippingRates();
   const currentSubtotal = subtotal();
   const progress = Math.min((currentSubtotal / FREE_SHIPPING_THRESHOLD) * 100, 100);
   const remaining = FREE_SHIPPING_THRESHOLD - currentSubtotal;

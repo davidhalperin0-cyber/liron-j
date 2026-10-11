@@ -1,8 +1,10 @@
 // Editorial running-text band — slow infinite marquee of brand promises,
 // separated by gold diamond marks. Pure CSS animation, no JS.
 
+import { FreeShippingAmount } from "@/components/ui/free-shipping-amount";
+
 const VALUES = [
-  "משלוח חינם מעל ₪500",
+  <>משלוח חינם מעל <FreeShippingAmount /></>,
   "אחריות על פגמי ייצור",
   "שירות אישי בוואטסאפ",
   "אריזת מתנה יוקרתית",
@@ -12,8 +14,8 @@ const VALUES = [
 function Row() {
   return (
     <div className="flex items-center gap-10 px-5 shrink-0">
-      {VALUES.map((v) => (
-        <span key={v} className="flex items-center gap-10 shrink-0">
+      {VALUES.map((v, i) => (
+        <span key={i} className="flex items-center gap-10 shrink-0">
           <span className="text-[11px] sm:text-xs tracking-[0.28em] uppercase text-white/55 whitespace-nowrap">
             {v}
           </span>

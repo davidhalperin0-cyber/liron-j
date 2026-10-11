@@ -54,17 +54,19 @@ export default async function Home() {
       <CartDrawer />
 
       <main>
+        {/* Shop-first order: a visitor arriving from an ad sees products right
+            after the hero; the brand stories (Ofek, AURÉA) follow. */}
         <HeroSection />
         <ValueMarquee />
-        <VideoText />
-        <OfekTributeSection />
         <NewDropSection products={newProducts} />
         <TrendingSection products={featuredProducts} />
-        <DragGallery products={featuredProducts} eyebrow="הסלקציה" title="Drag to explore" />
-        <EditorialSection />
         <CategoriesSection />
-        <KineticBand />
+        <DragGallery products={featuredProducts} eyebrow="הסלקציה" title="Drag to explore" />
+        <VideoText />
+        <EditorialSection />
+        <OfekTributeSection />
         <BrandStorySection />
+        <KineticBand />
         <VipSection />
         <InstagramFeed />
       </main>

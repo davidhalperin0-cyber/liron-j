@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { FIRST_ORDER_CODES } from "./settings-defaults";
 
 // Untyped service-role client (promo_codes isn't in the generated types).
 function getSupabase() {
@@ -29,10 +30,21 @@ export interface PromoValidation {
   discountValue?: number;
 }
 
-/** Validate a code against a subtotal. Does NOT consume a use. */
+async function hasPaidOrder(email: string): Promise<boolean> {
+  const { count } = await getSupabase()
+    .from("orders")
+    .select("id", { count: "exact", head: true })
+    .ilike("customer_email", email.trim())
+    .eq("payment_status", "paid");
+  return (count ?? 0) > 0;
+}
+
+/** Validate a code against a subtotal. Does NOT consume a use.
+ *  First-order codes are checked against `email` when one is given. */
 export async function validatePromoCode(
   rawCode: string,
-  subtotal: number
+  subtotal: number,
+  email?: string
 ): Promise<PromoValidation> {
   const code = (rawCode ?? "").trim().toUpperCase();
   if (!code) return { valid: false, message: "נא להזין קוד" };
@@ -54,6 +66,8 @@ export async function validatePromoCode(
     return { valid: false, message: "הקוד נוצל במלואו" };
   if (subtotal < p.min_order)
     return { valid: false, message: `הקוד תקף מהזמנה של ₪${p.min_order}` };
+  if (FIRST_ORDER_CODES.includes(p.code) && email && (await hasPaidOrder(email)))
+    return { valid: false, message: "הקוד מיועד להזמנה ראשונה בלבד" };
 
   const discount =
     p.discount_type === "percent"

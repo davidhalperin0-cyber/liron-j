@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyHypTransaction } from "@/lib/hyp/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
 import { sendOrderConfirmation, sendAdminOrderNotification } from "@/lib/email/send";
+import { sendMetaEvent } from "@/lib/meta-capi";
 
 // Hyp redirects the customer here (GET) after the hosted payment page.
 // We verify the transaction server-side, update the order, then send the
@@ -126,6 +127,22 @@ export async function GET(request: NextRequest) {
         shippingCost,
         total,
       }).catch((e) => console.error("[hyp-callback] admin email failed:", e));
+
+      // Meta CAPI Purchase — the source of truth for ad ROAS. event_id = order
+      // number, matching the browser Pixel event on the success page.
+      await sendMetaEvent({
+        eventName: "Purchase",
+        eventId: order,
+        value: total,
+        contentIds: ids,
+        email: order_row.customer_email,
+        phone: (order_row as { customer_phone?: string }).customer_phone || undefined,
+        ip: request.headers.get("x-forwarded-for")?.split(",")[0]?.trim(),
+        userAgent: request.headers.get("user-agent") ?? undefined,
+        fbp: request.cookies.get("_fbp")?.value,
+        fbc: request.cookies.get("_fbc")?.value,
+        url: `${baseUrl}/checkout/success`,
+      });
     }
   } catch (err) {
     console.error("[hyp-callback] order update error:", err);

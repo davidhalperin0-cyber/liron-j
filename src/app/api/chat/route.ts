@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { searchProducts, getAllActiveProducts, getFeaturedProducts, getProductsByCategory } from "@/lib/db/products";
 import type { ProductCard } from "@/types";
+import { getStoreSettings } from "@/lib/settings";
 
 // ─── Intent Detection ─────────────────────────────────────
 
@@ -194,7 +195,7 @@ export async function POST(req: NextRequest) {
         break;
 
       case "shipping":
-        reply = `משלוח חינם מעל ₪500.
+        reply = `משלוח חינם מעל ₪${(await getStoreSettings()).shipping.freeAbove}.
 
 רגיל: 3–5 ימי עסקים
 אקספרס: 1–2 ימי עסקים

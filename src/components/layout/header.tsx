@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useCartStore } from "@/stores/cart-store";
 import { useWishlistStore } from "@/stores/wishlist-store";
 import Link from "next/link";
+import { LaunchBar } from "./launch-bar";
 
 const NAV_ITEMS = [
   { label: "לאישה", labelEn: "For Her", href: "/collections/women" },
@@ -58,10 +59,11 @@ export function Header() {
           "fixed top-0 left-0 right-0 z-50 transition-all duration-500 pt-[env(safe-area-inset-top)]",
           isScrolled
             ? "glass py-3"
-            : "bg-transparent py-5"
+            : "bg-transparent pt-0 pb-4"
         )}
       >
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <LaunchBar hidden={isScrolled} />
+        <div className={cn("max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8", !isScrolled && "pt-3")}>
           <div className="flex items-center justify-between">
             {/* Mobile Menu Button */}
             <button

@@ -62,6 +62,16 @@ export const useCartStore = create<CartStore>()(
       itemCount: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
       subtotal: () => get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
     }),
-    { name: "liron-j-cart" }
+    {
+      name: "liron-j-cart",
+      // Carts saved before the fix may hold "undefined / מידה undefined".
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<CartStore>;
+        const items = (p.items ?? []).map((i) =>
+          i.variantName?.includes("undefined") ? { ...i, variantName: undefined } : i
+        );
+        return { ...current, ...p, items };
+      },
+    }
   )
 );

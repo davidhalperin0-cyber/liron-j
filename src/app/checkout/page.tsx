@@ -13,6 +13,7 @@ import { useCartStore } from "@/stores/cart-store";
 import { formatPrice } from "@/lib/utils";
 import { notifyAction, notifyError } from "@/lib/ui-actions";
 import { analytics } from "@/lib/analytics";
+import { DEFAULT_SETTINGS } from "@/lib/settings-defaults";
 import {
   checkoutInfoSchema,
   type CheckoutInfo,
@@ -62,7 +63,7 @@ export default function CheckoutPage() {
 
   // Shipping rates come from the store settings (with the same safe defaults
   // the server uses), so the displayed price matches what gets charged.
-  const [rates, setRates] = useState({ freeAbove: 500, standard: 29, express: 49 });
+  const [rates, setRates] = useState(DEFAULT_SETTINGS.shipping);
   useEffect(() => {
     fetch("/api/settings")
       .then((r) => r.json())
@@ -102,7 +103,7 @@ export default function CheckoutPage() {
       const res = await fetch("/api/promo/validate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: promoCode, subtotal }),
+        body: JSON.stringify({ code: promoCode, subtotal, email: info.email || undefined }),
       });
       const data = await res.json();
       setPromo(data);
@@ -235,7 +236,10 @@ export default function CheckoutPage() {
         }),
       });
 
-      if (!res.ok) throw new Error("Order failed");
+      if (!res.ok) {
+        const err = await res.json().catch(() => null);
+        throw new Error(typeof err?.error === "string" ? err.error : "");
+      }
 
       const data = await res.json();
 
@@ -250,8 +254,9 @@ export default function CheckoutPage() {
       store.clear();
       notifyAction(`ההזמנה נוצרה! מספר הזמנה: ${data.orderNumber ?? "ממתין"}`);
       router.push(`/checkout/success?order=${data.orderNumber ?? ""}&total=${total}`);
-    } catch {
-      notifyError("שגיאה ביצירת ההזמנה. נסי שנית.");
+    } catch (e) {
+      const msg = e instanceof Error && /[\u0590-\u05FF]/.test(e.message) ? e.message : "";
+      notifyError(msg || "שגיאה ביצירת ההזמנה. נסי שנית.");
     } finally {
       setSubmitting(false);
     }

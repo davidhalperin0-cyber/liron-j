@@ -4,35 +4,9 @@ import { createClient } from "@supabase/supabase-js";
 // Anything not yet saved falls back to these defaults, so the site works even
 // before the row is populated.
 
-export interface StoreSettings {
-  store: {
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-  };
-  shipping: {
-    freeAbove: number; // free shipping when subtotal >= this
-    standard: number;
-    express: number;
-  };
-  social: {
-    instagram: string;
-    facebook: string;
-    whatsapp: string; // international format, no +
-  };
-}
+import { DEFAULT_SETTINGS, type StoreSettings } from "./settings-defaults";
 
-export const DEFAULT_SETTINGS: StoreSettings = {
-  store: {
-    name: "AURÉA",
-    email: "Aureafinejewelryil@gmail.com",
-    phone: "052-4802044",
-    address: "תל אביב, ישראל",
-  },
-  shipping: { freeAbove: 500, standard: 29, express: 49 },
-  social: { instagram: "", facebook: "", whatsapp: "972507816577" },
-};
+export { DEFAULT_SETTINGS, type StoreSettings };
 
 function getSupabase() {
   return createClient(

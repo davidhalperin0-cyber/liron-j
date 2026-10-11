@@ -3,6 +3,10 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { FaqAccordion } from "@/components/ui/faq-accordion";
+import { getStoreSettings } from "@/lib/settings";
+
+// Re-read the shipping threshold from admin settings every 5 minutes.
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "שאלות נפוצות | AURÉA",
@@ -10,7 +14,7 @@ export const metadata: Metadata = {
     "תשובות לשאלות הנפוצות ביותר על תכשיטי AURÉA - משלוחים, החזרות, מוצרים ותשלום.",
 };
 
-const FAQ_CATEGORIES = [
+const faqCategories = (s: { freeAbove: number; standard: number }) => [
   {
     title: "משלוחים",
     items: [
@@ -22,7 +26,7 @@ const FAQ_CATEGORIES = [
       {
         question: "כמה עולה משלוח?",
         answer:
-          "משלוח חינם בהזמנות מעל ₪500, אחרת ₪30.",
+          `משלוח חינם בהזמנות מעל ₪${s.freeAbove}, אחרת ₪${s.standard}.`,
       },
       {
         question: "האם אתם שולחים לחו״ל?",
@@ -89,11 +93,11 @@ const FAQ_CATEGORIES = [
   },
 ];
 
-function buildFaqJsonLd() {
+function buildFaqJsonLd(categories: ReturnType<typeof faqCategories>) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: FAQ_CATEGORIES.flatMap((cat) =>
+    mainEntity: categories.flatMap((cat) =>
       cat.items.map((item) => ({
         "@type": "Question",
         name: item.question,
@@ -106,7 +110,8 @@ function buildFaqJsonLd() {
   };
 }
 
-export default function FaqPage() {
+export default async function FaqPage() {
+  const { shipping } = await getStoreSettings();
   return (
     <div className="min-h-screen bg-black">
       <Header />
@@ -114,7 +119,7 @@ export default function FaqPage() {
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqJsonLd()) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqJsonLd(faqCategories(shipping))) }}
       />
 
       <main className="pt-32 pb-20 px-6">
@@ -128,7 +133,7 @@ export default function FaqPage() {
             </h1>
           </div>
 
-          <FaqAccordion categories={FAQ_CATEGORIES} />
+          <FaqAccordion categories={faqCategories(shipping)} />
         </div>
       </main>
 

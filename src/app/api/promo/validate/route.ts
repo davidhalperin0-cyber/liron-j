@@ -6,11 +6,11 @@ export async function POST(request: NextRequest) {
   const limited = rateLimit(request, { maxRequests: 20, windowMs: 60_000 });
   if (limited) return limited;
 
-  const { code, subtotal } = await request.json();
+  const { code, subtotal, email } = await request.json();
   if (typeof code !== "string" || typeof subtotal !== "number") {
     return NextResponse.json({ valid: false, message: "בקשה לא תקינה" }, { status: 400 });
   }
 
-  const result = await validatePromoCode(code, subtotal);
+  const result = await validatePromoCode(code, subtotal, typeof email === "string" ? email : undefined);
   return NextResponse.json(result);
 }

@@ -22,11 +22,12 @@ import { useCartStore } from "@/stores/cart-store";
 import { useWishlistStore } from "@/stores/wishlist-store";
 import { notifyAction } from "@/lib/ui-actions";
 import { analytics } from "@/lib/analytics";
+import { FreeShippingAmount } from "@/components/ui/free-shipping-amount";
 import type { ProductCard as ProductCardType } from "@/types";
 import type { ProductDetail } from "@/lib/db/products";
 
 const TRUST_ITEMS = [
-  { icon: Truck, text: "משלוח חינם מעל ₪500" },
+  { icon: Truck, text: <>משלוח חינם מעל <FreeShippingAmount /></> },
   { icon: RotateCcw, text: "14 יום להחזרה" },
   { icon: Shield, text: "אחריות על פגמי ייצור" },
   { icon: Gift, text: "אריזת מתנה יוקרתית" },
@@ -82,7 +83,14 @@ export function ProductPage({ product, similarProducts, completeTheLook = [], fr
         image: product.images[0],
       },
       variantId: `${selectedColor}-${selectedSize}`,
-      variantName: `${product.options.colors.find((c) => c.id === selectedColor)?.name} / מידה ${selectedSize}`,
+      // Only describe options the product actually has (most have none).
+      variantName:
+        [
+          product.options.colors.find((c) => c.id === selectedColor)?.name,
+          selectedSize && `מידה ${selectedSize}`,
+        ]
+          .filter(Boolean)
+          .join(" / ") || undefined,
       quantity,
       price: product.price,
     });
@@ -309,9 +317,9 @@ export function ProductPage({ product, similarProducts, completeTheLook = [], fr
 
             {/* Trust Strip */}
             <div className="grid grid-cols-2 gap-3 pt-4">
-              {TRUST_ITEMS.map((item) => (
+              {TRUST_ITEMS.map((item, i) => (
                 <div
-                  key={item.text}
+                  key={i}
                   className="flex items-center gap-2.5 py-2"
                 >
                   <item.icon size={16} className="text-gold/60 shrink-0" />

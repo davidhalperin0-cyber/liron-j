@@ -9,11 +9,12 @@ import { CartDrawer } from "@/components/cart/cart-drawer";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/stores/cart-store";
 import { formatPrice } from "@/lib/utils";
-
-const FREE_SHIPPING_THRESHOLD = 500;
+import { useShippingRates } from "@/lib/use-shipping-rates";
+import { FreeShippingAmount } from "@/components/ui/free-shipping-amount";
 
 export default function CartPage() {
   const store = useCartStore();
+  const { freeAbove: FREE_SHIPPING_THRESHOLD, standard: STANDARD_SHIPPING } = useShippingRates();
   const items = store.items;
   const updateQuantity = store.updateQuantity;
   const removeItem = store.removeItem;
@@ -133,11 +134,11 @@ export default function CartPage() {
                   </div>
                   <div className="flex justify-between text-white/50">
                     <span>משלוח</span>
-                    <span>{subtotal >= FREE_SHIPPING_THRESHOLD ? "חינם" : formatPrice(29)}</span>
+                    <span>{subtotal >= FREE_SHIPPING_THRESHOLD ? "חינם" : formatPrice(STANDARD_SHIPPING)}</span>
                   </div>
                   <div className="border-t border-white/5 pt-3 flex justify-between text-white font-medium">
                     <span>סה&quot;כ</span>
-                    <span className="text-gold">{formatPrice(subtotal + (subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 29))}</span>
+                    <span className="text-gold">{formatPrice(subtotal + (subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING))}</span>
                   </div>
                 </div>
                 <Link href="/checkout">
@@ -150,11 +151,11 @@ export default function CartPage() {
                 {/* Trust */}
                 <div className="mt-6 space-y-2">
                   {[
-                    { icon: Truck, text: "משלוח חינם מעל ₪500" },
-                    { icon: Shield, text: "אחריות שנתיים" },
+                    { icon: Truck, text: <>משלוח חינם מעל <FreeShippingAmount /></> },
+                    { icon: Shield, text: "אחריות על פגמי ייצור" },
                     { icon: Gift, text: "אריזת מתנה חינם" },
-                  ].map((item) => (
-                    <div key={item.text} className="flex items-center gap-2 text-[10px] text-white/25">
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center gap-2 text-[10px] text-white/25">
                       <item.icon size={12} />
                       {item.text}
                     </div>

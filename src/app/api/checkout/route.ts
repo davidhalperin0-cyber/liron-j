@@ -78,8 +78,10 @@ export async function POST(request: NextRequest) {
   // Discounts — re-validate the promo server-side; recompute the club gift.
   let discount = 0;
   if (body.promoCode) {
-    const pv = await validatePromoCode(body.promoCode, subtotal);
-    if (pv.valid) discount += pv.discount ?? 0;
+    const pv = await validatePromoCode(body.promoCode, subtotal, body.customerEmail);
+    // Refuse rather than silently charge more than the customer was shown.
+    if (!pv.valid) return NextResponse.json({ error: pv.message }, { status: 400 });
+    discount += pv.discount ?? 0;
   }
   if (body.joinedClub) discount += Math.round(subtotal * 0.05);
   discount = Math.min(discount, subtotal);

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { FreeShippingAmount } from "@/components/ui/free-shipping-amount";
 
 const FOOTER_LINKS = {
   shop: {
@@ -134,7 +135,7 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-6">
             <span className="text-xs text-white/30">🔒 תשלום מאובטח</span>
-            <span className="text-xs text-white/30">📦 משלוח חינם מעל ₪500</span>
+            <span className="text-xs text-white/30">📦 משלוח חינם מעל <FreeShippingAmount /></span>
           </div>
         </div>
       </div>
