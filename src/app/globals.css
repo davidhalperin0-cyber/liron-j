@@ -312,3 +312,16 @@ html.a11y-noanim *::after {
     min-height: 44px;
   }
 }
+
+/* Boutique shelving: walnut uprights between the bays, a cream lacquered edge under each piece for its name */
+.shelf-unit {
+  gap: 6px;
+  padding: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #6A3F22, #80502E 50%, #6A3F22);
+  box-shadow:
+    0 1px 2px rgba(28, 25, 21, 0.06),
+    0 24px 60px -20px rgba(74, 47, 30, 0.45);
+}
+.shelf-bay { background: #F3EBDF; }
+.shelf-edge { border-top: 1px solid rgba(154, 123, 60, 0.28); }

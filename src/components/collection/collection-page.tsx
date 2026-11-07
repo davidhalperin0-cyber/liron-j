@@ -4,6 +4,8 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SlidersHorizontal, ChevronDown, X } from "lucide-react";
 import { ProductCard } from "@/components/product/product-card";
+import { ShelfBay } from "@/components/collection/shelf-bay";
+import { shelfImage } from "@/lib/shelf-images";
 import { cn } from "@/lib/utils";
 import type { ProductCard as ProductCardType } from "@/types";
 
@@ -95,6 +97,11 @@ export function CollectionPage({ slug, name, nameEn, description, products: init
   };
 
   const hasActiveFilters = activeMaterials.length > 0 || activeColors.length > 0;
+  // the shelf view is for collections photographed in the boutique (the women's pieces); the rest keep the grid
+  const shelfMode = useMemo(
+    () => initialProducts.length > 0 && initialProducts.filter((p) => shelfImage(p.slug)).length / initialProducts.length >= 0.6,
+    [initialProducts]
+  );
 
   return (
     <div className="min-h-screen bg-black pt-20">
@@ -332,6 +339,19 @@ export function CollectionPage({ slug, name, nameEn, description, products: init
 
           {/* Products Grid */}
           <div className="flex-1">
+            {shelfMode ? (
+              // the boutique: every piece in its own walnut bay, five to a shelf
+              <div
+                className={cn(
+                  "shelf-unit grid",
+                  filtersOpen ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
+                )}
+              >
+                {filteredProducts.map((product, index) => (
+                  <ShelfBay key={product.id} product={product} priority={index < 5} />
+                ))}
+              </div>
+            ) : (
             <motion.div
               layout
               className={cn(
@@ -358,6 +378,7 @@ export function CollectionPage({ slug, name, nameEn, description, products: init
                 </motion.div>
               ))}
             </motion.div>
+            )}
 
             {filteredProducts.length === 0 && (
               <div className="text-center py-20">

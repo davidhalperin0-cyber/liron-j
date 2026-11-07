@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ProductCard } from "@/components/product/product-card";
+import { ShelfBay } from "@/components/collection/shelf-bay";
+import { shelfImage } from "@/lib/shelf-images";
 import type { ProductCard as ProductCardType } from "@/types";
 
 const HE_CAT: Record<string, string> = {
@@ -22,6 +24,7 @@ interface Props {
 }
 
 export function GenderedCollection({ gender, products }: Props) {
+  const inBoutique = products.length > 0 && products.filter((p) => shelfImage(p.slug)).length / products.length >= 0.6;
   const t = TITLES[gender];
 
   // Distinct categories present for this gender, with a representative image.
@@ -80,11 +83,20 @@ export function GenderedCollection({ gender, products }: Props) {
         <h2 className="font-display text-2xl sm:text-3xl text-white text-center mb-10">
           הקולקציה המלאה
         </h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
-        </div>
+        {inBoutique ? (
+          // photographed in the boutique: the whole collection on walnut shelves, five to a shelf
+          <div className="shelf-unit grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+            {products.map((p, i) => (
+              <ShelfBay key={p.id} product={p} priority={i < 5} />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {products.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
