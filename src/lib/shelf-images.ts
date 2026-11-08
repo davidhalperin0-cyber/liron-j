@@ -1,4 +1,4 @@
-// Products photographed in the boutique: one walnut-shelf bay per piece, in /public/images/shelf/<slug>.webp.
+// Products photographed in the boutique: one pale-suede photo per piece, in /public/images/display/<slug>.webp.
 // A product missing from this list is shown in a bay with its regular photo instead.
 const SHELF_SLUGS = new Set([
   "aurea-0170D983",
@@ -80,5 +80,5 @@ const SHELF_SLUGS = new Set([
 ]);
 
 export function shelfImage(slug: string): string | null {
-  return SHELF_SLUGS.has(slug) ? `/images/shelf/${slug}.webp` : null;
+  return SHELF_SLUGS.has(slug) ? `/images/display/${slug}.webp` : null;
 }

@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SlidersHorizontal, ChevronDown, X } from "lucide-react";
 import { ProductCard } from "@/components/product/product-card";
-import { ShelfBay } from "@/components/collection/shelf-bay";
+import { BoutiqueGrid } from "@/components/collection/boutique-grid";
 import { shelfImage } from "@/lib/shelf-images";
 import { cn } from "@/lib/utils";
 import type { ProductCard as ProductCardType } from "@/types";
@@ -340,17 +340,11 @@ export function CollectionPage({ slug, name, nameEn, description, products: init
           {/* Products Grid */}
           <div className="flex-1">
             {shelfMode ? (
-              // the boutique: every piece in its own walnut bay, five to a shelf
-              <div
-                className={cn(
-                  "shelf-unit grid",
-                  filtersOpen ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
-                )}
-              >
-                {filteredProducts.map((product, index) => (
-                  <ShelfBay key={product.id} product={product} priority={index < 5} />
-                ))}
-              </div>
+              // the boutique: every piece on pale suede, five to a row, with air between them
+              <BoutiqueGrid
+                products={filteredProducts}
+                className={filtersOpen ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"}
+              />
             ) : (
             <motion.div
               layout

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ProductCard } from "@/components/product/product-card";
-import { ShelfBay } from "@/components/collection/shelf-bay";
+import { BoutiqueGrid } from "@/components/collection/boutique-grid";
 import { shelfImage } from "@/lib/shelf-images";
 import type { ProductCard as ProductCardType } from "@/types";
 
@@ -84,12 +84,8 @@ export function GenderedCollection({ gender, products }: Props) {
           הקולקציה המלאה
         </h2>
         {inBoutique ? (
-          // photographed in the boutique: the whole collection on walnut shelves, five to a shelf
-          <div className="shelf-unit grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
-            {products.map((p, i) => (
-              <ShelfBay key={p.id} product={p} priority={i < 5} />
-            ))}
-          </div>
+          // photographed in the boutique: the whole collection on pale suede, five to a row
+          <BoutiqueGrid products={products} className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-5" />
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {products.map((p) => (
