@@ -60,17 +60,17 @@ export async function generateMetadata({
   // Check if it's a special collection first
   const special = SPECIAL_COLLECTIONS[slug];
   if (special) {
-    return { title: `${special.name} | AURÉA`, description: special.description };
+    return { title: special.name, description: special.description };
   }
 
   // Otherwise look up the category from DB
   const category = await getCategoryBySlug(slug);
   if (category) {
-    return { title: `${category.name} | AURÉA`, description: category.description };
+    return { title: category.name, description: category.description };
   }
 
   // Fallback
-  return { title: "קולקציה | AURÉA", description: "הקולקציה של AURÉA" };
+  return { title: "קולקציה", description: "הקולקציה של AURÉA" };
 }
 
 export default async function Page({

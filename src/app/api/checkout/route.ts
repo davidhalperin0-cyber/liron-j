@@ -52,7 +52,8 @@ export async function POST(request: NextRequest) {
   }[] = [];
   for (const it of reqItems) {
     const price = it.productId ? priceById.get(it.productId) : undefined;
-    if (price == null) {
+    // a piece without a real price (e.g. the tribute page) is not for sale
+    if (price == null || !(price > 0)) {
       return NextResponse.json(
         { error: "פריט לא תקין בעגלה" },
         { status: 400 }

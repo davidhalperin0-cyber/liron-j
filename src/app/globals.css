@@ -137,8 +137,8 @@ body {
   line-height: 0.95;
   letter-spacing: 0.02em;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(154, 123, 60, 0.55);
-  text-stroke: 1px rgba(154, 123, 60, 0.55);
+  -webkit-text-stroke: 1.4px rgba(154, 123, 60, 0.85);
+  text-stroke: 1.4px rgba(154, 123, 60, 0.85);
 }
 @keyframes luxeKinetic {
   from { transform: translateX(0); }

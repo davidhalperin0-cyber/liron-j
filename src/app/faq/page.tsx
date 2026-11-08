@@ -9,7 +9,7 @@ import { getStoreSettings } from "@/lib/settings";
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "שאלות נפוצות | AURÉA",
+  title: "שאלות נפוצות",
   description:
     "תשובות לשאלות הנפוצות ביותר על תכשיטי AURÉA - משלוחים, החזרות, מוצרים ותשלום.",
 };

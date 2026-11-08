@@ -23,6 +23,6 @@ export const useWishlistStore = create<WishlistStore>()(
       has: (productId) => get().items.includes(productId),
       clear: () => set({ items: [] }),
     }),
-    { name: "liron-j-wishlist" }
+    { name: "liron-j-wishlist", skipHydration: true }
   )
 );

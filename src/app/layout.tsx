@@ -9,6 +9,7 @@ import { LuxeCursor } from "@/components/luxe/luxe-cursor";
 import { AccessibilityMenu } from "@/components/a11y/accessibility-menu";
 import { Analytics } from "@/components/analytics/analytics";
 import "./globals.css";
+import { StoreHydration } from "@/components/layout/store-hydration";
 
 const inter = Inter({
   variable: "--font-body",
@@ -57,6 +58,8 @@ export const metadata: Metadata = {
     "AURÉA",
   ],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.aureafinejewelry.com"),
+  // every page points search engines at its own clean address (no tracking query strings)
+  alternates: { canonical: "./" },
   openGraph: {
     type: "website",
     locale: "he_IL",
@@ -83,6 +86,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-black text-white">
         {children}
+        <StoreHydration />
         <GrainOverlay />
         <LuxeCursor />
         <IntroReveal />

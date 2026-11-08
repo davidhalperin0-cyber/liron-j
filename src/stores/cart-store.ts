@@ -64,6 +64,8 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: "liron-j-cart",
+      // loaded by <StoreHydration /> after the first render, so server and browser render the same page
+      skipHydration: true,
       // Carts saved before the fix may hold "undefined / מידה undefined".
       merge: (persisted, current) => {
         const p = (persisted ?? {}) as Partial<CartStore>;

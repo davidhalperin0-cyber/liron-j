@@ -19,7 +19,7 @@ export async function generateMetadata({
   if (!product) return { title: "מוצר לא נמצא" };
 
   return {
-    title: `${product.name.he} | AURÉA`,
+    title: product.name.he,
     description: product.description,
     openGraph: {
       title: `${product.name.he} | AURÉA`,

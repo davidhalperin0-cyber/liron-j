@@ -134,8 +134,12 @@ export function AiChatWidget() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (sessionStorage.getItem("concierge-greeted")) return;
-    const timer = setTimeout(() => setTeaser(true), 6500);
-    return () => clearTimeout(timer);
+    // On a phone the bubble covers the products, and the concierge bar is already at the bottom.
+    if (window.matchMedia("(max-width: 767px)").matches) return;
+    const show = setTimeout(() => setTeaser(true), 6500);
+    // it steps back by itself after a few seconds instead of staying over the page
+    const hide = setTimeout(() => setTeaser(false), 6500 + 9000);
+    return () => { clearTimeout(show); clearTimeout(hide); };
   }, []);
 
   const dismissTeaser = useCallback(() => {
