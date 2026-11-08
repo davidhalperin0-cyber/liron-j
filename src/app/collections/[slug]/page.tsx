@@ -47,7 +47,7 @@ const SPECIAL_COLLECTIONS: Record<string, { name: string; nameEn: string; descri
   new: { name: "חדש באתר", nameEn: "New Arrivals", description: "הפריטים החדשים ביותר שהגיעו לקולקציה." },
   bestsellers: { name: "בסט סלרס", nameEn: "Best Sellers", description: "המוצרים הכי אהובים על הלקוחות שלנו." },
   limited: { name: "מהדורה מוגבלת", nameEn: "Limited Edition", description: "פריטים בלעדיים במהדורה מוגבלת." },
-  all: { name: "כל המוצרים", nameEn: "All Products", description: "כל הקולקציה של AURÉA במקום אחד." },
+  all: { name: "כל המוצרים", nameEn: "All Products", description: "כל הקולקציה של LUZ במקום אחד." },
 };
 
 export async function generateMetadata({
@@ -70,7 +70,7 @@ export async function generateMetadata({
   }
 
   // Fallback
-  return { title: "קולקציה", description: "הקולקציה של AURÉA" };
+  return { title: "קולקציה", description: "הקולקציה של LUZ" };
 }
 
 export default async function Page({

@@ -21,7 +21,7 @@ export function WhatsAppButton() {
       aria-label="WhatsApp"
       className={`
         group fixed z-30
-        bottom-[60px] sm:bottom-6 start-4 sm:start-6
+        bottom-4 sm:bottom-6 start-4 sm:start-6
         flex h-11 w-11 items-center justify-center
         rounded-full bg-[#25D366] text-white shadow-md
         transition-all duration-500 ease-out

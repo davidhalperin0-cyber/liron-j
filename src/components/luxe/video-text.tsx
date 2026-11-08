@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 
-// Showcase finale — the giant word AURÉA, where EACH letter is its own window
+// Showcase finale — the giant word LUZ, where EACH letter is its own window
 // into the brand films. Letters alternate between both videos and each is
 // seeded to a different time offset, so the word is a living mosaic of frames.
 
@@ -10,11 +10,9 @@ const HERO = { src: "/videos/hero.mp4", poster: "/videos/hero-poster.jpg" };
 const EDIT = { src: "/videos/editorial.mp4", poster: "/videos/editorial-poster.jpg" };
 
 const LETTERS: { char: string; v: typeof HERO; offset: number }[] = [
-  { char: "A", v: HERO, offset: 0.6 },
+  { char: "L", v: HERO, offset: 0.6 },
   { char: "U", v: EDIT, offset: 3.4 },
-  { char: "R", v: HERO, offset: 6.7 },
-  { char: "É", v: EDIT, offset: 9.5 },
-  { char: "A", v: HERO, offset: 10.9 },
+  { char: "Z", v: HERO, offset: 6.7 },
 ];
 
 function letterMask(ch: string) {

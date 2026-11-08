@@ -11,7 +11,7 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "שאלות נפוצות",
   description:
-    "תשובות לשאלות הנפוצות ביותר על תכשיטי AURÉA - משלוחים, החזרות, מוצרים ותשלום.",
+    "תשובות לשאלות הנפוצות ביותר על תכשיטי LUZ - משלוחים, החזרות, מוצרים ותשלום.",
 };
 
 const faqCategories = (s: { freeAbove: number; standard: number }) => [

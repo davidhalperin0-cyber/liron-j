@@ -14,7 +14,7 @@ export function LaunchBar({ hidden }: { hidden: boolean }) {
       aria-hidden={hidden}
     >
       <p className="bg-gold/95 text-black text-center text-[10px] sm:text-[11px] tracking-[0.06em] sm:tracking-[0.18em] py-1.5 px-3 leading-snug whitespace-nowrap">
-        <bdi dir="ltr" className="hidden sm:inline font-medium">WELCOME TO AURÉA</bdi>
+        <bdi dir="ltr" className="hidden sm:inline font-medium">WELCOME TO LUZ</bdi>
         <span className="hidden sm:inline mx-2 opacity-50">◇</span>
         <bdi dir="ltr">10%</bdi>{" "}
         <span className="sm:hidden">להזמנה ראשונה:</span>

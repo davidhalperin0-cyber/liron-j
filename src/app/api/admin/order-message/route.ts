@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
 
   const addr = order.shipping_address as { address?: string; city?: string; postalCode?: string } | null;
   const header =
-    `🛍️ הזמנה ${order.order_number} — AURÉA\n` +
+    `🛍️ הזמנה ${order.order_number} — LUZ\n` +
     `לקוח/ה: ${order.customer_name} · ${order.customer_phone}\n` +
     `כתובת: ${addr?.address ?? ""}, ${addr?.city ?? ""}${addr?.postalCode ? " " + addr.postalCode : ""}\n` +
     `סה"כ: ₪${order.total}\n`;

@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 
-// AURÉA wordmark where each letter is its own window into the brand film —
+// LUZ wordmark where each letter is its own window into the brand film —
 // and every letter plays the video from a different time offset, so the word
 // shimmers with different fragments at once. Falls back to the poster frame.
 
@@ -11,11 +11,9 @@ const POSTER = "/videos/hero-poster.jpg";
 
 // char + a desynced start time (seconds) so no two letters match.
 const LETTERS: { char: string; offset: number }[] = [
-  { char: "A", offset: 0.4 },
+  { char: "L", offset: 0.4 },
   { char: "U", offset: 2.6 },
-  { char: "R", offset: 5.0 },
-  { char: "É", offset: 7.3 },
-  { char: "A", offset: 9.6 },
+  { char: "Z", offset: 5.0 },
 ];
 
 function letterMask(ch: string) {
@@ -79,7 +77,7 @@ export function VideoWordmark() {
   return (
     <span
       dir="ltr"
-      aria-label="AURÉA"
+      aria-label="LUZ"
       className="flex items-center gap-[0.1em] h-[36px] sm:h-[50px] select-none [filter:drop-shadow(0_1px_3px_rgba(28,25,21,0.3))]"
     >
       {LETTERS.map((l, i) => (

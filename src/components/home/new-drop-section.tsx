@@ -29,10 +29,10 @@ export function NewDropSection({ products }: Props) {
         >
           <div>
             <p className="text-gold/60 text-xs tracking-[0.5em] uppercase mb-4">
-              הגיע עכשיו
+              New Drop
             </p>
             <h2 className="font-display text-3xl sm:text-4xl lg:text-6xl tracking-wide text-white">
-              New Drop
+              חדש בקולקציה
             </h2>
           </div>
           <Link href="/collections/new">

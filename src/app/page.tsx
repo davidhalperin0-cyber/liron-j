@@ -20,24 +20,29 @@ import { CartDrawer } from "@/components/cart/cart-drawer";
 import { getNewProducts, getFeaturedProducts } from "@/lib/db/products";
 
 export default async function Home() {
-  const [newProducts, featuredProducts] = await Promise.all([
-    getNewProducts(4),
-    getFeaturedProducts(4),
+  // The brand speaks to women: the homepage shows the women's pieces (and unisex), each piece once.
+  const [newProducts, featured] = await Promise.all([
+    getNewProducts(4, "women"),
+    getFeaturedProducts(16, "women"),
   ]);
+  const shown = new Set(newProducts.map((p) => p.id));
+  const featuredProducts = featured.filter((p) => !shown.has(p.id));
+  const trending = featuredProducts.slice(0, 4);
+  const gallery = featuredProducts.slice(4, 12);
 
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "AURÉA",
+    name: "LUZ",
     url: "https://www.aureafinejewelry.com",
     logo: "https://www.aureafinejewelry.com/logo.png",
-    description: "תכשיטי יוקרה בעיצוב אישי — AURÉA",
+    description: "תכשיטי יוקרה בעיצוב אישי — LUZ",
   };
 
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "AURÉA",
+    name: "LUZ",
     url: "https://www.aureafinejewelry.com",
     potentialAction: {
       "@type": "SearchAction",
@@ -50,18 +55,18 @@ export default async function Home() {
     <>
       <JsonLd data={organizationJsonLd} />
       <JsonLd data={websiteJsonLd} />
-      <Header />
+      <Header overHero />
       <CartDrawer />
 
       <main>
         {/* Shop-first order: a visitor arriving from an ad sees products right
-            after the hero; the brand stories (Ofek, AURÉA) follow. */}
+            after the hero; the brand stories (Ofek, LUZ) follow. */}
         <HeroSection />
         <ValueMarquee />
         <NewDropSection products={newProducts} />
-        <TrendingSection products={featuredProducts} />
+        <TrendingSection products={trending} />
         <CategoriesSection />
-        <DragGallery products={featuredProducts} eyebrow="הסלקציה" title="Drag to explore" />
+        <DragGallery products={gallery} eyebrow="Selection" title="עוד מהסלקציה" />
         <VideoText />
         <EditorialSection />
         <OfekTributeSection />

@@ -12,14 +12,14 @@ function layout(content: string): string {
 <body style="margin:0;padding:0;background:${BG_COLOR};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <div style="max-width:560px;margin:0 auto;padding:40px 20px;">
     <div style="text-align:center;margin-bottom:32px;">
-      <h1 style="color:${BRAND_COLOR};font-size:24px;font-weight:300;letter-spacing:4px;margin:0;">AURÉA</h1>
+      <h1 style="color:${BRAND_COLOR};font-size:24px;font-weight:300;letter-spacing:4px;margin:0;">LUZ</h1>
     </div>
     <div style="background:${CARD_BG};border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:32px;">
       ${content}
     </div>
     <div style="text-align:center;margin-top:24px;">
       <p style="color:rgba(255,255,255,0.2);font-size:11px;margin:0;">
-        AURÉA · תכשיטי יוקרה · תל אביב, ישראל
+        LUZ · תכשיטי יוקרה · תל אביב, ישראל
       </p>
     </div>
   </div>
@@ -69,11 +69,11 @@ export function orderConfirmationEmail(data: OrderEmailData): { subject: string;
     .join("");
 
   return {
-    subject: `אישור הזמנה ${data.orderNumber} — AURÉA`,
+    subject: `אישור הזמנה ${data.orderNumber} — LUZ`,
     html: layout(`
       <h2 style="color:white;font-size:20px;font-weight:500;margin:0 0 8px;">ההזמנה שלך אושרה</h2>
       <p style="color:rgba(255,255,255,0.4);font-size:13px;margin:0 0 24px;">
-        שלום ${data.customerName}, תודה שקנית ב-AURÉA
+        שלום ${data.customerName}, תודה שקנית ב-LUZ
       </p>
 
       <div style="background:rgba(201,169,110,0.05);border:1px solid rgba(201,169,110,0.15);border-radius:6px;padding:16px;text-align:center;margin-bottom:24px;">
@@ -138,7 +138,7 @@ export function adminNewOrderEmail(data: AdminOrderData): { subject: string; htm
     `<tr><td style="padding:4px 0;color:rgba(255,255,255,0.4);font-size:12px;width:90px;">${label}</td><td style="padding:4px 0;color:rgba(255,255,255,0.85);font-size:13px;">${value}</td></tr>`;
 
   return {
-    subject: `🛒 הזמנה חדשה ${data.orderNumber} · ₪${data.total.toLocaleString()} — AURÉA`,
+    subject: `🛒 הזמנה חדשה ${data.orderNumber} · ₪${data.total.toLocaleString()} — LUZ`,
     html: layout(`
       <div style="background:rgba(184,155,94,0.08);border:1px solid rgba(184,155,94,0.2);border-radius:6px;padding:14px;text-align:center;margin-bottom:20px;">
         <p style="color:rgba(255,255,255,0.4);font-size:11px;margin:0 0 2px;">התקבלה הזמנה חדשה ששולמה</p>
@@ -215,12 +215,12 @@ export function contactNotificationEmail(data: ContactEmailData): { subject: str
 
 export function welcomeEmail(name: string): { subject: string; html: string } {
   return {
-    subject: `ברוכה הבאה ל-AURÉA, ${name}!`,
+    subject: `ברוכה הבאה ל-LUZ, ${name}!`,
     html: layout(`
-      <h2 style="color:white;font-size:20px;font-weight:500;margin:0 0 8px;">ברוכה הבאה למשפחת AURÉA</h2>
+      <h2 style="color:white;font-size:20px;font-weight:500;margin:0 0 8px;">ברוכה הבאה למשפחת LUZ</h2>
       <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.6;margin:0 0 24px;">
         שלום ${name},<br><br>
-        שמחים שהצטרפת אלינו. ב-AURÉA אנחנו מאמינים שתכשיט הוא יותר מאביזר — הוא סיפור, זיכרון, חלק ממך.
+        שמחים שהצטרפת אלינו. ב-LUZ אנחנו מאמינים שתכשיט הוא יותר מאביזר — הוא סיפור, זיכרון, חלק ממך.
       </p>
       <div style="text-align:center;margin:24px 0;">
         <a href="https://www.aureafinejewelry.com/collections" style="display:inline-block;background:${BRAND_COLOR};color:#000;text-decoration:none;padding:12px 32px;border-radius:6px;font-size:14px;font-weight:500;">
@@ -239,12 +239,12 @@ export function birthdayEmail(
   percentOff: number
 ): { subject: string; html: string } {
   return {
-    subject: `מתנת יום ההולדת שלך מחכה — AURÉA`,
+    subject: `מתנת יום ההולדת שלך מחכה — LUZ`,
     html: layout(`
       <p style="color:${BRAND_COLOR};font-size:11px;letter-spacing:3px;text-transform:uppercase;margin:0 0 12px;text-align:center;">Happy Birthday</p>
       <h2 style="color:white;font-size:22px;font-weight:500;margin:0 0 8px;text-align:center;">יום הולדת שמח, ${name}</h2>
       <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.7;margin:0 0 24px;text-align:center;">
-        מכל הצוות של AURÉA — שתהיה לך שנה זוהרת.<br>
+        מכל הצוות של LUZ — שתהיה לך שנה זוהרת.<br>
         הכנו לך מתנה קטנה לחגוג בה.
       </p>
       <div style="text-align:center;margin:8px 0 24px;">

@@ -40,8 +40,8 @@ export const viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "AURÉA | תכשיטי יוקרה",
-    template: "%s | AURÉA",
+    default: "LUZ | תכשיטי יוקרה",
+    template: "%s | LUZ",
   },
   description:
     "תכשיטי אופנה יוקרתיים בציפוי זהב ורוז גולד, כסף 925 וזרקונים נוצצים. טבעות, עגילים, שרשראות וצמידים — עיצוב ישראלי לנשים ולגברים.",
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     "gold plated jewelry",
     "zircon rings",
     "designer earrings",
-    "AURÉA",
+    "LUZ",
   ],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.aureafinejewelry.com"),
   // every page points search engines at its own clean address (no tracking query strings)
@@ -63,8 +63,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "he_IL",
-    siteName: "AURÉA",
-    title: "AURÉA | תכשיטי יוקרה",
+    siteName: "LUZ",
+    title: "LUZ | תכשיטי יוקרה",
     description: "תכשיטי אופנה יוקרתיים — ציפוי זהב, כסף 925 וזרקונים. עיצוב ישראלי.",
   },
   robots: {

@@ -20,7 +20,7 @@ export function BrandStorySection() {
                 {/* Editorial moodboard collage — full 3-panel ratio, proportional */}
                 <img
                   src="/images/brand-story.jpg"
-                  alt="AURÉA — מלאכת יד יוקרתית"
+                  alt="LUZ — מלאכת יד יוקרתית"
                   loading="lazy"
                   className="block w-full h-auto image-dramatic"
                 />
@@ -46,7 +46,7 @@ export function BrandStorySection() {
               <span className="text-gradient-gold">יצירת אמנות</span>
             </h2>
             <p className="text-white/50 text-lg leading-relaxed mb-6">
-              AURÉA נולדה מתוך אהבה אמיתית לאומנות עתיקה. כל תכשיט עובר תהליך קפדני של עיצוב, יציקה וליטוש — מתכת אחרי מתכת, אבן אחרי אבן.
+              LUZ נולדה מתוך אהבה אמיתית לאומנות עתיקה. כל תכשיט עובר תהליך קפדני של עיצוב, יציקה וליטוש — מתכת אחרי מתכת, אבן אחרי אבן.
             </p>
             <p className="text-white/50 text-lg leading-relaxed">
               אנחנו מאמינים שתכשיט צריך לספר סיפור. כל פריט בקולקציה שלנו מעוצב כך שילווה אתכם לכל חיים.

@@ -5,7 +5,7 @@ import { useScroll, useVelocity, useTransform, useSpring, motion } from "framer-
 // Oversized kinetic brand statement — giant outlined serif that idles in a
 // marquee and skews with scroll velocity (Awwwards-style reactive type).
 function Track() {
-  const phrase = "AURÉA — FINE JEWELRY — ";
+  const phrase = "LUZ — FINE JEWELRY — ";
   return (
     <span
       className="luxe-kinetic-text whitespace-nowrap font-display uppercase shrink-0 pe-[0.15em]"
@@ -23,7 +23,8 @@ export function KineticBand() {
   const skew = useTransform(smooth, [-2000, 0, 2000], [-7, 0, 7], { clamp: true });
 
   return (
-    <section className="relative overflow-hidden bg-[#F4EFE6] py-12 sm:py-20">
+    // English words on an LTR track: under the page's RTL the track started at the right edge and slid out of view
+    <section dir="ltr" className="relative overflow-hidden bg-[#F4EFE6] py-12 sm:py-20">
       <motion.div style={{ skewX: skew }} className="flex w-max luxe-kinetic">
         <Track />
         <Track />

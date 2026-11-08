@@ -85,7 +85,7 @@ export default function CheckoutPage() {
   const [promoLoading, setPromoLoading] = useState(false);
   const discount = promo?.valid ? promo.discount ?? 0 : 0;
 
-  // AURÉA Club — 5% first-purchase gift, stacks on top of any promo code.
+  // LUZ Club — 5% first-purchase gift, stacks on top of any promo code.
   const [joinClub, setJoinClub] = useState(false);
   const clubDiscount = joinClub ? Math.round(subtotal * 0.05) : 0;
 
@@ -438,7 +438,7 @@ export default function CheckoutPage() {
                         </p>
                       </div>
 
-                      {/* AURÉA Club — 5% first-purchase gift, stacks with promos */}
+                      {/* LUZ Club — 5% first-purchase gift, stacks with promos */}
                       <button
                         type="button"
                         onClick={() => setJoinClub((v) => !v)}
@@ -459,7 +459,7 @@ export default function CheckoutPage() {
                           <div className="flex-1">
                             <p className="text-sm text-white flex items-center gap-1.5">
                               <Sparkles size={13} className="text-gold" />
-                              הצטרפו למועדון AURÉA — <span className="text-gold">5% מתנה</span> לקנייה הראשונה
+                              הצטרפו למועדון LUZ — <span className="text-gold">5% מתנה</span> לקנייה הראשונה
                             </p>
                             <p className="text-[11px] text-white/45 mt-1 leading-relaxed">
                               ההנחה מצטברת על כל מבצע קיים. גישה מוקדמת לקולקציות והטבות חברים — ללא עלות.

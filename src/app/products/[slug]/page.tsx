@@ -3,7 +3,7 @@ import { ProductPage } from "@/components/product/product-page";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/cart/cart-drawer";
-import { getProductBySlug, getFeaturedProducts, getRelatedProducts } from "@/lib/db/products";
+import { getProductBySlug, getFeaturedProducts, getRelatedProducts, getProductGender } from "@/lib/db/products";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -22,7 +22,7 @@ export async function generateMetadata({
     title: product.name.he,
     description: product.description,
     openGraph: {
-      title: `${product.name.he} | AURÉA`,
+      title: `${product.name.he} | LUZ`,
       description: product.description,
       images: product.images[0] ? [{ url: product.images[0] }] : [],
     },
@@ -41,8 +41,9 @@ export default async function Page({
     notFound();
   }
 
+  const gender = await getProductGender(product.id);
   const [allFeatured, relationships] = await Promise.all([
-    getFeaturedProducts(5),
+    getFeaturedProducts(5, gender),
     getRelatedProducts(product.id),
   ]);
 
@@ -59,7 +60,7 @@ export default async function Page({
     image: product.images[0],
     brand: {
       "@type": "Brand",
-      name: "AURÉA",
+      name: "LUZ",
     },
     offers: {
       "@type": "Offer",

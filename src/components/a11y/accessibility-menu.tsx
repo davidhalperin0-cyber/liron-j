@@ -135,7 +135,7 @@ export function AccessibilityMenu() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="פתיחת תפריט נגישות"
-        className="fixed z-[60] bottom-24 left-4 sm:bottom-28 sm:left-6 w-12 h-12 rounded-full bg-charcoal border border-gold/40 text-gold flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.25)] hover:bg-gold hover:text-black transition-colors"
+        className="fixed z-[60] bottom-[72px] left-4 sm:bottom-28 sm:left-6 w-12 h-12 rounded-full bg-charcoal border border-gold/40 text-gold flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.25)] hover:bg-gold hover:text-black transition-colors"
       >
         <Accessibility size={22} strokeWidth={1.75} />
       </button>

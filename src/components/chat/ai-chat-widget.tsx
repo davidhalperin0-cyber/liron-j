@@ -383,13 +383,13 @@ export function AiChatWidget() {
       <button
         onClick={openConcierge}
         className={cn(
-          "fixed z-40 bottom-0 left-0 right-0 sm:bottom-6 sm:left-auto sm:right-6",
-          "sm:w-auto",
+          // phone: a small round button in the corner instead of a bar across the products
+          "fixed z-40 bottom-4 left-4 h-11 w-11 rounded-full shadow-md sm:shadow-none",
+          "sm:bottom-6 sm:left-auto sm:right-6 sm:h-auto sm:w-auto sm:rounded-none",
           "flex items-center justify-center gap-2.5",
-          "px-6 py-3.5 sm:py-3",
+          "p-0 sm:px-6 sm:py-3",
           "bg-[#FFFFFF]/95 backdrop-blur-sm",
-          "sm:border sm:border-gold/15",
-          "border-t border-gold/10 sm:border-t",
+          "border border-gold/25 sm:border-gold/15",
           "transition-all duration-500",
           "hover:sm:border-gold/30 hover:bg-[#FFFFFF]",
           "group",
@@ -398,7 +398,7 @@ export function AiChatWidget() {
         aria-label="ייעוץ אישי — Jewelry Concierge"
       >
         {/* Availability dot — quiet, no pulse */}
-        <span className="inline-flex h-1.5 w-1.5 rounded-full bg-gold/80" />
+        <span className="hidden sm:inline-flex h-1.5 w-1.5 rounded-full bg-gold/80" />
 
         {/* Diamond icon — subtle, geometric */}
         <svg
@@ -415,7 +415,7 @@ export function AiChatWidget() {
           />
         </svg>
 
-        <span className="text-[12px] tracking-[0.12em] text-white/70 group-hover:text-white/90 transition-colors duration-300">
+        <span className="hidden sm:inline text-[12px] tracking-[0.12em] text-white/70 group-hover:text-white/90 transition-colors duration-300">
           ייעוץ אישי
         </span>
         <span className="text-[10px] tracking-[0.2em] uppercase text-white/30 group-hover:text-white/45 transition-colors duration-300 hidden sm:inline">

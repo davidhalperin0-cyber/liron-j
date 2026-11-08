@@ -4,7 +4,7 @@ import { InfoPage } from "@/components/info/info-page";
 export const metadata: Metadata = {
   title: "הצהרת נגישות",
   description:
-    "AURÉA מחויבת להנגשת האתר לאנשים עם מוגבלות בהתאם לתקן הישראלי ת\"י 5568 ולתקנות הנגישות.",
+    "LUZ מחויבת להנגשת האתר לאנשים עם מוגבלות בהתאם לתקן הישראלי ת\"י 5568 ולתקנות הנגישות.",
 };
 
 export default function AccessibilityPage() {
@@ -12,7 +12,7 @@ export default function AccessibilityPage() {
     <InfoPage
       eyebrow="נגישות"
       title="הצהרת נגישות"
-      description="ב-AURÉA אנו רואים חשיבות עליונה במתן שירות שוויוני לכלל הלקוחות, ופועלים להנגשת האתר לאנשים עם מוגבלות."
+      description="ב-LUZ אנו רואים חשיבות עליונה במתן שירות שוויוני לכלל הלקוחות, ופועלים להנגשת האתר לאנשים עם מוגבלות."
       sections={[
         {
           title: "המחויבות שלנו",
@@ -32,7 +32,7 @@ export default function AccessibilityPage() {
         },
         {
           title: "פנייה ורכז הנגישות",
-          body: "נתקלתם בבעיית נגישות או שיש לכם הצעה לשיפור? נשמח לשמוע ולסייע. פנייה לרכז/ת הנגישות של AURÉA: דוא\"ל Aureafinejewelryil@gmail.com. נשתדל לטפל בפנייתכם בהקדם האפשרי.",
+          body: "נתקלתם בבעיית נגישות או שיש לכם הצעה לשיפור? נשמח לשמוע ולסייע. פנייה לרכז/ת הנגישות של LUZ: דוא\"ל Aureafinejewelryil@gmail.com. נשתדל לטפל בפנייתכם בהקדם האפשרי.",
         },
         {
           title: "עדכון ההצהרה",

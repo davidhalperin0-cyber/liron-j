@@ -23,10 +23,10 @@ export function CategoriesSection() {
           className="text-center mb-16"
         >
           <p className="text-gold/60 text-xs tracking-[0.5em] uppercase mb-4">
-            גלו את העולם שלנו
+            Shop by Category
           </p>
           <h2 className="font-display text-3xl sm:text-4xl lg:text-6xl tracking-wide text-white">
-            Shop by Category
+            לפי קטגוריה
           </h2>
         </motion.div>
 

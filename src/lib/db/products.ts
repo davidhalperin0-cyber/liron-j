@@ -122,6 +122,14 @@ async function queryProducts(
 
 // ─── Public API ──────────────────────────────────────────
 
+// Who a piece is for, so a page about a women's piece suggests women's pieces.
+export async function getProductGender(id: string): Promise<"women" | "men" | undefined> {
+  if (!hasSupabaseConfig()) return undefined;
+  const { data } = await createSupabaseAdminClient().from("products").select("gender").eq("id", id).single();
+  const g = (data as { gender?: string } | null)?.gender;
+  return g === "women" || g === "men" ? g : undefined;
+}
+
 export async function getProductBySlug(slug: string): Promise<ProductDetail | null> {
   if (!hasSupabaseConfig()) return null;
 
@@ -137,24 +145,27 @@ export async function getProductBySlug(slug: string): Promise<ProductDetail | nu
   return rowToProductDetail(data as ProductRow);
 }
 
-export async function getFeaturedProducts(limit = 4): Promise<ProductCard[]> {
-  const rows = await queryProducts((q) =>
-    q.eq("status", "active").order("is_featured", { ascending: false }).order("created_at", { ascending: false }).limit(limit)
-  );
+export async function getFeaturedProducts(limit = 4, gender?: "women" | "men"): Promise<ProductCard[]> {
+  const rows = await queryProducts((q) => {
+    let query = q.eq("status", "active");
+    if (gender) query = query.in("gender", [gender, "unisex"]);
+    return query.order("is_featured", { ascending: false }).order("created_at", { ascending: false }).limit(limit);
+  });
 
   return rows.map(rowToProductCard);
 }
 
-export async function getNewProducts(limit = 4): Promise<ProductCard[]> {
+export async function getNewProducts(limit = 4, gender?: "women" | "men"): Promise<ProductCard[]> {
+  const forGender = <T extends { in: (c: string, v: string[]) => T }>(q: T) => (gender ? q.in("gender", [gender, "unisex"]) : q);
   const rows = await queryProducts((q) =>
-    q.eq("status", "active").eq("is_new", true).order("created_at", { ascending: false }).limit(limit)
+    forGender(q.eq("status", "active").eq("is_new", true)).order("created_at", { ascending: false }).limit(limit)
   );
 
   // Fallback: if nothing is flagged "מוצר חדש" yet, show the most recent items
   // so the "גלו את הקולקציה" page is never empty.
   if (rows.length === 0) {
     const recent = await queryProducts((q) =>
-      q.eq("status", "active").order("created_at", { ascending: false }).limit(limit)
+      forGender(q.eq("status", "active")).order("created_at", { ascending: false }).limit(limit)
     );
     return recent.map(rowToProductCard);
   }

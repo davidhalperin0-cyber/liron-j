@@ -11,7 +11,7 @@ function getSupabase() {
   );
 }
 
-// Join the AURÉA Club — frictionless email capture (no account/password).
+// Join the LUZ Club — frictionless email capture (no account/password).
 // Called from the checkout opt-in. Idempotent per email.
 export async function POST(request: NextRequest) {
   const limited = rateLimit(request, { maxRequests: 20, windowMs: 60_000 });

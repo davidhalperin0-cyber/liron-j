@@ -1,7 +1,7 @@
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 
 export const metadata = {
-  title: "Admin | AURÉA",
+  title: "Admin | LUZ",
 };
 
 export default function AdminLayout({

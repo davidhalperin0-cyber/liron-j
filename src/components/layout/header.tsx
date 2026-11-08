@@ -38,7 +38,8 @@ const NAV_ITEMS = [
   { label: "צור קשר", labelEn: "Contact", href: "/contact" },
 ];
 
-export function Header() {
+// overHero: the page opens on a dark video, so until the visitor scrolls the header reads in light ink
+export function Header({ overHero = false }: { overHero?: boolean }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -59,7 +60,8 @@ export function Header() {
           "fixed top-0 left-0 right-0 z-50 transition-all duration-500 pt-[env(safe-area-inset-top)]",
           isScrolled
             ? "glass py-3"
-            : "bg-transparent pt-0 pb-4"
+            : "bg-transparent pt-0 pb-4",
+          overHero && !isScrolled && !mobileMenuOpen && "header-on-dark"
         )}
       >
         <LaunchBar hidden={isScrolled} />
@@ -123,11 +125,11 @@ export function Header() {
             {/* Logo */}
             <Link href="/" className="absolute left-1/2 -translate-x-1/2">
               <motion.h1
-                className="font-display text-2xl sm:text-3xl tracking-[0.3em] uppercase text-gradient-gold"
+                className="font-display text-3xl sm:text-4xl tracking-[0.06em] text-gradient-gold"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                AURÉA
+                Luz
               </motion.h1>
             </Link>
 

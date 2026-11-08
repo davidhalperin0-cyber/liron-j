@@ -65,11 +65,12 @@ export function HeroSection() {
         <source src="/videos/hero.mp4" type="video/mp4" />
       </video>
 
-      {/* Legibility overlays — soft darkening so light text reads cleanly */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/15 to-black/85 z-10 pointer-events-none" />
+      {/* Legibility overlays — soft darkening so light text reads cleanly. Real espresso tones:
+          in this palette "black" is the ivory page colour, which washed the video out. */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[rgba(24,16,9,0.45)] via-[rgba(24,16,9,0.12)] to-[rgba(24,16,9,0.7)] z-10 pointer-events-none" />
       {/* Focused scrim anchored to the bottom text block */}
-      <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black/75 via-black/35 to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-0 bg-black/[0.08] z-10 pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[rgba(24,16,9,0.6)] via-[rgba(24,16,9,0.25)] to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-0 bg-[rgba(24,16,9,0.06)] z-10 pointer-events-none" />
 
       {/* Content — bottom-weighted for luxury editorial feel */}
       <div className="relative z-20 text-center max-w-3xl mx-auto px-6">

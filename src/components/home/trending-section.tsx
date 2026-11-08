@@ -26,10 +26,10 @@ export function TrendingSection({ products }: Props) {
           className="text-center mb-16"
         >
           <p className="text-gold/60 text-xs tracking-[0.5em] uppercase mb-4">
-            הכי חמים עכשיו
+            Trending Now
           </p>
           <h2 className="font-display text-3xl sm:text-4xl lg:text-6xl tracking-wide text-white">
-            Trending Now
+            הכי אהובים עכשיו
           </h2>
         </motion.div>
 

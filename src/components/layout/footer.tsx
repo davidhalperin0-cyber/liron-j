@@ -36,8 +36,8 @@ export function Footer() {
         <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <h2 className="font-display text-2xl tracking-[0.3em] uppercase text-gradient-gold mb-4">
-              AURÉA
+            <h2 className="font-display text-3xl tracking-[0.06em] text-gradient-gold mb-4">
+              Luz
             </h2>
             <p className="text-sm text-white/50 leading-relaxed mb-6">
               תכשיטי אופנה יוקרתיים. ציפוי זהב, כסף 925, זרקונים ואבנים טבעיות — עוצבו עבור אלו שדורשים את המיוחד.
@@ -131,7 +131,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-white/5 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-white/30">
-            &copy; {new Date().getFullYear()} AURÉA. כל הזכויות שמורות.
+            &copy; {new Date().getFullYear()} LUZ. כל הזכויות שמורות.
           </p>
           <div className="flex items-center gap-6">
             <span className="text-xs text-white/30">🔒 תשלום מאובטח</span>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// One-time cinematic brand reveal — ivory curtain, the AURÉA wordmark draws in
+// One-time cinematic brand reveal — ivory curtain, the LUZ wordmark draws in
 // on a growing gold hairline, then the curtain lifts. Once per session.
 export function IntroReveal() {
   const [show, setShow] = useState(false);
@@ -28,12 +28,12 @@ export function IntroReveal() {
         >
           <div className="flex flex-col items-center">
             <motion.h1
-              className="font-display text-4xl sm:text-6xl tracking-[0.35em] uppercase text-gradient-gold ps-[0.35em]"
+              className="font-display text-5xl sm:text-7xl tracking-[0.06em] text-gradient-gold"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             >
-              AURÉA
+              Luz
             </motion.h1>
             <motion.div
               className="mt-5 h-px bg-gradient-to-r from-transparent via-gold to-transparent"

@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
       const paymentUrl = await createHypPaymentUrl({
         amount: Math.round(total * 100) / 100,
         order: orderNumber,
-        info: `AURÉA — הזמנה ${orderNumber}`,
+        info: `LUZ — הזמנה ${orderNumber}`,
         clientName: firstName || undefined,
         clientLName: rest.join(" ") || undefined,
         email: body.customerEmail,

@@ -11,7 +11,7 @@ interface Props {
 
 // Horizontal product gallery using NATIVE scroll — reliable swipe on mobile,
 // trackpad/scroll on desktop, and it never traps vertical page scrolling.
-export function DragGallery({ products, eyebrow = "גלריה", title = "Drag to explore" }: Props) {
+export function DragGallery({ products, eyebrow = "גלריה", title = "גררי לגלות" }: Props) {
   if (products.length === 0) return null;
 
   return (

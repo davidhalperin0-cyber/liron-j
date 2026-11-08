@@ -325,3 +325,13 @@ html.a11y-noanim *::after {
 }
 .shelf-bay { background: #F3EBDF; }
 .shelf-edge { border-top: 1px solid rgba(154, 123, 60, 0.28); }
+
+/* Header over the dark hero video: every text-white/* utility inside it becomes light ink */
+.header-on-dark {
+  text-shadow: 0 1px 12px rgba(24, 16, 9, 0.35);
+}
+.header-on-dark [class*="text-white"],
+.header-on-dark a,
+.header-on-dark button {
+  color: rgba(251, 248, 243, 0.92);
+}
