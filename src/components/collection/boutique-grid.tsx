@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ShelfBay } from "@/components/collection/shelf-bay";
+import { VitrineView } from "@/components/collection/vitrine-view";
 import type { ProductCard as ProductCardType } from "@/types";
 
 // Moments from a LUZ day, set between the pieces like the pages of a lookbook.
@@ -25,15 +26,50 @@ interface Props {
 
 export function BoutiqueGrid({ products, className }: Props) {
   const showMoments = products.length >= EVERY + 4;
+  const [openAt, setOpenAt] = useState<number | null>(null);
+  const grid = useRef<HTMLDivElement>(null);
+
+  // the vitrine lights up: pieces coming into view switch their light on one after another
+  useEffect(() => {
+    const el = grid.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    el.classList.add("vitrine-armed");
+    let queue: Element[] = [];
+    let timer = 0;
+    const flush = () => {
+      // on a first visit the opening curtain is still up: light the cells once it has lifted
+      const until = (window as Window & { __luzIntroUntil?: number }).__luzIntroUntil ?? 0;
+      const wait = Math.max(0, until - Date.now());
+      queue.forEach((c, k) => setTimeout(() => c.classList.add("is-lit"), wait + k * 110));
+      queue = [];
+      timer = 0;
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          io.unobserve(e.target);
+          queue.push(e.target);
+        }
+        queue.sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
+        if (!timer) timer = window.setTimeout(flush, 60);
+      },
+      { threshold: 0.3 }
+    );
+    el.querySelectorAll(".vitrine-cell:not(.is-lit)").forEach((c) => io.observe(c));
+    return () => io.disconnect();
+  }, [products]);
+
   return (
-    // dense: on 3- and 4-column widths a wide moment would otherwise leave a hole at a row end
-    <div className={cn("shelf-unit grid grid-flow-row-dense", className)}>
+    <>
+    {/* dense: on 3- and 4-column widths a wide moment would otherwise leave a hole at a row end */}
+    <div ref={grid} className={cn("shelf-unit grid grid-flow-row-dense", className)}>
       {products.map((p, i) => {
         const slot = (i + 1) / EVERY;
         const m = showMoments && Number.isInteger(slot) && i < products.length - 2 ? MOMENTS[(slot - 1) % MOMENTS.length] : null;
         return (
           <Fragment key={p.id}>
-            <ShelfBay product={p} priority={i < 5} />
+            <ShelfBay product={p} priority={i < 5} onOpen={() => setOpenAt(i)} />
             {m && (
               <Link
                 href={m.href}
@@ -63,5 +99,7 @@ export function BoutiqueGrid({ products, className }: Props) {
         );
       })}
     </div>
+    <VitrineView products={products} index={openAt} onIndex={setOpenAt} />
+    </>
   );
 }

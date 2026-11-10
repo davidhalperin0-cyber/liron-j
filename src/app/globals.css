@@ -331,3 +331,26 @@ html.a11y-noanim *::after {
 .header-on-dark button {
   color: rgba(251, 248, 243, 0.92);
 }
+
+/* The vitrine lights up: once the grid is armed by JS, each piece waits slightly dim,
+   then its light comes on (a soft spot from above) as it scrolls into view. Without JS,
+   or with reduced motion, nothing is ever dimmed. */
+.vitrine-armed .vitrine-cell > img {
+  filter: brightness(0.86) saturate(0.82) sepia(0.1);
+  transition: filter 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1.2s ease-out;
+}
+.vitrine-armed .vitrine-cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(55% 38% at 50% 0%, rgba(255, 238, 208, 0.75), rgba(255, 238, 208, 0) 70%);
+  opacity: 0;
+}
+.vitrine-armed .vitrine-cell.is-lit > img { filter: none; }
+.vitrine-armed .vitrine-cell.is-lit::after { animation: vitrine-light 1.3s ease-out both; }
+@keyframes vitrine-light {
+  0% { opacity: 0; }
+  30% { opacity: 1; }
+  100% { opacity: 0.18; }
+}

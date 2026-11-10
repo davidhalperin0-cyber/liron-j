@@ -13,6 +13,8 @@ export function IntroReveal() {
     if (sessionStorage.getItem("aurea-intro")) return;
     sessionStorage.setItem("aurea-intro", "1");
     setShow(true);
+    // the store's vitrine waits for the curtain to lift before switching its lights on
+    (window as Window & { __luzIntroUntil?: number }).__luzIntroUntil = Date.now() + 2900;
     const t = setTimeout(() => setShow(false), 2200);
     return () => clearTimeout(t);
   }, []);

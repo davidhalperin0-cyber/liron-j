@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Heart, ShoppingBag } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn, formatPrice } from "@/lib/utils";
 import { useCartStore } from "@/stores/cart-store";
 import { useWishlistStore } from "@/stores/wishlist-store";
@@ -12,11 +13,13 @@ import type { ProductCard as ProductCardType } from "@/types";
 interface Props {
   product: ProductCardType;
   priority?: boolean;
+  /** step into this cell of the vitrine instead of leaving the page */
+  onOpen?: () => void;
 }
 
 // One piece of the boutique: photographed on pale suede in soft daylight, its name and price
 // quietly under it, a heart in the corner and an add-to-bag that appears on hover (always on touch).
-export function ShelfBay({ product, priority }: Props) {
+export function ShelfBay({ product, priority, onOpen }: Props) {
   const addItem = useCartStore((s) => s.addItem);
   const { toggle, has } = useWishlistStore();
   const liked = has(product.id);
@@ -42,9 +45,16 @@ export function ShelfBay({ product, priority }: Props) {
     toggle(product.id);
   };
 
+  const open = (e: React.MouseEvent) => {
+    // a new tab / window still gets the full product page
+    if (!onOpen || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault();
+    onOpen();
+  };
+
   return (
-    <Link href={`/products/${product.slug}`} className="group block shelf-bay">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] bg-[#EFE6DA]">
+    <Link href={`/products/${product.slug}`} onClick={open} className="group block shelf-bay">
+      <motion.div layoutId={`cell-${product.id}`} className="vitrine-cell relative aspect-[4/5] overflow-hidden rounded-[2px] bg-[#EFE6DA]">
         {photo ? (
           <Image
             src={photo}
@@ -91,7 +101,7 @@ export function ShelfBay({ product, priority }: Props) {
           <ShoppingBag size={14} strokeWidth={1.4} />
           <span className="hidden sm:inline">הוספה לסל</span>
         </button>
-      </div>
+      </motion.div>
       <div className="px-1 pt-3 pb-2 text-center">
         <p className="font-hebrew text-[14px] leading-snug text-white/85">{name}</p>
         <p className="mt-1 text-[13px] tracking-wide text-white/55">{formatPrice(product.price)}</p>
