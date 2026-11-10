@@ -7,6 +7,7 @@ import { cn, formatPrice, getDiscountPercentage } from "@/lib/utils";
 import { useWishlistStore } from "@/stores/wishlist-store";
 import { useCartStore } from "@/stores/cart-store";
 import type { ProductCard as ProductCardType } from "@/types";
+import { shelfImage } from "@/lib/shelf-images";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -23,6 +24,9 @@ export function ProductCard({ product, size = "md" }: Props) {
   const addItem = useCartStore((s) => s.addItem);
   const router = useRouter();
   const isWishlisted = has(product.id);
+  // the piece itself on pale suede, when it has been photographed; then no model photo on hover either
+  const piecePhoto = shelfImage(product.slug);
+  const hoverImage = piecePhoto ? undefined : product.hoverImage;
 
   const discount = product.compareAtPrice
     ? getDiscountPercentage(product.price, product.compareAtPrice)
@@ -71,21 +75,21 @@ export function ProductCard({ product, size = "md" }: Props) {
 
           {/* Main Image */}
           <Image
-            src={product.image}
+            src={piecePhoto ?? product.image}
             alt={typeof product.name === "string" ? product.name : product.name.he || product.name.en}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className={cn(
               "object-cover transition-all duration-700",
-              isHovered && product.hoverImage ? "opacity-0 scale-105" : "opacity-100 scale-100"
+              isHovered && hoverImage ? "opacity-0 scale-105" : "opacity-100 scale-100"
             )}
             loading="lazy"
           />
 
           {/* Hover Image */}
-          {product.hoverImage && (
+          {hoverImage && (
             <Image
-              src={product.hoverImage}
+              src={hoverImage}
               alt={`${typeof product.name === "string" ? product.name : product.name.he || product.name.en} - hover`}
               fill
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"

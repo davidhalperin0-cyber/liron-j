@@ -12,7 +12,6 @@ import { KineticBand } from "@/components/luxe/kinetic-band";
 import { VideoText } from "@/components/luxe/video-text";
 import { DragGallery } from "@/components/luxe/drag-gallery";
 import { InstagramFeed } from "@/components/home/instagram-feed";
-import { OfekTributeSection } from "@/components/home/ofek-tribute-section";
 
 export const revalidate = 60; // re-fetch home data every 60s, not every request
 import { VipSection } from "@/components/home/vip-section";
@@ -60,7 +59,7 @@ export default async function Home() {
 
       <main>
         {/* Shop-first order: a visitor arriving from an ad sees products right
-            after the hero; the brand stories (Ofek, LUZ) follow. */}
+            after the hero; the brand story follows. */}
         <HeroSection />
         <ValueMarquee />
         <NewDropSection products={newProducts} />
@@ -69,7 +68,6 @@ export default async function Home() {
         <DragGallery products={gallery} eyebrow="Selection" title="עוד מהסלקציה" />
         <VideoText />
         <EditorialSection />
-        <OfekTributeSection />
         <BrandStorySection />
         <KineticBand />
         <VipSection />

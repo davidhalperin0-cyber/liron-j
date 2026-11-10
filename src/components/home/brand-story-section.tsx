@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export function BrandStorySection() {
   return (
@@ -16,14 +17,16 @@ export function BrandStorySection() {
             className="relative"
           >
             <div className="relative max-w-[300px] sm:max-w-[340px] mx-auto">
-              <div className="bg-smoke overflow-hidden">
-                {/* Editorial moodboard collage — full 3-panel ratio, proportional */}
-                <img
-                  src="/images/brand-story.jpg"
-                  alt="LUZ — מלאכת יד יוקרתית"
-                  loading="lazy"
-                  className="block w-full h-auto image-dramatic"
-                />
+              <div className="flex flex-col gap-2 overflow-hidden bg-smoke">
+                {[
+                  ["/images/display/aurea-caa28189.webp", "שרשרת LUZ"],
+                  ["/images/display/aurea-F1C08D77.webp", "עגילי LUZ"],
+                  ["/images/display/aurea-A1159DCE.webp", "טבעת LUZ"],
+                ].map(([src, alt]) => (
+                  <div key={src} className="relative aspect-[5/4] overflow-hidden">
+                    <Image src={src} alt={alt} fill sizes="340px" className="object-cover" />
+                  </div>
+                ))}
               </div>
               {/* Gold frame accent */}
               <div className="absolute -bottom-4 -left-4 w-full h-full border border-gold/20 -z-10" />

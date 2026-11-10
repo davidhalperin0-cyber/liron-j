@@ -4,10 +4,10 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 
 const CATEGORIES = [
-  { name: "טבעות", nameEn: "Rings", href: "/collections/rings", image: "/images/categories/rings.jpg" },
-  { name: "עגילים", nameEn: "Earrings", href: "/collections/earrings", image: "/images/categories/earrings.jpg" },
-  { name: "שרשראות", nameEn: "Necklaces", href: "/collections/necklaces", image: "/images/categories/necklaces.jpg" },
-  { name: "צמידים", nameEn: "Bracelets", href: "/collections/bracelets", image: "/images/categories/bracelets.jpg" },
+  { name: "טבעות", nameEn: "Rings", href: "/collections/rings", image: "/images/display/aurea-3CB81BF6.webp" },
+  { name: "עגילים", nameEn: "Earrings", href: "/collections/earrings", image: "/images/display/aurea-F1C08D77.webp" },
+  { name: "שרשראות", nameEn: "Necklaces", href: "/collections/necklaces", image: "/images/display/aurea-EB688B32.webp" },
+  { name: "צמידים", nameEn: "Bracelets", href: "/collections/bracelets", image: "/images/display/aurea-0170D983.webp" },
 ];
 
 export function CategoriesSection() {
